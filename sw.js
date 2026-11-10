@@ -1,8 +1,10 @@
-const cacheName = 'setlog-offline-v1';
+const cacheName = 'setlog-offline-v2';
 const home = new URL('./', self.location.href).href;
+const assets = ['styles.css', 'app.js', 'manifest.webmanifest', 'icon.png']
+  .map(path => new URL(path, home).href);
 
 self.addEventListener('install', event => {
-  event.waitUntil(caches.open(cacheName).then(cache => cache.addAll([home, './manifest.webmanifest', './icon.png'])));
+  event.waitUntil(caches.open(cacheName).then(cache => cache.addAll([home, ...assets])));
 });
 
 self.addEventListener('activate', event => {
@@ -12,17 +14,20 @@ self.addEventListener('activate', event => {
 });
 
 self.addEventListener('fetch', event => {
-  if (event.request.mode !== 'navigate') return;
+  const { request } = event;
+  if (request.method !== 'GET') return;
+  const key = request.mode === 'navigate' ? home : request.url;
+  if (key !== home && !assets.includes(key)) return;
   event.respondWith((async () => {
     const cache = await caches.open(cacheName);
     try {
-      const response = await fetch(event.request);
+      const response = await fetch(request);
       if (response.ok) {
-        try { await cache.put(home, response.clone()); } catch {}
+        try { await cache.put(key, response.clone()); } catch {}
       }
       return response;
     } catch {
-      return (await cache.match(home)) ?? Response.error();
+      return (await cache.match(key)) ?? Response.error();
     }
   })());
 });
