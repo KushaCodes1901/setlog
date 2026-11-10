@@ -1,6 +1,6 @@
-const cacheName = 'setlog-offline-v2';
+const cacheName = 'setlog-offline-v3';
 const home = new URL('./', self.location.href).href;
-const assets = ['styles.css', 'app.js', 'manifest.webmanifest', 'icon.png']
+const assets = ['styles.css', 'app.js', 'exercise-illustrations.svg', 'manifest.webmanifest', 'icon.png']
   .map(path => new URL(path, home).href);
 
 self.addEventListener('install', event => {

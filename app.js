@@ -3,6 +3,8 @@ const workout = document.querySelector('#workout');
 const nameInput = document.querySelector('#name');
 const addExerciseButton = document.querySelector('#addExercise');
 const exerciseHint = document.querySelector('#exerciseHint');
+const exercisePicker = document.querySelector('#exercisePicker');
+const exerciseChoices = document.querySelector('#exerciseChoices');
 const exercises = document.querySelector('#exercises');
 const historyView = document.querySelector('#history');
 const saveButton = document.querySelector('#save');
@@ -10,6 +12,13 @@ const cancelEdit = document.querySelector('#cancelEdit');
 const storageKey = 'setlog-v1';
 const effortLevels = [
   ['😄', 'Very easy'], ['🙂', 'Easy'], ['😐', 'Moderate'], ['😣', 'Hard'], ['😫', 'Max effort']
+];
+const commonExercises = [
+  'Chest Press', 'Bench Press', 'Incline Dumbbell Press', 'Chest Fly',
+  'Push-up', 'Lat Pulldown', 'Seated Cable Row', 'Dumbbell Row',
+  'Shoulder Press', 'Lateral Raise', 'Bicep Curl', 'Hammer Curl',
+  'Tricep Pushdown', 'Squat', 'Leg Press', 'Leg Extension',
+  'Leg Curl', 'Romanian Deadlift', 'Hip Thrust', 'Calf Raise', 'Crunch'
 ];
 let storageReadable = true;
 let hasDraft = false;
@@ -70,7 +79,83 @@ function updateWorkoutControls() {
   nameInput.disabled = hasOpenExercise;
   addExerciseButton.disabled = hasOpenExercise;
   exerciseHint.hidden = !hasOpenExercise;
+  exercisePicker.hidden = hasOpenExercise;
+  if (hasOpenExercise) exercisePicker.open = false;
   saveButton.disabled = hasOpenExercise || !exercises.children.length;
+}
+
+function exerciseKey(name) {
+  return name.trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
+function previousExercises() {
+  const previous = new Map();
+  for (const session of [...readStorage().sessions].reverse()) {
+    for (const exercise of session.exercises) {
+      const key = exerciseKey(exercise.name);
+      if (!previous.has(key)) previous.set(key, exercise);
+    }
+  }
+  return previous;
+}
+
+function renderExerciseChoices() {
+  exerciseChoices.replaceChildren();
+  let previous;
+  try {
+    previous = previousExercises();
+  } catch {
+    previous = new Map();
+  }
+  const query = exerciseKey(nameInput.value);
+  const groups = [
+    ['Your exercises', [...previous.values()].map(exercise => exercise.name)],
+    ['More exercises', commonExercises.filter(name => !previous.has(exerciseKey(name)))]
+  ];
+  for (const [title, names] of groups) {
+    const matches = names.filter(name => exerciseKey(name).includes(query));
+    if (!matches.length) continue;
+    const group = document.createElement('div');
+    const heading = document.createElement('h3');
+    group.className = 'picker-group';
+    heading.textContent = title;
+    group.append(heading);
+    for (const name of matches) {
+      const choice = document.createElement('button');
+      const illustration = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      const drawing = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+      const text = document.createElement('span');
+      const title = document.createElement('span');
+      const hint = document.createElement('small');
+      choice.type = 'button';
+      choice.className = 'exercise-choice';
+      const knownExercise = commonExercises.find(exercise => exerciseKey(exercise) === exerciseKey(name));
+      const picture = knownExercise ? exerciseKey(knownExercise).replace(/[^a-z0-9]+/g, '-') : 'custom';
+      illustration.classList.add('exercise-thumbnail');
+      illustration.setAttribute('viewBox', '0 0 80 80');
+      illustration.setAttribute('aria-hidden', 'true');
+      illustration.setAttribute('focusable', 'false');
+      drawing.setAttribute('href', 'exercise-illustrations.svg#' + picture);
+      illustration.append(drawing);
+      text.className = 'exercise-choice-text';
+      title.textContent = name;
+      hint.textContent = previous.has(exerciseKey(name)) ? 'Use last workout’s sets' : 'Start with a blank set';
+      text.append(title, hint);
+      choice.append(illustration, text);
+      choice.onclick = () => {
+        nameInput.value = name;
+        addNamedExercise();
+      };
+      group.append(choice);
+    }
+    exerciseChoices.append(group);
+  }
+  if (!exerciseChoices.children.length) {
+    const empty = document.createElement('p');
+    empty.className = 'muted picker-help';
+    empty.textContent = 'No matches. Tap Add to use your own exercise name.';
+    exerciseChoices.append(empty);
+  }
 }
 
 function saveDraft() {
@@ -257,9 +342,19 @@ function addNamedExercise() {
     nameInput.focus();
     return;
   }
-  tell('');
+  let previous;
+  try {
+    previous = previousExercises().get(exerciseKey(name));
+  } catch {
+    tell('Previous exercises could not be read. Reload to try again.', true);
+    return;
+  }
+  tell(previous ? 'Previous sets filled in. Adjust them for today.' : '');
   nameInput.value = '';
-  addExercise({ name, sets: [{}] }, true);
+  const sets = previous?.sets.length
+    ? previous.sets.map(({ reps, weight }) => ({ reps, weight }))
+    : [{}];
+  addExercise({ name: previous?.name ?? name, sets }, true);
   saveDraft();
 }
 
@@ -412,6 +507,10 @@ function refreshToday() {
 }
 
 addExerciseButton.onclick = addNamedExercise;
+exercisePicker.ontoggle = () => {
+  if (exercisePicker.open) renderExerciseChoices();
+};
+nameInput.addEventListener('input', renderExerciseChoices);
 document.querySelector('#logTab').onclick = () => selectView(true);
 document.querySelector('#historyTab').onclick = () => selectView(false);
 day.onchange = saveDraft;

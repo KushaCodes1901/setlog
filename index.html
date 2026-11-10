@@ -33,10 +33,15 @@
     <form id="workout">
       <div id="exercises"></div>
       <section class="exercise-entry">
+        <details id="exercisePicker">
+          <summary>+ Choose exercise</summary>
         <div class="fields name-row">
-          <label>Exercise name<input id="name" type="text" maxlength="100" placeholder="e.g. Chest press" enterkeyhint="go"></label>
-          <button id="addExercise" type="button">+ Exercise</button>
+          <label>Search or add your own<input id="name" type="text" maxlength="100" placeholder="Search exercises…" enterkeyhint="go" autocomplete="off"></label>
+          <button id="addExercise" type="button">Add</button>
         </div>
+          <p class="muted picker-help">Tap an exercise to add it. Previous sets fill in automatically.</p>
+          <div id="exerciseChoices"></div>
+        </details>
         <p id="exerciseHint" class="muted" hidden>Save the open exercise before adding another or saving the workout.</p>
       </section>
       <button id="save" class="primary wide" disabled>Save workout</button>
