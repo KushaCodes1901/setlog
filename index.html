@@ -39,18 +39,48 @@
   .fields label { flex: 1; min-width: 0; }
   .name-row button { white-space: nowrap; }
   .exercise-actions { justify-content: space-between; flex-wrap: wrap; margin-top: 14px; }
-  .history-actions { flex-wrap: wrap; justify-content: flex-end; }
+  .history-actions { flex-wrap: wrap; justify-content: flex-end; margin-top: 14px; }
+  .history-card { padding: 0; }
+  .history-card summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; padding: 16px; cursor: pointer; list-style: none; border-radius: 17px; }
+  .history-card summary::-webkit-details-marker { display: none; }
+  .history-card summary::after { content: ""; width: 8px; height: 8px; flex-shrink: 0; margin-right: 3px; border: solid var(--muted); border-width: 0 2px 2px 0; transform: rotate(45deg); }
+  .history-card details[open] > summary::after { transform: rotate(225deg); }
+  .history-title { display: block; font-size: 18px; font-weight: 750; }
+  .history-content { padding: 0 16px 16px; }
+  .history-exercise { border-top: 1px solid var(--line); padding-top: 12px; }
+  .history-exercise + .history-exercise { margin-top: 12px; }
+  .history-sets { margin: 6px 0 0; padding: 0; list-style: none; }
+  .history-sets li { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; padding: 4px 0; font-size: 14px; }
+  .history-sets li + li { border-top: 1px solid var(--line); }
   .delete-workout { color: #ffb4a8; }
   .exercise-summary, #exerciseHint { margin-top: 8px; font-size: 14px; }
   .exercise-summary { margin-bottom: 0; padding: 0; list-style: none; }
   .exercise-summary li + li { margin-top: 4px; }
   .remove { min-width: 46px; color: var(--muted); font-size: 20px; line-height: 1; }
-  .set { padding-top: 6px; }
-  .set small { display: block; min-width: 3em; padding-bottom: 13px; }
-  table { width: 100%; border-collapse: collapse; text-align: left; margin-top: 10px; }
-  th, td { padding: 8px 4px; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
-  th { color: var(--muted); font-size: 13px; }
-  td:first-child { max-width: 140px; }
+  .set { margin-top: 12px; border-top: 1px solid var(--line); }
+  .set-number { min-width: 3em; padding-bottom: 13px; }
+  .set-feedback { display: grid; gap: 10px; margin-top: 12px; }
+  .effort { min-width: 0; padding: 0; margin: 0; border: 0; }
+  .effort legend { padding: 0; color: var(--muted); font-size: 13px; font-weight: 650; }
+  .effort-options { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); gap: 5px; margin-top: 6px; }
+  .effort-options button { display: grid; grid-template-rows: auto 1fr auto; justify-items: center; align-items: center; gap: 3px; min-width: 0; padding: 7px 2px 6px; line-height: 1.15; }
+  .effort-face { font-size: 21px; }
+  .effort-label { font-size: clamp(10px, 2.8vw, 12px); overflow-wrap: anywhere; }
+  .effort-number { color: var(--muted); font-size: 11px; font-variant-numeric: tabular-nums; }
+  .effort-options button[aria-pressed=true] { color: var(--lime); border-color: var(--lime); background: #28331e; box-shadow: inset 0 0 0 1px var(--lime); }
+  .effort-options button[aria-pressed=true] .effort-number { color: var(--lime); }
+  .reps-left-label { width: 105px; }
+  .set-notes { display: block; }
+  .workout-celebration { position: relative; overflow: hidden; border-color: #59683f; }
+  .workout-celebration h2 { color: var(--lime); }
+  .confetti { position: absolute; top: 45%; left: 50%; width: 6px; height: 10px; pointer-events: none; opacity: 0; }
+  @media (prefers-reduced-motion: no-preference) {
+    .confetti { animation: confetti-burst 950ms ease-out both; }
+  }
+  @keyframes confetti-burst {
+    0% { opacity: 1; transform: translate(0, 0) rotate(0); }
+    100% { opacity: 0; transform: translate(var(--x), var(--y)) rotate(var(--spin)); }
+  }
   #status { min-height: 25px; margin-top: 10px; color: var(--lime); font-size: 14px; }
   #status.error { color: #ffb4a8; }
   .foot { margin-top: 14px; font-size: 13px; }
@@ -111,11 +141,20 @@
   </article>
 </template>
 <template id="setTemplate">
-  <div class="fields set">
-    <small></small>
-    <label>Reps<input class="reps" type="number" inputmode="numeric" min="1" step="1" required></label>
-    <label>Weight (kg)<input class="weight" type="number" inputmode="decimal" min="0" step="any" required></label>
-    <button class="remove" type="button">×</button>
+  <div class="set">
+    <div class="fields">
+      <small class="set-number"></small>
+      <label>Reps<input class="reps" type="number" inputmode="numeric" min="1" step="1" required></label>
+      <label>Weight (kg)<input class="weight" type="number" inputmode="decimal" min="0" step="any" required></label>
+      <button class="remove" type="button">×</button>
+    </div>
+    <div class="set-feedback">
+      <fieldset class="effort">
+        <legend>How hard was it? <small>(optional)</small></legend>
+        <div class="effort-options"></div>
+      </fieldset>
+      <label class="reps-left-label" title="How many more reps could you have done?">Reps left <small>(optional)</small><input class="reps-left" type="number" inputmode="numeric" min="0" step="1" placeholder="—"></label>
+    </div>
   </div>
 </template>
 <script>
@@ -129,6 +168,9 @@
   const saveButton = document.querySelector('#save');
   const cancelEdit = document.querySelector('#cancelEdit');
   const storageKey = 'setlog-v1';
+  const effortLevels = [
+    ['😄', 'Very easy'], ['🙂', 'Easy'], ['😐', 'Moderate'], ['😣', 'Hard'], ['😫', 'Max effort']
+  ];
   let storageReadable = true;
   let hasDraft = false;
   let editing = null;
@@ -157,10 +199,22 @@
   }
 
   function getSets(list) {
-    return Array.from(list.children, row => ({
-      reps: row.querySelector('.reps').value,
-      weight: row.querySelector('.weight').value
-    }));
+    return Array.from(list.children, row => {
+      const set = { reps: row.querySelector('.reps').value, weight: row.querySelector('.weight').value };
+      const effort = row.querySelector('.effort-options [aria-pressed=true]');
+      const repsLeft = row.querySelector('.reps-left').value;
+      if (effort) set.effort = Number(effort.value);
+      if (repsLeft !== '') set.repsLeft = Number(repsLeft);
+      return set;
+    });
+  }
+
+  function setNotes(set) {
+    const notes = [];
+    const effort = effortLevels[set.effort - 1];
+    if (effort) notes.push(effort[0] + ' ' + effort[1] + ' · ' + set.effort + '/5');
+    if (set.repsLeft != null) notes.push(set.repsLeft + (set.repsLeft === 1 ? ' rep left' : ' reps left'));
+    return notes.join(' · ');
   }
 
   function getExercises() {
@@ -253,6 +307,33 @@
     const weight = row.querySelector('.weight');
     reps.value = values.reps ?? '';
     weight.value = values.weight ?? '';
+    row.querySelector('.reps-left').value = values.repsLeft ?? '';
+    const options = row.querySelector('.effort-options');
+    effortLevels.forEach(([face, label], index) => {
+      const rating = document.createElement('button');
+      const icon = document.createElement('span');
+      const name = document.createElement('span');
+      const number = document.createElement('span');
+      rating.type = 'button';
+      rating.value = index + 1;
+      rating.setAttribute('aria-label', label + ', ' + (index + 1) + ' of 5');
+      rating.setAttribute('aria-pressed', Number(values.effort) === index + 1);
+      icon.className = 'effort-face';
+      icon.textContent = face;
+      icon.setAttribute('aria-hidden', 'true');
+      name.className = 'effort-label';
+      name.textContent = label;
+      number.className = 'effort-number';
+      number.textContent = rating.value + '/5';
+      rating.append(icon, name, number);
+      rating.onclick = () => {
+        const selected = options.querySelector('[aria-pressed=true]');
+        selected?.setAttribute('aria-pressed', 'false');
+        if (selected !== rating) rating.setAttribute('aria-pressed', 'true');
+        saveDraft();
+      };
+      options.append(rating);
+    });
     row.querySelector('button').onclick = () => {
       row.remove();
       numberSets(list);
@@ -294,6 +375,8 @@
         getSets(list).forEach((set, index) => {
           const item = document.createElement('li');
           item.textContent = 'Set ' + (index + 1) + ' · ' + set.reps + ' reps × ' + set.weight + ' kg';
+          const notes = setNotes(set);
+          if (notes) item.append(' · ' + notes);
           summary.append(item);
         });
       }
@@ -357,14 +440,26 @@
     }
     sessions.map((session, index) => ({ session, index })).reverse().forEach(({ session, index }) => {
       const card = document.createElement('article');
-      const header = document.createElement('div');
-      const heading = document.createElement('h2');
+      const details = document.createElement('details');
+      const header = document.createElement('summary');
+      const label = document.createElement('span');
+      const heading = document.createElement('span');
+      const metadata = document.createElement('small');
+      const content = document.createElement('div');
       const actions = document.createElement('div');
       const edit = document.createElement('button');
       const remove = document.createElement('button');
-      const date = document.createElement('small');
+      card.className = 'history-card';
+      details.open = index === sessions.length - 1;
+      heading.className = 'history-title';
       heading.textContent = session.day + ' workout';
-      date.textContent = 'Logged ' + session.date;
+      const exerciseCount = session.exercises.length;
+      const setCount = session.exercises.reduce((total, exercise) => total + exercise.sets.length, 0);
+      metadata.textContent = session.date + ' · ' + exerciseCount + (exerciseCount === 1 ? ' exercise' : ' exercises')
+        + ' · ' + setCount + (setCount === 1 ? ' set' : ' sets');
+      label.append(heading, metadata);
+      header.append(label);
+      content.className = 'history-content';
       edit.type = 'button';
       edit.textContent = editing?.index === index ? 'Resume edit' : 'Edit';
       edit.disabled = Boolean(editing && editing.index !== index);
@@ -376,23 +471,38 @@
       remove.disabled = Boolean(editing);
       remove.setAttribute('aria-label', 'Delete · ' + heading.textContent + ' · ' + session.date);
       remove.onclick = () => deleteWorkout(session, index);
-      header.className = 'row spread';
       actions.className = 'row history-actions';
       actions.append(edit, remove);
-      header.append(heading, actions);
-      const table = document.createElement('table');
-      table.setAttribute('aria-label', heading.textContent + ' · ' + session.date);
-      table.createTHead().insertRow().innerHTML = '<th scope="col">Exercise</th><th scope="col">Set</th><th scope="col">Reps</th><th scope="col">kg</th>';
-      const body = table.createTBody();
       session.exercises.forEach(exercise => {
+        const group = document.createElement('div');
+        const title = document.createElement('h3');
+        const sets = document.createElement('ul');
+        group.className = 'history-exercise';
+        title.textContent = exercise.name;
+        sets.className = 'history-sets';
         exercise.sets.forEach((set, index) => {
-          const row = body.insertRow();
-          [exercise.name, index + 1, set.reps, set.weight].forEach(value => {
-            row.insertCell().textContent = value;
-          });
+          const row = document.createElement('li');
+          const number = document.createElement('span');
+          const result = document.createElement('span');
+          number.className = 'muted';
+          number.textContent = 'Set ' + (index + 1);
+          result.textContent = set.reps + ' reps × ' + set.weight + ' kg';
+          const notes = setNotes(set);
+          if (notes) {
+            const note = document.createElement('small');
+            note.className = 'set-notes';
+            note.textContent = notes;
+            result.append(note);
+          }
+          row.append(number, result);
+          sets.append(row);
         });
+        group.append(title, sets);
+        content.append(group);
       });
-      card.append(header, date, table);
+      content.append(actions);
+      details.append(header, content);
+      card.append(details);
       historyView.append(card);
     });
   }
@@ -403,6 +513,55 @@
     document.querySelector('#logTab').setAttribute('aria-pressed', showLog);
     document.querySelector('#historyTab').setAttribute('aria-pressed', !showLog);
     if (!showLog) showHistory();
+  }
+
+  function workoutHighlight(session, previousSessions) {
+    for (const exercise of session.exercises) {
+      const name = exercise.name.trim().toLowerCase();
+      const previous = previousSessions.findLast(workout =>
+        workout.exercises.some(entry => entry.name.trim().toLowerCase() === name)
+      );
+      if (!previous) continue;
+      const previousSets = previous.exercises
+        .filter(entry => entry.name.trim().toLowerCase() === name)
+        .flatMap(entry => entry.sets);
+      for (const set of exercise.sets) {
+        const comparable = previousSets.filter(entry => Number(entry.weight) === Number(set.weight));
+        if (!comparable.length) continue;
+        const extra = Number(set.reps) - Math.max(...comparable.map(entry => Number(entry.reps)));
+        if (extra > 0) {
+          return exercise.name + ' · ' + extra + (extra === 1 ? ' more rep' : ' more reps')
+            + ' at ' + set.weight + ' kg than last time.';
+        }
+      }
+    }
+    return '';
+  }
+
+  function celebrateWorkout(highlight) {
+    const card = document.createElement('section');
+    const heading = document.createElement('h2');
+    const message = document.createElement('p');
+    card.className = 'workout-celebration';
+    heading.tabIndex = -1;
+    heading.textContent = 'Workout saved!';
+    message.textContent = highlight || 'Nice work showing up today.';
+    card.append(heading, message);
+    historyView.prepend(card);
+    heading.focus();
+    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    const colors = ['#d4fa7d', '#ffe091', '#ffb4a8', '#a9d7ff'];
+    for (let index = 0; index < 24; index++) {
+      const piece = document.createElement('span');
+      piece.className = 'confetti';
+      piece.setAttribute('aria-hidden', 'true');
+      piece.style.backgroundColor = colors[index % colors.length];
+      piece.style.setProperty('--x', (Math.random() - 0.5) * 440 + 'px');
+      piece.style.setProperty('--y', (Math.random() - 0.5) * 190 + 'px');
+      piece.style.setProperty('--spin', (Math.random() - 0.5) * 760 + 'deg');
+      card.append(piece);
+      piece.addEventListener('animationend', () => piece.remove(), { once: true });
+    }
   }
 
   function refreshToday() {
@@ -450,9 +609,13 @@
       exercises: entries.map(({ name, sets }) => ({ name, sets }))
     };
     let regularDraft = null;
+    let previousSessions;
     const isEdit = Boolean(editing);
     if (!writeStorage(data => {
-      if (!editing) return { ...data, sessions: [...data.sessions, session], draft: null };
+      if (!editing) {
+        previousSessions = data.sessions;
+        return { ...data, sessions: [...data.sessions, session], draft: null };
+      }
       if (JSON.stringify(data.sessions[editing.index]) !== JSON.stringify(editing.original)) {
         tell('This workout changed in another tab. Cancel this edit and reopen it from History.', true);
         return null;
@@ -464,8 +627,9 @@
     })) return;
     editing = null;
     loadDraft(regularDraft);
-    tell(isEdit ? 'Workout updated.' : 'Workout saved on this device.');
+    tell(isEdit ? 'Workout updated.' : '');
     selectView(false);
+    if (!isEdit) celebrateWorkout(workoutHighlight(session, previousSessions));
   };
 
   refreshToday();
