@@ -1,0 +1,490 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="theme-color" content="#141615">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="apple-touch-icon" href="icon.png">
+<title>Setlog · Workout journal</title>
+<style>
+  :root { color-scheme: dark; --bg: #141615; --card: #1e211f; --line: #353b35; --text: #f2f4ef; --muted: #a9b2a8; --lime: #d4fa7d; }
+  * { box-sizing: border-box; }
+  body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, sans-serif; }
+  main { width: min(100%, 620px); margin: auto; padding: calc(26px + env(safe-area-inset-top)) 18px calc(36px + env(safe-area-inset-bottom)); }
+  h1, h2, h3, p { margin: 0; }
+  h1 { font-size: clamp(44px, 12vw, 64px); letter-spacing: -.085em; line-height: 1; margin: 8px 0 12px; }
+  h2 { font-size: 22px; letter-spacing: -.04em; }
+  h3 { font-size: 17px; overflow-wrap: anywhere; }
+  .eyebrow { color: var(--lime); text-transform: uppercase; letter-spacing: .15em; font: 700 11px/1.5 system-ui; }
+  .muted, small { color: var(--muted); }
+  nav, .row, .fields { display: flex; align-items: center; gap: 10px; }
+  nav { margin: 25px 0 18px; padding: 4px; border: 1px solid var(--line); border-radius: 14px; }
+  nav button { flex: 1; border-color: transparent; background: transparent; }
+  nav button[aria-pressed=true] { background: var(--line); color: var(--text); }
+  section, article { border: 1px solid var(--line); border-radius: 17px; padding: 16px; background: var(--card); }
+  section + section, article + article, #exercises article, #history article { margin-top: 12px; }
+  #exercises article { background: var(--bg); }
+  .spread { justify-content: space-between; }
+  label { display: block; color: var(--muted); font-size: 13px; font-weight: 650; }
+  input, select, button { font: inherit; color: inherit; border: 1px solid var(--line); border-radius: 10px; min-height: 46px; }
+  input, select { width: 100%; margin-top: 4px; padding: 8px 10px; background: var(--bg); }
+  button { padding: 8px 13px; background: var(--card); font-weight: 700; cursor: pointer; }
+  button:disabled { opacity: .48; cursor: default; }
+  :focus-visible { outline: 2px solid var(--lime); outline-offset: 2px; }
+  .primary { background: var(--lime); color: #1a2310; border-color: var(--lime); }
+  .wide { width: 100%; margin-top: 14px; }
+  .fields { align-items: end; margin-top: 10px; }
+  .fields label { flex: 1; min-width: 0; }
+  .name-row button { white-space: nowrap; }
+  .exercise-actions { justify-content: space-between; flex-wrap: wrap; margin-top: 14px; }
+  .history-actions { flex-wrap: wrap; justify-content: flex-end; }
+  .delete-workout { color: #ffb4a8; }
+  .exercise-summary, #exerciseHint { margin-top: 8px; font-size: 14px; }
+  .exercise-summary { margin-bottom: 0; padding: 0; list-style: none; }
+  .exercise-summary li + li { margin-top: 4px; }
+  .remove { min-width: 46px; color: var(--muted); font-size: 20px; line-height: 1; }
+  .set { padding-top: 6px; }
+  .set small { display: block; min-width: 3em; padding-bottom: 13px; }
+  table { width: 100%; border-collapse: collapse; text-align: left; margin-top: 10px; }
+  th, td { padding: 8px 4px; border-bottom: 1px solid var(--line); overflow-wrap: anywhere; }
+  th { color: var(--muted); font-size: 13px; }
+  td:first-child { max-width: 140px; }
+  #status { min-height: 25px; margin-top: 10px; color: var(--lime); font-size: 14px; }
+  #status.error { color: #ffb4a8; }
+  .foot { margin-top: 14px; font-size: 13px; }
+</style>
+</head>
+<body>
+<main>
+  <header>
+    <p class="eyebrow">Workout journal</p>
+    <h1>Setlog<span style="color:var(--lime)">.</span></h1>
+    <p class="muted">Log your lifts, one set at a time.</p>
+  </header>
+  <nav aria-label="Workout views">
+    <button id="logTab" type="button" aria-controls="log" aria-pressed="true">Log workout</button>
+    <button id="historyTab" type="button" aria-controls="history" aria-pressed="false">History</button>
+  </nav>
+  <div id="log">
+    <section aria-labelledby="sessionTitle">
+      <div class="row spread"><h2 id="sessionTitle">Session</h2><small id="today"></small></div>
+      <label for="day" style="margin-top:10px">Day of the week</label>
+      <select id="day">
+        <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
+        <option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
+      </select>
+    </section>
+    <form id="workout">
+      <div id="exercises"></div>
+      <section style="margin-top:12px">
+        <div class="fields name-row">
+          <label>Exercise name<input id="name" type="text" maxlength="100" placeholder="e.g. Chest press" enterkeyhint="go"></label>
+          <button id="addExercise" type="button">+ Exercise</button>
+        </div>
+        <p id="exerciseHint" class="muted" hidden>Save the open exercise before adding another or saving the workout.</p>
+      </section>
+      <button id="save" class="primary wide" disabled>Save workout</button>
+      <button id="cancelEdit" class="wide" type="button" hidden>Cancel edit</button>
+    </form>
+  </div>
+  <div id="history" hidden></div>
+  <p id="status" role="status"></p>
+  <p class="muted foot">Stored on this device · Weights in kg</p>
+</main>
+<template id="exerciseTemplate">
+  <article>
+    <div class="row spread">
+      <h3></h3>
+      <button class="edit-exercise" type="button" hidden>Edit</button>
+      <button class="remove remove-exercise" type="button">×</button>
+    </div>
+    <ul class="exercise-summary muted" aria-label="Saved sets" hidden></ul>
+    <div class="exercise-editor">
+      <div class="sets"></div>
+      <div class="row exercise-actions">
+        <button class="add-set" type="button">+ Set</button>
+        <button class="save-exercise primary" type="button">Save exercise</button>
+      </div>
+    </div>
+  </article>
+</template>
+<template id="setTemplate">
+  <div class="fields set">
+    <small></small>
+    <label>Reps<input class="reps" type="number" inputmode="numeric" min="1" step="1" required></label>
+    <label>Weight (kg)<input class="weight" type="number" inputmode="decimal" min="0" step="any" required></label>
+    <button class="remove" type="button">×</button>
+  </div>
+</template>
+<script>
+  const day = document.querySelector('#day');
+  const workout = document.querySelector('#workout');
+  const nameInput = document.querySelector('#name');
+  const addExerciseButton = document.querySelector('#addExercise');
+  const exerciseHint = document.querySelector('#exerciseHint');
+  const exercises = document.querySelector('#exercises');
+  const historyView = document.querySelector('#history');
+  const saveButton = document.querySelector('#save');
+  const cancelEdit = document.querySelector('#cancelEdit');
+  const storageKey = 'setlog-v1';
+  let storageReadable = true;
+  let hasDraft = false;
+  let editing = null;
+
+  function tell(message, error = false) {
+    const status = document.querySelector('#status');
+    status.textContent = message;
+    status.classList.toggle('error', error);
+  }
+
+  function readStorage() {
+    return JSON.parse(localStorage.getItem(storageKey)) ?? { sessions: [], draft: null };
+  }
+
+  function writeStorage(change) {
+    if (!storageReadable) return false;
+    try {
+      const updated = change(readStorage());
+      if (!updated) return false;
+      localStorage.setItem(storageKey, JSON.stringify(updated));
+      return true;
+    } catch {
+      tell('Could not save on this device. Your entries are still on screen.', true);
+      return false;
+    }
+  }
+
+  function getSets(list) {
+    return Array.from(list.children, row => ({
+      reps: row.querySelector('.reps').value,
+      weight: row.querySelector('.weight').value
+    }));
+  }
+
+  function getExercises() {
+    return Array.from(exercises.children, card => ({
+      name: card.querySelector('h3').textContent,
+      sets: getSets(card.querySelector('.sets')),
+      saved: card.querySelector('.exercise-editor').hidden
+    }));
+  }
+
+  function updateWorkoutControls() {
+    const hasOpenExercise = Boolean(exercises.querySelector('.exercise-editor:not([hidden])'));
+    nameInput.disabled = hasOpenExercise;
+    addExerciseButton.disabled = hasOpenExercise;
+    exerciseHint.hidden = !hasOpenExercise;
+    saveButton.disabled = hasOpenExercise || !exercises.children.length;
+  }
+
+  function saveDraft() {
+    hasDraft = true;
+    updateWorkoutControls();
+    const draft = { day: day.value, name: nameInput.value, exercises: getExercises() };
+    if (editing) return writeStorage(data => ({ ...data, editDraft: { ...editing, draft } }));
+    return writeStorage(data => ({ ...data, draft }));
+  }
+
+  function loadDraft(draft) {
+    hasDraft = Boolean(draft);
+    exercises.replaceChildren();
+    nameInput.value = draft?.name ?? '';
+    refreshToday();
+    if (draft) {
+      day.value = draft.day;
+      draft.exercises.forEach(exercise => addExercise(exercise));
+    }
+    document.querySelector('#sessionTitle').textContent = editing ? 'Editing workout' : 'Session';
+    saveButton.textContent = editing ? 'Save changes' : 'Save workout';
+    cancelEdit.hidden = !editing;
+    updateWorkoutControls();
+  }
+
+  function editWorkout(session, index) {
+    if (editing) {
+      selectView(true);
+      return;
+    }
+    const draft = {
+      day: session.day,
+      name: '',
+      exercises: session.exercises.map(exercise => ({ ...exercise, saved: true }))
+    };
+    const target = { index, original: session };
+    if (!writeStorage(data => ({ ...data, editDraft: { ...target, draft } }))) return;
+    editing = target;
+    loadDraft(draft);
+    tell('');
+    selectView(true);
+    day.focus();
+  }
+
+  function deleteWorkout(session, index) {
+    if (editing || !window.confirm('Delete the ' + session.day + ' workout logged on ' + session.date + '?')) return;
+    if (!writeStorage(data => {
+      if (data.editDraft) {
+        tell('Finish or cancel the workout edit before deleting a workout.', true);
+        return null;
+      }
+      if (JSON.stringify(data.sessions[index]) !== JSON.stringify(session)) {
+        tell('History changed. Open it again before deleting this workout.', true);
+        return null;
+      }
+      return { ...data, sessions: data.sessions.filter((_, position) => position !== index) };
+    })) return;
+    showHistory();
+    document.querySelector('#historyTab').focus();
+    tell('Workout deleted.');
+  }
+
+  function numberSets(list) {
+    Array.from(list.children).forEach((row, index) => {
+      row.querySelector('small').textContent = 'Set ' + (index + 1);
+      row.querySelector('button').setAttribute('aria-label', 'Remove set ' + (index + 1));
+      row.querySelector('button').disabled = list.children.length === 1;
+    });
+  }
+
+  function addSet(list, values = {}, focus = false) {
+    const row = document.querySelector('#setTemplate').content.firstElementChild.cloneNode(true);
+    const reps = row.querySelector('.reps');
+    const weight = row.querySelector('.weight');
+    reps.value = values.reps ?? '';
+    weight.value = values.weight ?? '';
+    row.querySelector('button').onclick = () => {
+      row.remove();
+      numberSets(list);
+      saveDraft();
+    };
+    list.append(row);
+    numberSets(list);
+    if (focus) reps.focus();
+  }
+
+  function addExercise(exercise, focus = false) {
+    const card = document.querySelector('#exerciseTemplate').content.firstElementChild.cloneNode(true);
+    card.querySelector('h3').textContent = exercise.name;
+    const list = card.querySelector('.sets');
+    const editor = card.querySelector('.exercise-editor');
+    const summary = card.querySelector('.exercise-summary');
+    const edit = card.querySelector('.edit-exercise');
+    const remove = card.querySelector('.remove-exercise');
+    edit.setAttribute('aria-label', 'Edit ' + exercise.name);
+    remove.setAttribute('aria-label', 'Remove ' + exercise.name);
+    remove.onclick = () => {
+      card.remove();
+      saveDraft();
+    };
+    card.querySelector('.add-set').onclick = () => {
+      if (Array.from(list.querySelectorAll('input')).every(input => input.reportValidity())) {
+        addSet(list, {}, true);
+        saveDraft();
+      }
+    };
+
+    function setSaved(saved) {
+      editor.hidden = saved;
+      edit.hidden = !saved;
+      remove.hidden = saved;
+      summary.hidden = !saved;
+      summary.replaceChildren();
+      if (saved) {
+        getSets(list).forEach((set, index) => {
+          const item = document.createElement('li');
+          item.textContent = 'Set ' + (index + 1) + ' · ' + set.reps + ' reps × ' + set.weight + ' kg';
+          summary.append(item);
+        });
+      }
+    }
+
+    edit.onclick = () => {
+      if (addExerciseButton.disabled) {
+        tell('Save the open exercise before editing another.', true);
+        return;
+      }
+      tell('');
+      setSaved(false);
+      saveDraft();
+      list.querySelector('.reps').focus();
+    };
+    card.querySelector('.save-exercise').onclick = () => {
+      if (!Array.from(list.querySelectorAll('input')).every(input => input.reportValidity())) return;
+      tell('');
+      setSaved(true);
+      if (saveDraft()) {
+        edit.focus();
+      } else {
+        setSaved(false);
+        updateWorkoutControls();
+        card.querySelector('.save-exercise').focus();
+      }
+    };
+    exercises.append(card);
+    exercise.sets.forEach((set, index) => addSet(list, set, focus && index === 0));
+    setSaved(exercise.saved === true);
+  }
+
+  function addNamedExercise() {
+    if (addExerciseButton.disabled) return;
+    const name = nameInput.value.trim();
+    if (!name) {
+      tell('Enter an exercise name first.', true);
+      nameInput.focus();
+      return;
+    }
+    tell('');
+    nameInput.value = '';
+    addExercise({ name, sets: [{}] }, true);
+    saveDraft();
+  }
+
+  function showHistory() {
+    historyView.replaceChildren();
+    let sessions;
+    try {
+      sessions = readStorage().sessions;
+    } catch {
+      tell('Workout history could not be read on this device.', true);
+      return;
+    }
+    if (!sessions.length) {
+      const empty = document.createElement('section');
+      empty.textContent = 'Your saved workouts will appear here.';
+      historyView.append(empty);
+      return;
+    }
+    sessions.map((session, index) => ({ session, index })).reverse().forEach(({ session, index }) => {
+      const card = document.createElement('article');
+      const header = document.createElement('div');
+      const heading = document.createElement('h2');
+      const actions = document.createElement('div');
+      const edit = document.createElement('button');
+      const remove = document.createElement('button');
+      const date = document.createElement('small');
+      heading.textContent = session.day + ' workout';
+      date.textContent = 'Logged ' + session.date;
+      edit.type = 'button';
+      edit.textContent = editing?.index === index ? 'Resume edit' : 'Edit';
+      edit.disabled = Boolean(editing && editing.index !== index);
+      edit.setAttribute('aria-label', edit.textContent + ' · ' + heading.textContent + ' · ' + session.date);
+      edit.onclick = () => editWorkout(session, index);
+      remove.type = 'button';
+      remove.className = 'delete-workout';
+      remove.textContent = 'Delete';
+      remove.disabled = Boolean(editing);
+      remove.setAttribute('aria-label', 'Delete · ' + heading.textContent + ' · ' + session.date);
+      remove.onclick = () => deleteWorkout(session, index);
+      header.className = 'row spread';
+      actions.className = 'row history-actions';
+      actions.append(edit, remove);
+      header.append(heading, actions);
+      const table = document.createElement('table');
+      table.setAttribute('aria-label', heading.textContent + ' · ' + session.date);
+      table.createTHead().insertRow().innerHTML = '<th scope="col">Exercise</th><th scope="col">Set</th><th scope="col">Reps</th><th scope="col">kg</th>';
+      const body = table.createTBody();
+      session.exercises.forEach(exercise => {
+        exercise.sets.forEach((set, index) => {
+          const row = body.insertRow();
+          [exercise.name, index + 1, set.reps, set.weight].forEach(value => {
+            row.insertCell().textContent = value;
+          });
+        });
+      });
+      card.append(header, date, table);
+      historyView.append(card);
+    });
+  }
+
+  function selectView(showLog) {
+    document.querySelector('#log').hidden = !showLog;
+    historyView.hidden = showLog;
+    document.querySelector('#logTab').setAttribute('aria-pressed', showLog);
+    document.querySelector('#historyTab').setAttribute('aria-pressed', !showLog);
+    if (!showLog) showHistory();
+  }
+
+  function refreshToday() {
+    const now = new Date();
+    document.querySelector('#today').textContent = editing?.original.date
+      ?? now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
+    if (!hasDraft) day.value = now.toLocaleDateString('en-GB', { weekday: 'long' });
+  }
+
+  addExerciseButton.onclick = addNamedExercise;
+  document.querySelector('#logTab').onclick = () => selectView(true);
+  document.querySelector('#historyTab').onclick = () => selectView(false);
+  day.onchange = saveDraft;
+  workout.oninput = saveDraft;
+  cancelEdit.onclick = () => {
+    let regularDraft;
+    if (!writeStorage(data => {
+      regularDraft = data.draft;
+      return { ...data, editDraft: null };
+    })) return;
+    editing = null;
+    loadDraft(regularDraft);
+    tell('Workout edit canceled.');
+    selectView(false);
+  };
+  nameInput.onkeydown = event => {
+    if (event.key === 'Enter' && !event.isComposing) {
+      event.preventDefault();
+      addNamedExercise();
+    }
+  };
+
+  workout.onsubmit = event => {
+    event.preventDefault();
+    if (saveButton.disabled) return;
+    if (nameInput.value.trim()) {
+      addNamedExercise();
+      return;
+    }
+    const entries = getExercises();
+    if (!entries.length) return;
+    const session = {
+      day: day.value,
+      date: editing?.original.date ?? new Date().toLocaleDateString('en-GB'),
+      exercises: entries.map(({ name, sets }) => ({ name, sets }))
+    };
+    let regularDraft = null;
+    const isEdit = Boolean(editing);
+    if (!writeStorage(data => {
+      if (!editing) return { ...data, sessions: [...data.sessions, session], draft: null };
+      if (JSON.stringify(data.sessions[editing.index]) !== JSON.stringify(editing.original)) {
+        tell('This workout changed in another tab. Cancel this edit and reopen it from History.', true);
+        return null;
+      }
+      regularDraft = data.draft;
+      const sessions = [...data.sessions];
+      sessions[editing.index] = session;
+      return { ...data, sessions, editDraft: null };
+    })) return;
+    editing = null;
+    loadDraft(regularDraft);
+    tell(isEdit ? 'Workout updated.' : 'Workout saved on this device.');
+    selectView(false);
+  };
+
+  refreshToday();
+  try {
+    const { draft, editDraft } = readStorage();
+    if (editDraft) {
+      editing = { index: editDraft.index, original: editDraft.original };
+    }
+    loadDraft(editDraft?.draft ?? draft);
+  } catch {
+    storageReadable = false;
+    tell('Stored workouts are unavailable. Reload to try again.', true);
+  }
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) refreshToday();
+  });
+  if ('serviceWorker' in navigator && location.protocol !== 'file:') {
+    navigator.serviceWorker.register('./sw.js').catch(() => {});
+  }
+</script>
+</body>
+</html>
