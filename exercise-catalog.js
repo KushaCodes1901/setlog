@@ -18,6 +18,7 @@ const exerciseCatalog = [
   { name: 'Chest Supported Row', area: 'Back', equipment: 'Dumbbells · incline bench', image: 'chest-supported-row', tracking: 'weight' },
   { name: 'Straight Arm Pulldown', area: 'Back', equipment: 'High cable · straight bar', image: 'straight-arm-pulldown', tracking: 'weight' },
   { name: 'Pull-up', area: 'Back', equipment: 'Bodyweight · overhead bar', image: 'pull-up', tracking: 'reps', aliases: ['Pull ups', 'Pullups'] },
+  { name: 'Dead Hang', area: 'Back', equipment: 'Bodyweight · overhead bar hold', image: 'dead-hang', tracking: 'seconds', aliases: ['Dead Hangs', 'Hanging Hold'] },
   { name: 'Chin-up', area: 'Back', equipment: 'Bar · palms toward you', image: 'chin-up', tracking: 'reps', aliases: ['Chin ups', 'Chinups'] },
   { name: 'Assisted Pull-up', area: 'Back', equipment: 'Assisted pull-up machine', image: 'assisted-pull-up', tracking: 'weight' },
   { name: 'Back Extension', area: 'Back', equipment: 'Roman chair', image: 'back-extension', tracking: 'reps', aliases: ['Hyperextension'] },
@@ -93,5 +94,10 @@ const exerciseCatalog = [
   { name: 'Elliptical', area: 'Cardio', equipment: 'Cross trainer', image: 'elliptical', tracking: 'seconds' },
   { name: 'Stair Climber', area: 'Cardio', equipment: 'Stepping machine', image: 'stair-climber', tracking: 'seconds', aliases: ['Stairmaster'] },
   { name: 'Rowing Machine', area: 'Cardio', equipment: 'Indoor rower', image: 'rowing-machine', tracking: 'seconds', aliases: ['Rower'] },
-  { name: 'Jump Rope', area: 'Cardio', equipment: 'Skipping rope', image: 'jump-rope', tracking: 'seconds', aliases: ['Skipping'] }
+  { name: 'Jump Rope', area: 'Cardio', equipment: 'Skipping rope', image: 'jump-rope', tracking: 'seconds', aliases: ['Skipping'] },
+  { name: 'Incline Push-up', area: 'Chest', equipment: 'Bodyweight · hands on bench', image: 'incline-push-up', tracking: 'reps', aliases: ['Incline Push ups'] },
+  { name: 'Dumbbell Pullover', area: 'Back', equipment: 'Dumbbell · flat bench', image: 'dumbbell-pullover', tracking: 'weight' },
+  { name: 'Tricep Kickback', area: 'Arms', equipment: 'Dumbbell · bent over', image: 'tricep-kickback', tracking: 'weight', aliases: ['Triceps Kickback'] },
+  { name: 'Bodyweight Squat', area: 'Legs & glutes', equipment: 'Bodyweight · standing', image: 'bodyweight-squat', tracking: 'reps', aliases: ['Air Squat'] },
+  { name: 'Jumping Jack', area: 'Full body', equipment: 'Bodyweight · standing', image: 'jumping-jack', tracking: 'reps', aliases: ['Jumping Jacks'] }
 ];

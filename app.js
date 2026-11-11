@@ -76,7 +76,7 @@ function isTimedExercise(name) {
 }
 
 function isHold(name) {
-  return ['Plank', 'Side Plank'].includes(exerciseDefinition(name)?.name);
+  return ['Plank', 'Side Plank', 'Dead Hang'].includes(exerciseDefinition(name)?.name);
 }
 
 function setResult(set, name) {

@@ -405,6 +405,41 @@
     <path d="M19 39C-4 2 84 2 61 39M19 39c-8 38 50 38 42 0" fill="none" stroke="#697568" stroke-width="3"/>
     <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="21" r="5"/><path d="M40 31v21M34 35l-15 4M46 35l15 4M40 52l-6 13M40 52l6 13"/></g>
   </symbol>
+  <symbol id="dead-hang" viewBox="0 0 80 80">
+    <path d="M10 9h60M14 9v62M66 9v62" fill="none" stroke="#697568" stroke-width="4" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="40" cy="31" r="5"/>
+      <path d="M40 41v13M34 42l-8-17V10M46 42l8-17V10M40 54l-6 16M40 54l6 16"/>
+    </g>
+  </symbol>
+  <symbol id="incline-push-up" viewBox="0 0 80 80">
+    <path d="M8 69h64M49 49h23M54 51v18M68 51v18" fill="none" stroke="#697568" stroke-width="4" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="54" cy="23" r="5"/><path d="m47 31-19 18-14 17M46 33l12 15M12 66h8M55 49h7"/>
+    </g>
+  </symbol>
+  <symbol id="dumbbell-pullover" viewBox="0 0 80 80">
+    <path d="M19 53h42M25 55v14M56 55v14" fill="none" stroke="#697568" stroke-width="4" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="27" cy="44" r="5"/><path d="M35 47h19l11 9 3 12M37 44 23 31 12 39M8 36h10M8 32v9M18 32v9"/>
+    </g>
+  </symbol>
+  <symbol id="tricep-kickback" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="56" cy="21" r="5"/><path d="m48 28-21 13 7 13-6 15M27 41 16 68M45 32l-12 6-16-5M11 30h12M11 26v9M23 26v9"/>
+    </g>
+  </symbol>
+  <symbol id="bodyweight-squat" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="36" cy="17" r="5"/><path d="m35 27-6 20 18 7-8 14h15M29 47 17 57l-3 11h13M37 32h26M37 36l23 3"/>
+    </g>
+  </symbol>
+  <symbol id="jumping-jack" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="40" cy="20" r="5"/><path d="M40 30v21M34 34 21 23l-7-11M46 34l13-11 7-11M40 51 22 69M40 51l18 18"/>
+    </g>
+    <path d="m11 37-4-9 6 2M69 37l4-9-6 2" fill="none" stroke="#697568" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
   <symbol id="custom" viewBox="0 0 80 80">
     <g fill="none" stroke="#a9b2a8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
       <path d="m28 48 20-20M18 38l24 24M38 18l24 24M12 44l24 24M44 12l24 24"/>
