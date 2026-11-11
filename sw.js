@@ -1,6 +1,7 @@
-const cacheName = 'setlog-offline-v5';
+const cacheName = 'setlog-offline-v6';
 const home = new URL('./', self.location.href).href;
-const assets = ['styles.css', 'exercise-catalog.js', 'app.js', 'rest-timer.js', 'exercise-illustrations.svg', 'manifest.webmanifest', 'icon.png']
+const assets = ['styles.css', 'exercise-catalog.js', 'app.js', 'rest-timer.js', 'exercise-illustrations.svg',
+  'manifest.webmanifest', 'icon.png', 'icon-v2-192.png', 'icon-v2-512.png', 'apple-touch-icon-v2.png']
   .map(path => new URL(path, home).href);
 
 self.addEventListener('install', event => {
