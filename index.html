@@ -89,6 +89,16 @@
     </form>
   </div>
   <div id="history" hidden></div>
+  <section id="backupPanel" class="backup-panel" hidden aria-labelledby="backupTitle">
+    <h2 id="backupTitle">Your workout backup</h2>
+    <p class="muted picker-help">Save your workouts and rest days to a file. Import the file to restore them on this or another device.</p>
+    <div class="row backup-actions">
+      <button id="exportBackup" type="button">Export backup</button>
+      <button id="importBackup" type="button">Import backup</button>
+    </div>
+    <input id="backupFile" type="file" accept=".json,application/json" hidden>
+    <p id="backupStatus" class="muted picker-help" role="status"></p>
+  </section>
   <p id="status" role="status"></p>
   <p class="muted foot">Stored on this device · Weights in kg</p>
 </main>
@@ -133,6 +143,7 @@
 </template>
 <script src="exercise-catalog.js"></script>
 <script src="app.js"></script>
+<script src="backup.js"></script>
 <script src="rest-timer.js"></script>
 </body>
 </html>

@@ -614,6 +614,7 @@ function showHistory() {
 function selectView(showLog) {
   document.querySelector('#log').hidden = !showLog;
   historyView.hidden = showLog;
+  document.querySelector('#backupPanel').hidden = showLog;
   document.querySelector('#logTab').setAttribute('aria-pressed', showLog);
   document.querySelector('#historyTab').setAttribute('aria-pressed', !showLog);
   if (!showLog) showHistory();
