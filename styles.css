@@ -1,5 +1,6 @@
 :root { color-scheme: dark; --bg: #141615; --card: #1e211f; --line: #353b35; --text: #f2f4ef; --muted: #a9b2a8; --lime: #d4fa7d; }
 * { box-sizing: border-box; }
+[hidden] { display: none !important; }
 body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, sans-serif; }
 main { width: min(100%, 620px); margin: auto; padding: calc(26px + env(safe-area-inset-top)) 18px calc(36px + env(safe-area-inset-bottom)); }
 h1, h2, h3, p { margin: 0; }
@@ -19,9 +20,34 @@ section + section, article + article, #exercises article, #history article { mar
 .spread { justify-content: space-between; }
 label { display: block; color: var(--muted); font-size: 13px; font-weight: 650; }
 .day-label { margin-top: 10px; }
+.rest-day-choice { display: flex; align-items: center; gap: 10px; margin-top: 14px; color: var(--text); font-size: 15px; cursor: pointer; }
+.rest-day-choice input { width: 21px; height: 21px; min-height: 0; margin: 0; accent-color: var(--lime); }
+.workout-exercises { border: 0; padding: 0; margin: 0; min-width: 0; }
+.rest-day-message { margin-top: 16px; }
 .exercise-entry { margin-top: 12px; }
+.rest-timer { margin-top: 12px; border: 1px solid var(--line); border-radius: 17px; background: var(--card); }
+.rest-timer > summary { display: flex; align-items: center; justify-content: space-between; padding: 14px 16px; cursor: pointer; font-weight: 700; list-style: none; }
+.rest-timer > summary::-webkit-details-marker { display: none; }
+.timer-content { padding: 0 16px 16px; }
+.timer-dial { position: relative; width: min(100%, 250px); aspect-ratio: 1; margin: 8px auto 24px; }
+.timer-ring { display: block; width: 100%; height: 100%; fill: none; stroke-width: 7; }
+.timer-track { stroke: #343e2c; }
+.timer-progress { stroke: var(--lime); stroke-linecap: round; stroke-dasharray: 100; stroke-dashoffset: 0; transform: rotate(-90deg); transform-origin: 120px 120px; transition: stroke-dashoffset 250ms linear; }
+.timer-dial-center { position: absolute; inset: 0; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px; }
+#restDialTime { color: var(--text); font-size: clamp(42px, 12vw, 58px); font-weight: 300; letter-spacing: -.04em; line-height: 1.15; font-variant-numeric: tabular-nums; }
+#restDialLabel { color: var(--muted); font-size: 13px; }
+@media (prefers-reduced-motion: reduce) {
+  .timer-progress { transition: none; }
+}
+.timer-presets { display: flex; flex-wrap: wrap; gap: 6px; }
+.timer-presets button { flex: 1; padding: 8px; }
+.timer-presets button[aria-pressed=true] { color: var(--lime); border-color: var(--lime); }
+.timer-content .fields { flex-wrap: wrap; }
+.timer-content label { min-width: 100px; }
 #exercisePicker > summary { cursor: pointer; font-weight: 700; color: var(--lime); min-height: 46px; padding: 10px 0; }
 .picker-help { margin-top: 10px; font-size: 13px; }
+.picker-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }
+.exercise-metadata { color: var(--muted); font-size: 12px; font-weight: 400; }
 .picker-group { margin-top: 16px; }
 .picker-group h3 { color: var(--muted); font-size: 12px; letter-spacing: .06em; text-transform: uppercase; margin-bottom: 6px; }
 .exercise-choice { display: flex; align-items: center; gap: 12px; text-align: left; width: 100%; margin-top: 6px; padding: 8px; overflow-wrap: anywhere; }
@@ -60,6 +86,8 @@ button:disabled { opacity: .48; cursor: default; }
 .remove { min-width: 46px; color: var(--muted); font-size: 20px; line-height: 1; }
 .set { margin-top: 12px; border-top: 1px solid var(--line); }
 .set-number { min-width: 3em; padding-bottom: 13px; }
+.plank-timer { margin-top: 10px; }
+.plank-clock { margin-left: 12px; color: var(--lime); font-size: 24px; font-variant-numeric: tabular-nums; }
 .set-feedback { display: grid; gap: 10px; margin-top: 12px; }
 .effort { min-width: 0; padding: 0; margin: 0; border: 0; }
 .effort legend { padding: 0; color: var(--muted); font-size: 13px; font-weight: 650; }

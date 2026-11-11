@@ -5,20 +5,17 @@ const addExerciseButton = document.querySelector('#addExercise');
 const exerciseHint = document.querySelector('#exerciseHint');
 const exercisePicker = document.querySelector('#exercisePicker');
 const exerciseChoices = document.querySelector('#exerciseChoices');
+const exerciseArea = document.querySelector('#exerciseArea');
+const exerciseEquipment = document.querySelector('#exerciseEquipment');
 const exercises = document.querySelector('#exercises');
 const historyView = document.querySelector('#history');
 const saveButton = document.querySelector('#save');
 const cancelEdit = document.querySelector('#cancelEdit');
+const restDay = document.querySelector('#restDay');
+const workoutExercises = document.querySelector('#workoutExercises');
 const storageKey = 'setlog-v1';
 const effortLevels = [
   ['😄', 'Very easy'], ['🙂', 'Easy'], ['😐', 'Moderate'], ['😣', 'Hard'], ['😫', 'Max effort']
-];
-const commonExercises = [
-  'Chest Press', 'Bench Press', 'Incline Dumbbell Press', 'Chest Fly',
-  'Push-up', 'Lat Pulldown', 'Seated Cable Row', 'Dumbbell Row',
-  'Shoulder Press', 'Lateral Raise', 'Bicep Curl', 'Hammer Curl',
-  'Tricep Pushdown', 'Squat', 'Leg Press', 'Leg Extension',
-  'Leg Curl', 'Romanian Deadlift', 'Hip Thrust', 'Calf Raise', 'Crunch'
 ];
 let storageReadable = true;
 let hasDraft = false;
@@ -49,13 +46,45 @@ function writeStorage(change) {
 
 function getSets(list) {
   return Array.from(list.children, row => {
-    const set = { reps: row.querySelector('.reps').value, weight: row.querySelector('.weight').value };
+    const quantity = row.querySelector('.reps').value;
+    const set = row.dataset.timed === 'true' ? { seconds: quantity } : { reps: quantity };
+    if (row.dataset.legacyReps && quantity === '') {
+      delete set.seconds;
+      set.reps = row.dataset.legacyReps;
+    }
+    if (row.dataset.holdEndsAt) {
+      set.holdEndsAt = Number(row.dataset.holdEndsAt);
+      set.holdStartedAt = Number(row.dataset.holdStartedAt);
+    }
+    const weight = row.querySelector('.weight');
+    if (!weight.disabled) set.weight = weight.value;
     const effort = row.querySelector('.effort-options [aria-pressed=true]');
     const repsLeft = row.querySelector('.reps-left').value;
     if (effort) set.effort = Number(effort.value);
     if (repsLeft !== '') set.repsLeft = Number(repsLeft);
     return set;
   });
+}
+
+function isBodyweight(name) {
+  const tracking = exerciseDefinition(name)?.tracking;
+  return tracking === 'reps' || tracking === 'seconds';
+}
+
+function isTimedExercise(name) {
+  return exerciseDefinition(name)?.tracking === 'seconds';
+}
+
+function isHold(name) {
+  return ['Plank', 'Side Plank'].includes(exerciseDefinition(name)?.name);
+}
+
+function setResult(set, name) {
+  const showWeight = set.weight != null && set.weight !== '' && (!isBodyweight(name) || Number(set.weight) > 0);
+  const quantity = set.seconds != null
+    ? set.seconds + (Number(set.seconds) === 1 ? ' second' : ' seconds')
+    : set.reps + ' reps';
+  return quantity + (showWeight ? ' × ' + set.weight + ' kg' : '');
 }
 
 function setNotes(set) {
@@ -81,11 +110,40 @@ function updateWorkoutControls() {
   exerciseHint.hidden = !hasOpenExercise;
   exercisePicker.hidden = hasOpenExercise;
   if (hasOpenExercise) exercisePicker.open = false;
-  saveButton.disabled = hasOpenExercise || !exercises.children.length;
+  workoutExercises.hidden = restDay.checked;
+  workoutExercises.disabled = restDay.checked;
+  document.querySelector('#restTimer').hidden = restDay.checked;
+  document.querySelector('#restDayMessage').hidden = !restDay.checked;
+  saveButton.disabled = !restDay.checked && (hasOpenExercise || !exercises.children.length);
+  saveButton.textContent = editing ? 'Save changes' : restDay.checked ? 'Save rest day' : 'Save workout';
+  restDay.disabled = Boolean(exercises.querySelector('[data-hold-ends-at]'));
+  for (const card of exercises.children) {
+    const running = Boolean(card.querySelector('[data-hold-ends-at]'));
+    card.querySelector('.save-exercise').disabled = running;
+    card.querySelector('.add-set').disabled = running;
+  }
 }
 
 function exerciseKey(name) {
   return name.trim().replace(/\s+/g, ' ').toLowerCase();
+}
+
+function exerciseDefinition(name) {
+  const key = exerciseKey(name).replace(/[^a-z0-9]/g, '');
+  return exerciseCatalog.find(exercise => [exercise.name, ...(exercise.aliases ?? [])]
+    .some(alias => exerciseKey(alias).replace(/[^a-z0-9]/g, '') === key));
+}
+
+function equipmentGroup(exercise) {
+  if (!exercise) return 'Other';
+  const equipment = exercise.equipment.toLowerCase();
+  if (equipment.includes('bodyweight') || equipment.includes('overhead bar') || equipment.startsWith('bar ·')) return 'Bodyweight';
+  if (equipment.includes('dumbbell')) return 'Dumbbells';
+  if (/barbell|ez |curl bar/.test(equipment)) return 'Barbell';
+  if (equipment.includes('cable')) return 'Cable';
+  if (equipment.includes('kettlebell')) return 'Kettlebell';
+  if (/machine|treadmill|bike|trainer|rower/.test(equipment)) return 'Machine';
+  return 'Other';
 }
 
 function previousExercises() {
@@ -108,13 +166,25 @@ function renderExerciseChoices() {
     previous = new Map();
   }
   const query = exerciseKey(nameInput.value);
+  const areas = [...new Set(exerciseCatalog.map(exercise => exercise.area))];
   const groups = [
     ['Your exercises', [...previous.values()].map(exercise => exercise.name)],
-    ['More exercises', commonExercises.filter(name => !previous.has(exerciseKey(name)))]
+    ...areas.map(area => [area, exerciseCatalog
+      .filter(exercise => exercise.area === area && ![...previous.keys()]
+        .some(name => exerciseDefinition(name)?.name === exercise.name))
+      .map(exercise => exercise.name)])
   ];
+  let resultCount = 0;
   for (const [title, names] of groups) {
-    const matches = names.filter(name => exerciseKey(name).includes(query));
+    const matches = names.filter(name => {
+      const exercise = exerciseDefinition(name);
+      const search = [name, exercise?.name, exercise?.area, exercise?.equipment, ...(exercise?.aliases ?? [])].join(' ');
+      return query.split(/\s+/).every(word => exerciseKey(search).includes(word))
+        && (!exerciseArea.value || exercise?.area === exerciseArea.value)
+        && (!exerciseEquipment.value || equipmentGroup(exercise) === exerciseEquipment.value);
+    });
     if (!matches.length) continue;
+    resultCount += matches.length;
     const group = document.createElement('div');
     const heading = document.createElement('h3');
     group.className = 'picker-group';
@@ -129,8 +199,8 @@ function renderExerciseChoices() {
       const hint = document.createElement('small');
       choice.type = 'button';
       choice.className = 'exercise-choice';
-      const knownExercise = commonExercises.find(exercise => exerciseKey(exercise) === exerciseKey(name));
-      const picture = knownExercise ? exerciseKey(knownExercise).replace(/[^a-z0-9]+/g, '-') : 'custom';
+      const knownExercise = exerciseDefinition(name);
+      const picture = knownExercise?.image ?? 'custom';
       illustration.classList.add('exercise-thumbnail');
       illustration.setAttribute('viewBox', '0 0 80 80');
       illustration.setAttribute('aria-hidden', 'true');
@@ -139,8 +209,11 @@ function renderExerciseChoices() {
       illustration.append(drawing);
       text.className = 'exercise-choice-text';
       title.textContent = name;
+      const metadata = document.createElement('span');
+      metadata.className = 'exercise-metadata';
+      metadata.textContent = knownExercise ? knownExercise.equipment : 'Custom exercise';
       hint.textContent = previous.has(exerciseKey(name)) ? 'Use last workout’s sets' : 'Start with a blank set';
-      text.append(title, hint);
+      text.append(title, metadata, hint);
       choice.append(illustration, text);
       choice.onclick = () => {
         nameInput.value = name;
@@ -150,6 +223,7 @@ function renderExerciseChoices() {
     }
     exerciseChoices.append(group);
   }
+  document.querySelector('#exerciseCount').textContent = resultCount + (resultCount === 1 ? ' exercise' : ' exercises');
   if (!exerciseChoices.children.length) {
     const empty = document.createElement('p');
     empty.className = 'muted picker-help';
@@ -161,7 +235,7 @@ function renderExerciseChoices() {
 function saveDraft() {
   hasDraft = true;
   updateWorkoutControls();
-  const draft = { day: day.value, name: nameInput.value, exercises: getExercises() };
+  const draft = { day: day.value, name: nameInput.value, restDay: restDay.checked, exercises: getExercises() };
   if (editing) return writeStorage(data => ({ ...data, editDraft: { ...editing, draft } }));
   return writeStorage(data => ({ ...data, draft }));
 }
@@ -170,6 +244,7 @@ function loadDraft(draft) {
   hasDraft = Boolean(draft);
   exercises.replaceChildren();
   nameInput.value = draft?.name ?? '';
+  restDay.checked = draft?.restDay === true;
   refreshToday();
   if (draft) {
     day.value = draft.day;
@@ -189,6 +264,7 @@ function editWorkout(session, index) {
   const draft = {
     day: session.day,
     name: '',
+    restDay: session.restDay === true,
     exercises: session.exercises.map(exercise => ({ ...exercise, saved: true }))
   };
   const target = { index, original: session };
@@ -201,7 +277,7 @@ function editWorkout(session, index) {
 }
 
 function deleteWorkout(session, index) {
-  if (editing || !window.confirm('Delete the ' + session.day + ' workout logged on ' + session.date + '?')) return;
+  if (editing || !window.confirm('Delete the ' + session.day + (session.restDay ? ' rest day' : ' workout') + ' logged on ' + session.date + '?')) return;
   if (!writeStorage(data => {
     if (data.editDraft) {
       tell('Finish or cancel the workout edit before deleting a workout.', true);
@@ -230,9 +306,21 @@ function addSet(list, values = {}, focus = false) {
   const row = document.querySelector('#setTemplate').content.firstElementChild.cloneNode(true);
   const reps = row.querySelector('.reps');
   const weight = row.querySelector('.weight');
-  reps.value = values.reps ?? '';
+  const name = list.closest('article').querySelector('h3').textContent;
+  const timed = isTimedExercise(name);
+  row.dataset.timed = timed;
+  reps.value = timed ? values.seconds ?? '' : values.reps ?? '';
+  if (timed && values.reps != null) row.dataset.legacyReps = values.reps;
+  row.querySelector('.quantity-label').textContent = timed ? isHold(name) ? 'Hold (seconds)' : 'Time (seconds)' : 'Reps';
   weight.value = values.weight ?? '';
+  const bodyweight = isBodyweight(list.closest('article').querySelector('h3').textContent);
+  // Keep extra weight visible in older records that explicitly logged it.
+  weight.disabled = bodyweight && !(Number(values.weight) > 0);
+  weight.required = !weight.disabled;
+  weight.closest('label').hidden = weight.disabled;
   row.querySelector('.reps-left').value = values.repsLeft ?? '';
+  row.querySelector('.reps-left').disabled = timed;
+  row.querySelector('.reps-left-label').hidden = timed;
   const options = row.querySelector('.effort-options');
   effortLevels.forEach(([face, label], index) => {
     const rating = document.createElement('button');
@@ -265,8 +353,77 @@ function addSet(list, values = {}, focus = false) {
     saveDraft();
   };
   list.append(row);
+  if (timed) setupSetTimer(row, values);
   numberSets(list);
   if (focus) reps.focus();
+}
+
+function setupSetTimer(row, values) {
+  const panel = row.querySelector('.plank-timer');
+  const input = row.querySelector('.reps');
+  const start = row.querySelector('.plank-start');
+  const clock = row.querySelector('.plank-clock');
+  const status = row.querySelector('.plank-status');
+  let interval = null;
+  const holding = isHold(row.closest('article').querySelector('h3').textContent);
+  const startLabel = holding ? 'Start hold' : 'Start timer';
+  start.textContent = startLabel;
+  status.textContent = holding ? 'Enter your hold time in seconds, then tap Start hold.'
+    : 'Enter your time in seconds, then tap Start timer.';
+  panel.hidden = false;
+  if (values.reps != null && values.seconds == null) {
+    status.textContent = 'Previously logged as reps. Enter a hold time in seconds.';
+  }
+
+  function finish(message) {
+    clearInterval(interval);
+    interval = null;
+    delete row.dataset.holdEndsAt;
+    delete row.dataset.holdStartedAt;
+    input.disabled = false;
+    start.textContent = startLabel;
+    status.textContent = message;
+    saveDraft();
+  }
+
+  function tick() {
+    if (!row.isConnected) {
+      clearInterval(interval);
+      return;
+    }
+    const remaining = Math.max(0, Math.ceil((Number(row.dataset.holdEndsAt) - Date.now()) / 1000));
+    clock.textContent = remaining + 's';
+    if (!remaining) finish('Timer complete. Your time is ready to save.');
+  }
+
+  function run() {
+    input.disabled = true;
+    start.textContent = 'Stop early';
+    status.textContent = holding ? 'Holding…' : 'Timing…';
+    interval = setInterval(tick, 250);
+    clock.textContent = Math.max(0, Math.ceil((Number(row.dataset.holdEndsAt) - Date.now()) / 1000)) + 's';
+    updateWorkoutControls();
+  }
+
+  start.onclick = () => {
+    if (row.dataset.holdEndsAt) {
+      const elapsed = Math.min(Number(input.value), Math.floor((Date.now() - Number(row.dataset.holdStartedAt)) / 1000));
+      input.value = Math.max(0, elapsed);
+      clock.textContent = input.value + 's';
+      finish('Stopped. Review your time, then save the exercise.');
+      return;
+    }
+    if (!input.reportValidity()) return;
+    row.dataset.holdStartedAt = Date.now();
+    row.dataset.holdEndsAt = Date.now() + Number(input.value) * 1000;
+    run();
+    saveDraft();
+  };
+  if (Number.isFinite(values.holdEndsAt) && Number.isFinite(values.holdStartedAt)) {
+    row.dataset.holdEndsAt = values.holdEndsAt;
+    row.dataset.holdStartedAt = values.holdStartedAt;
+    run();
+  }
 }
 
 function addExercise(exercise, focus = false) {
@@ -299,7 +456,7 @@ function addExercise(exercise, focus = false) {
     if (saved) {
       getSets(list).forEach((set, index) => {
         const item = document.createElement('li');
-        item.textContent = 'Set ' + (index + 1) + ' · ' + set.reps + ' reps × ' + set.weight + ' kg';
+        item.textContent = 'Set ' + (index + 1) + ' · ' + setResult(set, exercise.name);
         const notes = setNotes(set);
         if (notes) item.append(' · ' + notes);
         summary.append(item);
@@ -335,7 +492,7 @@ function addExercise(exercise, focus = false) {
 }
 
 function addNamedExercise() {
-  if (addExerciseButton.disabled) return;
+  if (addExerciseButton.disabled || restDay.checked) return;
   const name = nameInput.value.trim();
   if (!name) {
     tell('Enter an exercise name first.', true);
@@ -344,7 +501,12 @@ function addNamedExercise() {
   }
   let previous;
   try {
-    previous = previousExercises().get(exerciseKey(name));
+    const savedExercises = previousExercises();
+    const definition = exerciseDefinition(name);
+    previous = savedExercises.get(exerciseKey(name));
+    if (!previous && definition) {
+      previous = [...savedExercises.values()].find(exercise => exerciseDefinition(exercise.name)?.name === definition.name);
+    }
   } catch {
     tell('Previous exercises could not be read. Reload to try again.', true);
     return;
@@ -352,7 +514,8 @@ function addNamedExercise() {
   tell(previous ? 'Previous sets filled in. Adjust them for today.' : '');
   nameInput.value = '';
   const sets = previous?.sets.length
-    ? previous.sets.map(({ reps, weight }) => ({ reps, weight }))
+    ? previous.sets.map(({ reps, weight, seconds }) => isTimedExercise(name) ? { seconds }
+      : isBodyweight(name) ? { reps } : { reps, weight })
     : [{}];
   addExercise({ name: previous?.name ?? name, sets }, true);
   saveDraft();
@@ -387,14 +550,20 @@ function showHistory() {
     card.className = 'history-card';
     details.open = index === sessions.length - 1;
     heading.className = 'history-title';
-    heading.textContent = session.day + ' workout';
+    heading.textContent = session.day + (session.restDay ? ' · Rest day' : ' workout');
     const exerciseCount = session.exercises.length;
     const setCount = session.exercises.reduce((total, exercise) => total + exercise.sets.length, 0);
-    metadata.textContent = session.date + ' · ' + exerciseCount + (exerciseCount === 1 ? ' exercise' : ' exercises')
+    metadata.textContent = session.restDay ? session.date : session.date + ' · ' + exerciseCount + (exerciseCount === 1 ? ' exercise' : ' exercises')
       + ' · ' + setCount + (setCount === 1 ? ' set' : ' sets');
     label.append(heading, metadata);
     header.append(label);
     content.className = 'history-content';
+    if (session.restDay) {
+      const message = document.createElement('p');
+      message.className = 'muted';
+      message.textContent = 'Rest and recovery.';
+      content.append(message);
+    }
     edit.type = 'button';
     edit.textContent = editing?.index === index ? 'Resume edit' : 'Edit';
     edit.disabled = Boolean(editing && editing.index !== index);
@@ -421,7 +590,7 @@ function showHistory() {
         const result = document.createElement('span');
         number.className = 'muted';
         number.textContent = 'Set ' + (index + 1);
-        result.textContent = set.reps + ' reps × ' + set.weight + ' kg';
+        result.textContent = setResult(set, exercise.name);
         const notes = setNotes(set);
         if (notes) {
           const note = document.createElement('small');
@@ -461,12 +630,18 @@ function workoutHighlight(session, previousSessions) {
       .filter(entry => entry.name.trim().toLowerCase() === name)
       .flatMap(entry => entry.sets);
     for (const set of exercise.sets) {
-      const comparable = previousSets.filter(entry => Number(entry.weight) === Number(set.weight));
+      if (set.seconds != null) {
+        const holds = previousSets.filter(entry => entry.seconds != null);
+        const extra = Number(set.seconds) - Math.max(...holds.map(entry => Number(entry.seconds)));
+        if (holds.length && extra > 0) return exercise.name + ' · Held ' + extra + ' seconds longer than last time.';
+        continue;
+      }
+      const comparable = previousSets.filter(entry => Number(entry.weight ?? 0) === Number(set.weight ?? 0));
       if (!comparable.length) continue;
       const extra = Number(set.reps) - Math.max(...comparable.map(entry => Number(entry.reps)));
       if (extra > 0) {
         return exercise.name + ' · ' + extra + (extra === 1 ? ' more rep' : ' more reps')
-          + ' at ' + set.weight + ' kg than last time.';
+          + (set.weight != null ? ' at ' + set.weight + ' kg' : '') + ' than last time.';
       }
     }
   }
@@ -507,6 +682,11 @@ function refreshToday() {
 }
 
 addExerciseButton.onclick = addNamedExercise;
+for (const area of new Set(exerciseCatalog.map(exercise => exercise.area))) {
+  exerciseArea.add(new Option(area, area));
+}
+exerciseArea.onchange = renderExerciseChoices;
+exerciseEquipment.onchange = renderExerciseChoices;
 exercisePicker.ontoggle = () => {
   if (exercisePicker.open) renderExerciseChoices();
 };
@@ -514,6 +694,7 @@ nameInput.addEventListener('input', renderExerciseChoices);
 document.querySelector('#logTab').onclick = () => selectView(true);
 document.querySelector('#historyTab').onclick = () => selectView(false);
 day.onchange = saveDraft;
+restDay.onchange = saveDraft;
 workout.oninput = saveDraft;
 cancelEdit.onclick = () => {
   let regularDraft;
@@ -536,15 +717,16 @@ nameInput.onkeydown = event => {
 workout.onsubmit = event => {
   event.preventDefault();
   if (saveButton.disabled) return;
-  if (nameInput.value.trim()) {
+  if (!restDay.checked && nameInput.value.trim()) {
     addNamedExercise();
     return;
   }
-  const entries = getExercises();
-  if (!entries.length) return;
+  const entries = restDay.checked ? [] : getExercises();
+  if (!restDay.checked && !entries.length) return;
   const session = {
     day: day.value,
     date: editing?.original.date ?? new Date().toLocaleDateString('en-GB'),
+    restDay: restDay.checked,
     exercises: entries.map(({ name, sets }) => ({ name, sets }))
   };
   let regularDraft = null;
@@ -566,9 +748,9 @@ workout.onsubmit = event => {
   })) return;
   editing = null;
   loadDraft(regularDraft);
-  tell(isEdit ? 'Workout updated.' : '');
+  tell(isEdit ? 'Entry updated.' : session.restDay ? 'Rest day saved.' : '');
   selectView(false);
-  if (!isEdit) celebrateWorkout(workoutHighlight(session, previousSessions));
+  if (!isEdit && !session.restDay) celebrateWorkout(workoutHighlight(session, previousSessions));
 };
 
 refreshToday();

@@ -128,6 +128,283 @@
       <circle cx="22" cy="32" r="5"/><path d="m29 40 12 17 12-22 13 25M29 40l-10 3 1-8"/>
     </g>
   </symbol>
+  <symbol id="pull-up" viewBox="0 0 80 80">
+    <path d="M10 12h60M14 12v56M66 12v56" fill="none" stroke="#697568" stroke-width="4" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="40" cy="23" r="5"/><path d="M40 33v18M34 36 24 28V13M46 36l10-8V13M40 51l-7 12 8 6M40 51l9 12-5 6"/>
+    </g>
+  </symbol>
+  <symbol id="plank" viewBox="0 0 80 80">
+    <path d="M8 64h64" fill="none" stroke="#697568" stroke-width="3" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+      <circle cx="60" cy="37" r="5"/><path d="m51 43-22 8-15 9M48 45l7 13h12M12 60h8"/>
+    </g>
+  </symbol>
+  <symbol id="dumbbell-bench-press" viewBox="0 0 80 80">
+    <path d="M10 53h48M16 53v15M52 53v15" fill="none" stroke="#697568" stroke-width="4" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="19" cy="44" r="5"/><path d="M28 47h22l12 8 5 12M34 44V25M28 22h13M28 18v8M41 18v8M45 42V29M40 27h12M40 23v8M52 23v8"/></g>
+  </symbol>
+  <symbol id="incline-barbell-press" viewBox="0 0 80 80">
+    <use href="#incline-dumbbell-press"/><path d="M30 15h35M30 10v10M65 10v10" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="decline-bench-press" viewBox="0 0 80 80">
+    <g fill="none" stroke="#697568" stroke-width="4" stroke-linecap="round"><path d="m11 56 46-17M19 53v15M53 42v26"/></g>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="47" r="5"/><path d="m25 46 22-8 13 8 5 18M34 42V21M20 18h32M20 12v12M52 12v12"/></g>
+  </symbol>
+  <symbol id="pec-deck" viewBox="0 0 80 80">
+    <use href="#chest-fly"/><path d="M9 65V13h62v52M12 38v12M68 38v12" fill="none" stroke="#697568" stroke-width="3" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="cable-crossover" viewBox="0 0 80 80">
+    <path d="M8 68V12h64v56M8 22l26 23M72 22 46 45" fill="none" stroke="#697568" stroke-width="3" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="23" r="5"/><path d="M40 33v18M34 35l-9 2 11 11M46 35l9 2-11 11M40 51 29 68M40 51l11 17"/></g>
+  </symbol>
+  <symbol id="barbell-row" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="55" cy="21" r="5"/><path d="m47 28-22 13 7 13-7 14M25 41l-9 27M46 31l-8 11 7 7M27 51h37M27 45v12M64 45v12"/></g>
+  </symbol>
+  <symbol id="t-bar-row" viewBox="0 0 80 80">
+    <path d="m10 69 39-22" stroke="#697568" stroke-width="4" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="54" cy="20" r="5"/><path d="m46 28-19 13 5 14-6 13M27 41l-12 27M43 31l-8 12 9 5M38 44l10 8M45 41l8 13"/></g>
+  </symbol>
+  <symbol id="chest-supported-row" viewBox="0 0 80 80">
+    <path d="m23 52 26-26M26 52v16M45 32l13 36" fill="none" stroke="#697568" stroke-width="4" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="52" cy="20" r="5"/><path d="M45 28 27 46 15 66M43 33l9 12-13 6M33 54h14M33 50v8M47 50v8"/></g>
+  </symbol>
+  <symbol id="straight-arm-pulldown" viewBox="0 0 80 80">
+    <path d="M68 69V10H53M54 12 40 48" fill="none" stroke="#697568" stroke-width="3" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="30" cy="20" r="5"/><path d="m30 30-7 21 5 17M23 51 15 68M31 34l10 15M36 50h14"/></g>
+  </symbol>
+  <symbol id="chin-up" viewBox="0 0 80 80">
+    <use href="#pull-up"/><path d="M31 13v9M49 13v9M29 21h5M46 21h5" fill="none" stroke="#d4fa7d" stroke-width="3"/>
+  </symbol>
+  <symbol id="assisted-pull-up" viewBox="0 0 80 80">
+    <use href="#pull-up"/><path d="M29 65h24M40 65v9M11 73h58M65 40h8v31h-8" fill="none" stroke="#697568" stroke-width="4"/>
+  </symbol>
+  <symbol id="back-extension" viewBox="0 0 80 80">
+    <path d="m18 68 29-24M26 59h31M51 48l10 20M40 43l9 7" fill="none" stroke="#697568" stroke-width="5" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="61" cy="25" r="5"/><path d="M54 32 41 45 25 60 17 60M50 36l10 8-12-4"/></g>
+  </symbol>
+  <symbol id="deadlift" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="43" cy="20" r="5"/><path d="m37 28-12 19 12 8-6 13M25 47 16 61v7M37 31l9 27M17 61h45M17 54v14M62 54v14"/></g>
+  </symbol>
+  <symbol id="arnold-press" viewBox="0 0 80 80">
+    <use href="#shoulder-press"/><path d="m8 30 3-8 5 7M9 23q-6 15 4 21M72 30l-3-8-5 7M71 23q6 15-4 21" fill="none" stroke="#697568" stroke-width="2" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="cable-lateral-raise" viewBox="0 0 80 80">
+    <path d="M9 10v58h11M13 61l47-24" fill="none" stroke="#697568" stroke-width="3"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="39" cy="18" r="5"/><path d="M39 28v23M44 32l16 4M34 32l-7 15M39 51 29 68M39 51l11 17"/></g>
+  </symbol>
+  <symbol id="front-raise" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="27" cy="16" r="5"/><path d="M27 26v25M31 31h29M27 51 18 69M27 51l12 18M60 25v12M55 25h10M55 37h10"/></g>
+  </symbol>
+  <symbol id="reverse-fly" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="29" r="5"/><path d="M40 39v14M34 41 19 33 9 30M46 41l15-8 10-3M40 53 28 69M40 53l12 16M6 26v10M13 26v10M67 26v10M74 26v10"/></g>
+    <path d="m35 55-8-9M45 55l8-9" stroke="#697568" stroke-width="3"/>
+  </symbol>
+  <symbol id="face-pull" viewBox="0 0 80 80">
+    <path d="M68 68V11M66 24H49M50 24l-8 6M50 24l-8-6" fill="none" stroke="#697568" stroke-width="3"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="25" cy="22" r="5"/><path d="M25 32v20M29 33l13 6 1-10M29 33l8-12h7M25 52 16 69M25 52l11 17"/></g>
+  </symbol>
+  <symbol id="upright-row" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="17" r="5"/><path d="M40 27v25M34 31 21 25l10 14M46 31l13-6-10 14M16 41h48M16 35v12M64 35v12M40 52 29 69M40 52l11 17"/></g>
+  </symbol>
+  <symbol id="shrug" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="17" r="5"/><path d="M40 27v25M34 26l-9 7v15M46 26l9 7v15M40 52 29 69M40 52l11 17M19 50h13M48 50h13M19 46v8M32 46v8M48 46v8M61 46v8"/></g>
+    <path d="M18 25v-9l-4 4M62 25v-9l4 4" fill="none" stroke="#697568" stroke-width="2"/>
+  </symbol>
+  <symbol id="ez-bar-curl" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="15" r="5"/><path d="M40 25v27M34 29 24 43l8-10M46 29l10 14-8-10M16 33h11l5-4 8 4 8-4 5 4h11M16 27v12M64 27v12M40 52 29 69M40 52l11 17"/></g>
+  </symbol>
+  <symbol id="preacher-curl" viewBox="0 0 80 80">
+    <path d="m32 33 18 13M43 43v26M16 53h17M20 53v16" fill="none" stroke="#697568" stroke-width="5" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="28" cy="19" r="5"/><path d="m28 29-4 21 15 6 2 13M32 32l14 12 7-15M47 26h17M47 22v8M64 22v8"/></g>
+  </symbol>
+  <symbol id="concentration-curl" viewBox="0 0 80 80">
+    <path d="M15 48h30M20 50v19M40 50v19" fill="none" stroke="#697568" stroke-width="4" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="41" cy="17" r="5"/><path d="M37 27 27 45l22 8 8 16M27 45 15 68M38 31l9 17 9-8M51 37h13M51 33v8M64 33v8"/></g>
+  </symbol>
+  <symbol id="cable-curl" viewBox="0 0 80 80">
+    <use href="#ez-bar-curl"/><path d="M72 12v55H40V35" fill="none" stroke="#697568" stroke-width="3"/>
+  </symbol>
+  <symbol id="reverse-curl" viewBox="0 0 80 80">
+    <use href="#ez-bar-curl"/><path d="M26 29v9M54 29v9M23 29h6M51 29h6" fill="none" stroke="#f2f4ef" stroke-width="2"/>
+  </symbol>
+  <symbol id="wrist-curl" viewBox="0 0 80 80">
+    <path d="M12 47h37M17 49v19M44 49v19" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="25" cy="19" r="5"/><path d="M26 29v16l16 9 5 14M30 34l13 8h16l3-7M56 33h14M56 29v8M70 29v8"/></g>
+  </symbol>
+  <symbol id="overhead-tricep-extension" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="27" r="5"/><path d="M40 37v17M34 39 27 20l13-5 13 5-7 19M40 54 29 69M40 54l11 15M35 11h10M35 7v12M45 7v12"/></g>
+  </symbol>
+  <symbol id="skull-crusher" viewBox="0 0 80 80">
+    <path d="M10 53h49M16 55v14M53 55v14" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="20" cy="44" r="5"/><path d="M29 47h21l13 8 4 14M35 43V25l-13 8M14 32h17M14 26v12M31 26v12"/></g>
+  </symbol>
+  <symbol id="dip" viewBox="0 0 80 80">
+    <path d="M18 69V37h11M62 69V37H51" fill="none" stroke="#697568" stroke-width="5" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="15" r="5"/><path d="M40 25v23M34 29l-9-5v14M46 29l9-5v14M40 48l-8 12 9 7M40 48l8 12-4 7"/></g>
+  </symbol>
+  <symbol id="bench-dip" viewBox="0 0 80 80">
+    <path d="M9 42h20M14 44v24M25 44v24M8 69h63" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="36" cy="24" r="5"/><path d="m35 34-5 17 20 6 15 11M30 38l-6 4M32 39l-4 4"/></g>
+  </symbol>
+  <symbol id="front-squat" viewBox="0 0 80 80">
+    <use href="#squat"/><path d="M17 32h47M17 27v10M64 27v10M39 32l11 7" fill="none" stroke="#d4fa7d" stroke-width="3"/>
+  </symbol>
+  <symbol id="goblet-squat" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="37" cy="17" r="5"/><path d="m35 27-7 19 16 8-5 14h14M28 46 17 57l-3 11h13M37 31l10 7 6-6M43 31h12"/><circle cx="51" cy="27" r="4"/></g>
+  </symbol>
+  <symbol id="hack-squat" viewBox="0 0 80 80">
+    <path d="m14 67 40-56M24 69 64 13M44 19l12 9M16 62l16 10" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="48" cy="21" r="5"/><path d="M42 30 32 45l14 8-15 10M38 32l10 8"/></g>
+  </symbol>
+  <symbol id="smith-machine-squat" viewBox="0 0 80 80">
+    <path d="M9 70V9h62v61M18 10v59M62 10v59" fill="none" stroke="#697568" stroke-width="3"/>
+    <use href="#squat"/>
+  </symbol>
+  <symbol id="seated-leg-curl" viewBox="0 0 80 80">
+    <path d="M18 24v27h29M23 53v16M44 53v16M44 56h13" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="29" cy="19" r="5"/><path d="M29 29v19h20l-8 17M33 34l9 8M38 65h9"/></g>
+  </symbol>
+  <symbol id="standing-leg-curl" viewBox="0 0 80 80">
+    <path d="M61 68V28H47M15 69h49M49 46h10" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="35" cy="15" r="5"/><path d="M35 25v24M39 30l10 3M35 49 29 68M35 49l14 10 5-14M50 44h9"/></g>
+  </symbol>
+  <symbol id="sumo-deadlift" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="23" r="5"/><path d="M40 33v15M34 37l-3 20M46 37l3 20M40 48 22 52 12 68M40 48l18 4 10 16M15 60h50M15 54v13M65 54v13"/></g>
+  </symbol>
+  <symbol id="lunge" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="15" r="5"/><path d="M40 25v23M34 30l-8 14M46 30l8 14M40 48 22 48v20M40 48l12 17h15M19 44h13M48 44h13M19 40v8M32 40v8M48 40v8M61 40v8"/></g>
+    <path d="M15 26H7l4-4" fill="none" stroke="#697568" stroke-width="2"/>
+  </symbol>
+  <symbol id="reverse-lunge" viewBox="0 0 80 80">
+    <use href="#lunge"/><path d="M63 25h10l-4-4" fill="none" stroke="#697568" stroke-width="3"/>
+  </symbol>
+  <symbol id="bulgarian-split-squat" viewBox="0 0 80 80">
+    <path d="M51 47h21M58 49v20M69 49v20" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="32" cy="16" r="5"/><path d="M32 26v23M26 31l-7 14M38 31l7 14M32 49 19 51v17M32 49l15 14 12-16M13 45h12M39 45h12M13 41v8M25 41v8M39 41v8M51 41v8"/></g>
+  </symbol>
+  <symbol id="step-up" viewBox="0 0 80 80">
+    <path d="M40 70V49h29v21" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="34" cy="13" r="5"/><path d="M34 23v22M28 28l-8 14M40 28l8 14M34 45l18-9v12M34 45 23 68M14 43h12M42 43h12M14 39v8M26 39v8M42 39v8M54 39v8"/></g>
+  </symbol>
+  <symbol id="glute-bridge" viewBox="0 0 80 80">
+    <path d="M8 67h64" stroke="#697568" stroke-width="4" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="56" r="5"/><path d="m25 58 18-20 15 10 5 16M28 56l-3 8h12"/></g>
+  </symbol>
+  <symbol id="cable-kickback" viewBox="0 0 80 80">
+    <path d="M67 12v57H13M45 40h21M14 68l7-10" fill="none" stroke="#697568" stroke-width="3"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="46" cy="19" r="5"/><path d="m40 27-8 20 9 21M32 47 18 56l-8-1M39 31l12 9"/></g>
+  </symbol>
+  <symbol id="hip-abduction" viewBox="0 0 80 80">
+    <path d="M32 27v24h16V27M40 53v18M16 55l6 4M58 59l6-4" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="17" r="5"/><path d="M40 27v22M40 49 22 53l-6 15M40 49l18 4 6 15M34 33l-5 12M46 33l5 12"/></g>
+    <path d="M23 42H11l4-4M57 42h12l-4-4" fill="none" stroke="#f2f4ef" stroke-width="2"/>
+  </symbol>
+  <symbol id="hip-adduction" viewBox="0 0 80 80">
+    <path d="M32 27v24h16V27M40 53v18M26 57h8M46 57h8" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="17" r="5"/><path d="M40 27v22M40 49l-7 6-3 14M40 49l7 6 3 14M34 33l-5 12M46 33l5 12"/></g>
+    <path d="M12 42h13l-4-4M68 42H55l4-4" fill="none" stroke="#f2f4ef" stroke-width="2"/>
+  </symbol>
+  <symbol id="seated-calf-raise" viewBox="0 0 80 80">
+    <path d="M16 23v29h25M20 54v16M42 69h23M45 43h15M51 43V27h14" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="28" cy="17" r="5"/><path d="M28 27v21h22v13l7 6M32 32l12 9"/></g>
+  </symbol>
+  <symbol id="standing-calf-machine" viewBox="0 0 80 80">
+    <use href="#calf-raise"/><path d="M12 70V10h57v60M26 25h27M28 25v8M51 25v8" fill="none" stroke="#697568" stroke-width="4"/>
+  </symbol>
+  <symbol id="side-plank" viewBox="0 0 80 80">
+    <path d="M8 67h64" fill="none" stroke="#697568" stroke-width="3"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="56" cy="27" r="5"/><path d="m49 35-21 19-14 9M48 36l9 28h11M48 36 35 25l8-8"/></g>
+  </symbol>
+  <symbol id="reverse-crunch" viewBox="0 0 80 80">
+    <path d="M9 66h62" fill="none" stroke="#697568" stroke-width="3"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="17" cy="54" r="5"/><path d="M26 58h19l3-23-16 9M28 58l-4 6h17M48 35l12 9"/></g>
+  </symbol>
+  <symbol id="sit-up" viewBox="0 0 80 80">
+    <path d="M8 67h64" fill="none" stroke="#697568" stroke-width="3"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="21" cy="27" r="5"/><path d="m27 35 15 26 13-20 12 23M29 40l-11-3 1-9"/></g>
+  </symbol>
+  <symbol id="bicycle-crunch" viewBox="0 0 80 80">
+    <use href="#crunch"/><path d="m40 56 20 5 11-12M28 40l16-3" fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="hanging-knee-raise" viewBox="0 0 80 80">
+    <path d="M12 11h56M15 11v59M65 11v59" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="29" r="5"/><path d="M40 39v17M34 42l-8-16V12M46 42l8-16V12M40 56l-15-9-6 13M40 56l14-9 7 13"/></g>
+  </symbol>
+  <symbol id="hanging-leg-raise" viewBox="0 0 80 80">
+    <path d="M12 11h56M15 11v59M65 11v59" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="29" r="5"/><path d="M40 39v17M34 42l-8-16V12M46 42l8-16V12M40 56H17M40 56l-18 7"/></g>
+  </symbol>
+  <symbol id="cable-crunch" viewBox="0 0 80 80">
+    <path d="M65 69V10H45v19M8 70h55" fill="none" stroke="#697568" stroke-width="3"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="44" cy="36" r="5"/><path d="m37 39-12 13 16 7-5 10H20M35 42l13 3-1-14"/></g>
+  </symbol>
+  <symbol id="russian-twist" viewBox="0 0 80 80">
+    <path d="M8 68h64" fill="none" stroke="#697568" stroke-width="3"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="26" cy="23" r="5"/><path d="m30 32 10 28 15-17 12 16M32 37l14 6 7-7"/><circle cx="55" cy="34" r="6"/></g>
+  </symbol>
+  <symbol id="ab-wheel-rollout" viewBox="0 0 80 80">
+    <path d="M8 69h64" fill="none" stroke="#697568" stroke-width="3"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="51" cy="29" r="5"/><path d="m44 36-18 9-9 20h-8M26 45l13 17M47 38l12 20"/><circle cx="61" cy="61" r="7"/></g>
+  </symbol>
+  <symbol id="dead-bug" viewBox="0 0 80 80">
+    <path d="M8 69h64" fill="none" stroke="#697568" stroke-width="3"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="18" cy="58" r="5"/><path d="M26 61h18l10-24 14 5M44 61l24 3M29 59l3-24M29 59 12 38"/></g>
+  </symbol>
+  <symbol id="bird-dog" viewBox="0 0 80 80">
+    <path d="M8 69h64" fill="none" stroke="#697568" stroke-width="3"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="53" cy="29" r="5"/><path d="M46 36H29L10 31M30 36l-5 22h13M46 36l6 31M46 36h24"/></g>
+  </symbol>
+  <symbol id="mountain-climber" viewBox="0 0 80 80">
+    <path d="M8 68h64" fill="none" stroke="#697568" stroke-width="3"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="58" cy="26" r="5"/><path d="m50 34-21 9-16 22M49 37l9 28M29 43l17 13-13 9"/></g>
+  </symbol>
+  <symbol id="kettlebell-swing" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="29" cy="15" r="5"/><path d="M29 25v24M33 30l23 8M29 49 18 68M29 49l13 19"/><circle cx="60" cy="45" r="7"/><path d="M56 38v-5h8v5"/></g>
+  </symbol>
+  <symbol id="burpee" viewBox="0 0 80 80">
+    <path d="M8 72h64" fill="none" stroke="#697568" stroke-width="3"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="23" r="5"/><path d="M40 33v20M34 36 23 15M46 36l11-21M40 53 28 63M40 53l12 10"/></g>
+    <path d="M15 62v-9l-4 4M65 62v-9l4 4" fill="none" stroke="#697568" stroke-width="2"/>
+  </symbol>
+  <symbol id="thruster" viewBox="0 0 80 80">
+    <use href="#shoulder-press"/><path d="M10 61V44l-4 5M70 61V44l4 5" fill="none" stroke="#697568" stroke-width="2"/>
+  </symbol>
+  <symbol id="farmer-carry" viewBox="0 0 80 80">
+    <use href="#shrug"/><path d="M23 69h13M45 67l11 5M7 61h8l-3-3" fill="none" stroke="#697568" stroke-width="3"/>
+  </symbol>
+  <symbol id="battle-ropes" viewBox="0 0 80 80">
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="26" cy="18" r="5"/><path d="m26 28-4 22 9 18M22 50 12 68M29 33l13 8M28 36l10 14"/></g>
+    <path d="M42 41q8-16 15 0t15 0M38 50q9 16 17 0t17 0" fill="none" stroke="#697568" stroke-width="4" stroke-linecap="round"/>
+  </symbol>
+  <symbol id="sled-push" viewBox="0 0 80 80">
+    <path d="M46 68h26M53 67V32M65 67V32M45 70h29" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="43" cy="20" r="5"/><path d="M36 28 23 45 10 65M23 45l12 13-4 10M36 30l17 5M38 33l23 3"/></g>
+  </symbol>
+  <symbol id="treadmill" viewBox="0 0 80 80">
+    <path d="M8 70h60l-4-40H52M14 66h44M63 70v3" fill="none" stroke="#697568" stroke-width="4" stroke-linecap="round"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="41" cy="14" r="5"/><path d="m37 23-8 18 14 10-3 12M29 41 20 56l-9 1M35 28l12 8 9-6"/></g>
+  </symbol>
+  <symbol id="stationary-bike" viewBox="0 0 80 80">
+    <g fill="none" stroke="#697568" stroke-width="4" stroke-linecap="round"><circle cx="24" cy="57" r="10"/><path d="M24 57h33M20 43h16M57 57V32h8M12 70h57M21 57l4 13M54 57l8 13"/></g>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="41" cy="16" r="5"/><path d="M36 25 28 40l18 5-9 15M36 28l18 6"/></g>
+  </symbol>
+  <symbol id="elliptical" viewBox="0 0 80 80">
+    <g fill="none" stroke="#697568" stroke-width="3" stroke-linecap="round"><path d="M14 71h52M27 63l-4-37M56 64l7-40M17 63h18M46 65h19M27 64l15-9 13 9"/><circle cx="42" cy="55" r="8"/></g>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="14" r="5"/><path d="M40 24v20M34 29l-10 3M46 29l15 2M40 44 26 61M40 44l15 19"/></g>
+  </symbol>
+  <symbol id="stair-climber" viewBox="0 0 80 80">
+    <path d="M12 70V59h15V48h15V37h16M60 70V21H47" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="37" cy="12" r="5"/><path d="M34 22v20M34 42l17-13v7M34 42 21 49v9M38 26l12 2"/></g>
+  </symbol>
+  <symbol id="rowing-machine" viewBox="0 0 80 80">
+    <path d="M9 65h58M20 60h14M70 56v13M62 46h8v14h-8M62 49H46" fill="none" stroke="#697568" stroke-width="4"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="25" cy="26" r="5"/><path d="m25 36 5 19 14-14 13 16M29 40l10 12 8-4"/></g>
+  </symbol>
+  <symbol id="jump-rope" viewBox="0 0 80 80">
+    <path d="M19 39C-4 2 84 2 61 39M19 39c-8 38 50 38 42 0" fill="none" stroke="#697568" stroke-width="3"/>
+    <g fill="none" stroke="#d4fa7d" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="21" r="5"/><path d="M40 31v21M34 35l-15 4M46 35l15 4M40 52l-6 13M40 52l6 13"/></g>
+  </symbol>
   <symbol id="custom" viewBox="0 0 80 80">
     <g fill="none" stroke="#a9b2a8" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
       <path d="m28 48 20-20M18 38l24 24M38 18l24 24M12 44l24 24M44 12l24 24"/>

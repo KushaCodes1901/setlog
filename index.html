@@ -29,8 +29,38 @@
         <option>Monday</option><option>Tuesday</option><option>Wednesday</option>
         <option>Thursday</option><option>Friday</option><option>Saturday</option><option>Sunday</option>
       </select>
+      <label class="rest-day-choice"><input id="restDay" type="checkbox"> Rest day</label>
     </section>
+    <details id="restTimer" class="rest-timer">
+      <summary>Rest timer</summary>
+      <div class="timer-content">
+        <div class="timer-dial">
+          <svg class="timer-ring" viewBox="0 0 240 240" focusable="false" aria-hidden="true">
+            <circle class="timer-track" cx="120" cy="120" r="108"/>
+            <circle id="restProgress" class="timer-progress" cx="120" cy="120" r="108" pathLength="100"/>
+          </svg>
+          <div class="timer-dial-center">
+            <span id="restDialTime" role="timer" aria-label="Time remaining" aria-live="off">1:30</span>
+            <span id="restDialLabel">Ready to rest</span>
+          </div>
+        </div>
+        <div class="timer-presets" aria-label="Rest duration">
+          <button type="button" data-rest="30">30s</button>
+          <button type="button" data-rest="60">1m</button>
+          <button type="button" data-rest="90">1m 30s</button>
+          <button type="button" data-rest="120">2m</button>
+        </div>
+        <div class="fields">
+          <label>Rest in seconds<input id="restDuration" type="number" inputmode="numeric" min="1" max="3600" step="1" value="90" required></label>
+          <button id="restStart" class="primary" type="button">Start</button>
+          <button id="restReset" type="button">Reset</button>
+        </div>
+        <p id="restStatus" class="muted picker-help" role="status">Choose your rest time, then tap Start.</p>
+      </div>
+    </details>
     <form id="workout">
+      <p id="restDayMessage" class="rest-day-message muted" hidden>A day to recover. Save it to keep it in your History.</p>
+      <fieldset id="workoutExercises" class="workout-exercises">
       <div id="exercises"></div>
       <section class="exercise-entry">
         <details id="exercisePicker">
@@ -40,10 +70,19 @@
           <button id="addExercise" type="button">Add</button>
         </div>
           <p class="muted picker-help">Tap an exercise to add it. Previous sets fill in automatically.</p>
+          <div class="picker-filters">
+            <label>Body area<select id="exerciseArea"><option value="">All areas</option></select></label>
+            <label>Equipment<select id="exerciseEquipment">
+              <option value="">All equipment</option><option>Bodyweight</option><option>Dumbbells</option>
+              <option>Barbell</option><option>Cable</option><option>Machine</option><option>Kettlebell</option><option>Other</option>
+            </select></label>
+          </div>
+          <p id="exerciseCount" class="muted picker-help" role="status"></p>
           <div id="exerciseChoices"></div>
         </details>
         <p id="exerciseHint" class="muted" hidden>Save the open exercise before adding another or saving the workout.</p>
       </section>
+      </fieldset>
       <button id="save" class="primary wide" disabled>Save workout</button>
       <button id="cancelEdit" class="wide" type="button" hidden>Cancel edit</button>
     </form>
@@ -73,9 +112,14 @@
   <div class="set">
     <div class="fields">
       <small class="set-number"></small>
-      <label>Reps<input class="reps" type="number" inputmode="numeric" min="1" step="1" required></label>
+      <label><span class="quantity-label">Reps</span><input class="reps" type="number" inputmode="numeric" min="1" step="1" required></label>
       <label>Weight (kg)<input class="weight" type="number" inputmode="decimal" min="0" step="any" required></label>
       <button class="remove" type="button">×</button>
+    </div>
+    <div class="plank-timer" hidden>
+      <button class="plank-start" type="button">Start hold</button>
+      <span class="plank-clock" aria-label="Seconds remaining"></span>
+      <p class="plank-status muted picker-help" role="status">Enter your hold time in seconds, then tap Start hold.</p>
     </div>
     <div class="set-feedback">
       <fieldset class="effort">
@@ -86,6 +130,8 @@
     </div>
   </div>
 </template>
+<script src="exercise-catalog.js"></script>
 <script src="app.js"></script>
+<script src="rest-timer.js"></script>
 </body>
 </html>
