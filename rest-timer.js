@@ -10,6 +10,7 @@
   const storageKey = 'setlog-rest-v1';
   let state = { duration: 90, remaining: 90, endsAt: null, paused: false };
   let interval = null;
+  const durationControl = durationPicker.attach(durationInput, { label: 'Custom rest time', maximum: 3600 });
 
   function readState(value) {
     const parsed = JSON.parse(value);
@@ -43,6 +44,7 @@
     progress.style.strokeDashoffset = String((1 - fraction) * 100);
     start.textContent = state.endsAt !== null ? 'Pause' : state.paused ? 'Resume' : 'Start';
     durationInput.disabled = state.endsAt !== null;
+    durationControl.refresh();
     timer.querySelectorAll('[data-rest]').forEach(button => {
       button.setAttribute('aria-pressed', Number(button.dataset.rest) === state.duration);
     });

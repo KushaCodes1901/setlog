@@ -82,7 +82,7 @@ function isHold(name) {
 function setResult(set, name) {
   const showWeight = set.weight != null && set.weight !== '' && (!isBodyweight(name) || Number(set.weight) > 0);
   const quantity = set.seconds != null
-    ? set.seconds + (Number(set.seconds) === 1 ? ' second' : ' seconds')
+    ? durationPicker.format(set.seconds)
     : set.reps + ' reps';
   return quantity + (showWeight ? ' × ' + set.weight + ' kg' : '');
 }
@@ -297,9 +297,22 @@ function deleteWorkout(session, index) {
 function numberSets(list) {
   Array.from(list.children).forEach((row, index) => {
     row.querySelector('small').textContent = 'Set ' + (index + 1);
-    row.querySelector('button').setAttribute('aria-label', 'Remove set ' + (index + 1));
-    row.querySelector('button').disabled = list.children.length === 1;
+    row.querySelector('.remove').setAttribute('aria-label', 'Remove set ' + (index + 1));
+    row.querySelector('.remove').disabled = list.children.length === 1;
   });
+}
+
+function validateSets(list) {
+  for (const row of list.children) {
+    const quantity = row.querySelector('.reps');
+    if (row.dataset.timed === 'true' && !(Number(quantity.value) > 0)) {
+      tell('Choose a duration for each timed set.', true);
+      row.querySelector('.duration-trigger').click();
+      return false;
+    }
+    if (!Array.from(row.querySelectorAll('input')).every(input => input.reportValidity())) return false;
+  }
+  return true;
 }
 
 function addSet(list, values = {}, focus = false) {
@@ -311,7 +324,11 @@ function addSet(list, values = {}, focus = false) {
   row.dataset.timed = timed;
   reps.value = timed ? values.seconds ?? '' : values.reps ?? '';
   if (timed && values.reps != null) row.dataset.legacyReps = values.reps;
-  row.querySelector('.quantity-label').textContent = timed ? isHold(name) ? 'Hold (seconds)' : 'Time (seconds)' : 'Reps';
+  row.querySelector('.quantity-label').textContent = timed ? isHold(name) ? 'Hold time' : 'Duration' : 'Reps';
+  if (timed) {
+    reps.type = 'hidden';
+    reps.required = false;
+  }
   weight.value = values.weight ?? '';
   const bodyweight = isBodyweight(list.closest('article').querySelector('h3').textContent);
   // Keep extra weight visible in older records that explicitly logged it.
@@ -347,7 +364,7 @@ function addSet(list, values = {}, focus = false) {
     };
     options.append(rating);
   });
-  row.querySelector('button').onclick = () => {
+  row.querySelector('.remove').onclick = () => {
     row.remove();
     numberSets(list);
     saveDraft();
@@ -355,7 +372,7 @@ function addSet(list, values = {}, focus = false) {
   list.append(row);
   if (timed) setupSetTimer(row, values);
   numberSets(list);
-  if (focus) reps.focus();
+  if (focus) (row.querySelector('.duration-trigger') ?? reps).focus();
 }
 
 function setupSetTimer(row, values) {
@@ -365,11 +382,12 @@ function setupSetTimer(row, values) {
   const clock = row.querySelector('.plank-clock');
   const status = row.querySelector('.plank-status');
   let interval = null;
+  const durationControl = durationPicker.attach(input, { label: 'Set duration' });
   const holding = isHold(row.closest('article').querySelector('h3').textContent);
   const startLabel = holding ? 'Start hold' : 'Start timer';
   start.textContent = startLabel;
-  status.textContent = holding ? 'Enter your hold time in seconds, then tap Start hold.'
-    : 'Enter your time in seconds, then tap Start timer.';
+  status.textContent = holding ? 'Choose your hold time, then tap Start hold.'
+    : 'Choose your duration, then tap Start timer.';
   panel.hidden = false;
   if (values.reps != null && values.seconds == null) {
     status.textContent = 'Previously logged as reps. Enter a hold time in seconds.';
@@ -381,6 +399,7 @@ function setupSetTimer(row, values) {
     delete row.dataset.holdEndsAt;
     delete row.dataset.holdStartedAt;
     input.disabled = false;
+    durationControl.refresh();
     start.textContent = startLabel;
     status.textContent = message;
     saveDraft();
@@ -392,16 +411,17 @@ function setupSetTimer(row, values) {
       return;
     }
     const remaining = Math.max(0, Math.ceil((Number(row.dataset.holdEndsAt) - Date.now()) / 1000));
-    clock.textContent = remaining + 's';
+    clock.textContent = durationPicker.format(remaining) === 'Choose time' ? '0:00' : durationPicker.format(remaining);
     if (!remaining) finish('Timer complete. Your time is ready to save.');
   }
 
   function run() {
     input.disabled = true;
+    durationControl.refresh();
     start.textContent = 'Stop early';
     status.textContent = holding ? 'Holding…' : 'Timing…';
     interval = setInterval(tick, 250);
-    clock.textContent = Math.max(0, Math.ceil((Number(row.dataset.holdEndsAt) - Date.now()) / 1000)) + 's';
+    clock.textContent = durationPicker.format(Math.max(0, Math.ceil((Number(row.dataset.holdEndsAt) - Date.now()) / 1000)));
     updateWorkoutControls();
   }
 
@@ -409,15 +429,22 @@ function setupSetTimer(row, values) {
     if (row.dataset.holdEndsAt) {
       const elapsed = Math.min(Number(input.value), Math.floor((Date.now() - Number(row.dataset.holdStartedAt)) / 1000));
       input.value = Math.max(0, elapsed);
-      clock.textContent = input.value + 's';
+      clock.textContent = Number(input.value) ? durationPicker.format(input.value) : '0:00';
       finish('Stopped. Review your time, then save the exercise.');
       return;
     }
-    if (!input.reportValidity()) return;
+    if (!(Number(input.value) > 0)) {
+      durationControl.button.click();
+      return;
+    }
     row.dataset.holdStartedAt = Date.now();
     row.dataset.holdEndsAt = Date.now() + Number(input.value) * 1000;
     run();
     saveDraft();
+  };
+  input.onchange = () => {
+    clock.textContent = '';
+    status.textContent = 'Time selected. Ready when you are.';
   };
   if (Number.isFinite(values.holdEndsAt) && Number.isFinite(values.holdStartedAt)) {
     row.dataset.holdEndsAt = values.holdEndsAt;
@@ -441,7 +468,7 @@ function addExercise(exercise, focus = false) {
     saveDraft();
   };
   card.querySelector('.add-set').onclick = () => {
-    if (Array.from(list.querySelectorAll('input')).every(input => input.reportValidity())) {
+    if (validateSets(list)) {
       addSet(list, {}, true);
       saveDraft();
     }
@@ -472,10 +499,10 @@ function addExercise(exercise, focus = false) {
     tell('');
     setSaved(false);
     saveDraft();
-    list.querySelector('.reps').focus();
+    (list.querySelector('.duration-trigger') ?? list.querySelector('.reps')).focus();
   };
   card.querySelector('.save-exercise').onclick = () => {
-    if (!Array.from(list.querySelectorAll('input')).every(input => input.reportValidity())) return;
+    if (!validateSets(list)) return;
     tell('');
     setSaved(true);
     if (saveDraft()) {

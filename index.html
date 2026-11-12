@@ -52,7 +52,7 @@
           <button type="button" data-rest="120">2m</button>
         </div>
         <div class="fields">
-          <label>Rest in seconds<input id="restDuration" type="number" inputmode="numeric" min="1" max="3600" step="1" value="90" required></label>
+          <div id="restDurationControl"><input id="restDuration" type="hidden" value="90"></div>
           <button id="restStart" class="primary" type="button">Start</button>
           <button id="restReset" type="button">Reset</button>
         </div>
@@ -141,6 +141,22 @@
     </div>
   </div>
 </template>
+<dialog id="durationDialog" class="duration-dialog" aria-labelledby="durationTitle">
+  <form method="dialog" id="durationForm">
+    <h2 id="durationTitle">Choose duration</h2>
+    <p class="muted picker-help">Scroll to set minutes and seconds.</p>
+    <div class="duration-wheels">
+      <div class="wheel-column"><div id="minutesWheel" class="duration-wheel" role="listbox" tabindex="0" aria-label="Minutes"></div><span class="wheel-unit" aria-hidden="true">min</span></div>
+      <div class="wheel-column"><div id="secondsWheel" class="duration-wheel" role="listbox" tabindex="0" aria-label="Seconds"></div><span class="wheel-unit" aria-hidden="true">sec</span></div>
+    </div>
+    <p id="durationHelp" class="muted picker-help" role="status"></p>
+    <div class="row duration-actions">
+      <button value="cancel">Cancel</button>
+      <button id="durationDone" class="primary" value="save">Set time</button>
+    </div>
+  </form>
+</dialog>
+<script src="duration-picker.js"></script>
 <script src="exercise-catalog.js"></script>
 <script src="app.js"></script>
 <script src="backup.js"></script>
