@@ -20,6 +20,8 @@ const effortLevels = [
 let storageReadable = true;
 let hasDraft = false;
 let editing = null;
+let activeView = 'log';
+const viewScroll = { log: 0, rest: 0, history: 0 };
 
 function tell(message, error = false) {
   const status = document.querySelector('#status');
@@ -112,7 +114,6 @@ function updateWorkoutControls() {
   if (hasOpenExercise) exercisePicker.open = false;
   workoutExercises.hidden = restDay.checked;
   workoutExercises.disabled = restDay.checked;
-  document.querySelector('#restTimer').hidden = restDay.checked;
   document.querySelector('#restDayMessage').hidden = !restDay.checked;
   saveButton.disabled = !restDay.checked && (hasOpenExercise || !exercises.children.length);
   saveButton.textContent = editing ? 'Save changes' : restDay.checked ? 'Save rest day' : 'Save workout';
@@ -258,7 +259,7 @@ function loadDraft(draft) {
 
 function editWorkout(session, index) {
   if (editing) {
-    selectView(true);
+    selectView('log');
     return;
   }
   const draft = {
@@ -272,7 +273,7 @@ function editWorkout(session, index) {
   editing = target;
   loadDraft(draft);
   tell('');
-  selectView(true);
+  selectView('log');
   day.focus();
 }
 
@@ -632,13 +633,18 @@ function renderHistoryEntries(entries, target) {
   });
 }
 
-function selectView(showLog) {
-  document.querySelector('#log').hidden = !showLog;
-  historyView.hidden = showLog;
-  document.querySelector('#backupPanel').hidden = showLog;
-  document.querySelector('#logTab').setAttribute('aria-pressed', showLog);
-  document.querySelector('#historyTab').setAttribute('aria-pressed', !showLog);
-  if (!showLog) showHistory();
+function selectView(view, { restoreScroll = false } = {}) {
+  if (activeView !== view) viewScroll[activeView] = window.scrollY;
+  activeView = view;
+  document.querySelector('#log').hidden = view !== 'log';
+  document.querySelector('#restView').hidden = view !== 'rest';
+  historyView.hidden = view !== 'history';
+  document.querySelector('#backupPanel').hidden = view !== 'history';
+  document.querySelector('#logTab').setAttribute('aria-pressed', view === 'log');
+  document.querySelector('#restTab').setAttribute('aria-pressed', view === 'rest');
+  document.querySelector('#historyTab').setAttribute('aria-pressed', view === 'history');
+  if (view === 'history') showHistory();
+  window.scrollTo({ top: restoreScroll ? viewScroll[view] : 0, behavior: 'auto' });
 }
 
 function workoutHighlight(session, previousSessions) {
@@ -714,12 +720,13 @@ exercisePicker.ontoggle = () => {
 };
 nameInput.addEventListener('input', renderExerciseChoices);
 document.querySelector('#logTab').onclick = () => {
-  selectView(true);
-  window.scrollTo({ top: 0, behavior: 'auto' });
+  selectView('log', { restoreScroll: true });
+};
+document.querySelector('#restTab').onclick = () => {
+  selectView('rest', { restoreScroll: true });
 };
 document.querySelector('#historyTab').onclick = () => {
-  selectView(false);
-  window.scrollTo({ top: 0, behavior: 'auto' });
+  selectView('history', { restoreScroll: true });
 };
 day.onchange = saveDraft;
 restDay.onchange = saveDraft;
@@ -733,7 +740,7 @@ cancelEdit.onclick = () => {
   editing = null;
   loadDraft(regularDraft);
   tell('Workout edit canceled.');
-  selectView(false);
+  selectView('history');
 };
 nameInput.onkeydown = event => {
   if (event.key === 'Enter' && !event.isComposing) {
@@ -778,7 +785,7 @@ workout.onsubmit = event => {
   loadDraft(regularDraft);
   tell(isEdit ? 'Entry updated.' : session.restDay ? 'Rest day saved.' : '');
   historyCalendar.select(session.date);
-  selectView(false);
+  selectView('history');
   if (!isEdit && !session.restDay) celebrateWorkout(workoutHighlight(session, previousSessions));
 };
 

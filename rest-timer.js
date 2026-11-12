@@ -106,7 +106,6 @@
       state.paused = false;
       clearInterval(interval);
       interval = null;
-      timer.open = true;
       status.textContent = 'Rest complete. Ready for your next set?';
       persist();
       openFocus();
@@ -158,10 +157,14 @@
   reset.onclick = () => chooseDuration(state.duration);
   focusToggle.onclick = () => start.click();
   document.querySelector('#restFocusReset').onclick = () => reset.click();
-  document.querySelector('#restFocusClose').onclick = () => focus.close();
+  document.querySelector('#restFocusClose').onclick = () => {
+    focus.close();
+    selectView('log', { restoreScroll: true });
+  };
   done.onclick = () => {
     focus.close();
     chooseDuration(state.duration);
+    selectView('log', { restoreScroll: true });
   };
   expand.onclick = openFocus;
   focus.addEventListener('close', () => {

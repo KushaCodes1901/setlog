@@ -137,7 +137,7 @@
         status.textContent = 'The backup could not be saved on this device. Your existing data is still available.';
         return;
       }
-      selectView(false);
+      selectView('history');
       status.textContent = 'Imported ' + added + (added === 1 ? ' entry.' : ' entries.') + ' Your History is ready.';
     } catch (error) {
       status.textContent = 'Could not import this backup. ' + error.message;
