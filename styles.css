@@ -131,3 +131,50 @@ button:disabled { opacity: .48; cursor: default; }
 .wheel-unit { position: absolute; top: 98px; right: 12px; font-size: 16px; color: var(--text); pointer-events: none; }
 .duration-actions { margin-top: 20px; }
 .duration-actions button { flex: 1; }
+.rest-focus { --focus-accent: var(--lime); --focus-text: var(--text); --focus-muted: #b9c4b4; position: fixed; inset: 0; width: 100%; max-width: none; height: 100%; height: 100dvh; max-height: none; margin: 0; padding: calc(20px + env(safe-area-inset-top)) max(20px, env(safe-area-inset-right)) calc(24px + env(safe-area-inset-bottom)) max(20px, env(safe-area-inset-left)); border: 0; border-radius: 0; color: var(--focus-text); background: rgb(20 26 20 / .72); overflow-y: auto; transition: background-color 400ms ease, color 400ms ease; }
+.rest-focus[open] { display: flex; flex-direction: column; }
+.rest-focus::backdrop { background: rgb(0 0 0 / .3); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); }
+.rest-focus-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.rest-focus .eyebrow { color: var(--focus-accent); }
+.rest-focus-header button { font-size: 13px; color: var(--focus-text); background: rgb(255 255 255 / .06); border-color: rgb(255 255 255 / .17); }
+.rest-focus-content { width: min(100%, 420px); margin: auto; padding: 32px 0; text-align: center; }
+#restFocusTitle { font-size: clamp(28px, 7vw, 40px); letter-spacing: -.05em; }
+#restFocusMessage { color: var(--focus-muted); font-size: 15px; margin-top: 8px; }
+.focus-dial { width: min(100%, 320px); margin: 30px auto 10px; }
+.rest-focus .timer-track { stroke: rgb(212 250 125 / .12); }
+.rest-focus .timer-progress { stroke: var(--focus-accent); }
+#restFocusTime { color: var(--focus-text); font-size: clamp(50px, 16vw, 80px); font-weight: 300; line-height: 1.1; letter-spacing: -.04em; font-variant-numeric: tabular-nums; }
+#restFocusLabel { color: var(--focus-muted); font-size: 14px; margin-top: 8px; }
+.rest-focus-announcement { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); white-space: nowrap; }
+.rest-focus-actions { gap: 12px; margin-top: 24px; }
+.rest-focus-actions button { flex: 1; min-height: 58px; border-radius: 30px; background: rgb(255 255 255 / .06); border-color: rgb(255 255 255 / .17); color: var(--focus-text); }
+.rest-focus-actions .primary { background: var(--focus-accent); border-color: var(--focus-accent); color: #141615; }
+.rest-focus.is-complete { --focus-accent: #141615; --focus-text: #141615; --focus-muted: #374526; background: var(--lime); }
+.rest-focus.is-complete .timer-track { stroke: rgb(20 22 21 / .16); }
+.rest-focus.is-complete .rest-focus-header button, .rest-focus.is-complete .rest-focus-actions button { border-color: rgb(20 22 21 / .25); background: rgb(20 22 21 / .06); }
+.rest-focus.is-complete .rest-focus-actions .primary { background: #141615; color: var(--lime); border-color: #141615; }
+.rest-focus.is-complete :focus-visible { outline-color: #141615; }
+.rest-focus.is-complete .rest-focus-content { position: relative; z-index: 1; }
+.rest-focus.is-complete #restFocusTitle { font-size: clamp(44px, 12vw, 72px); line-height: 1.05; letter-spacing: -.065em; }
+.rest-focus.is-complete #restFocusMessage { max-width: 280px; margin: 20px auto 0; font-size: 18px; line-height: 1.5; }
+.rest-focus-done { margin-top: 38px; min-height: 58px; padding: 14px 28px; border-radius: 30px; background: #141615; color: var(--lime); border-color: #141615; font-size: 16px; }
+.rest-confetti { position: absolute; top: 15%; left: 50%; width: 8px; height: 14px; border-radius: 2px; opacity: 0; pointer-events: none; }
+.rest-focus { overflow-x: hidden; }
+@media (prefers-reduced-motion: no-preference) {
+  .rest-focus.is-complete #restFocusTitle { animation: rest-title-arrive 600ms cubic-bezier(.16, 1, .3, 1) both; }
+  .rest-confetti { animation: rest-confetti-fall 1500ms ease-out both; }
+}
+@keyframes rest-title-arrive {
+  from { opacity: 0; transform: translateY(20px) scale(.94); }
+  to { opacity: 1; transform: translateY(0) scale(1); }
+}
+@keyframes rest-confetti-fall {
+  0% { opacity: 0; transform: translate(0, -30px) rotate(0deg); }
+  12% { opacity: 1; }
+  85% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--x), var(--y)) rotate(var(--spin)); }
+}
+html.rest-focus-open { overflow: hidden; }
+@media (prefers-reduced-motion: reduce) {
+  .rest-focus { transition: none; }
+}
