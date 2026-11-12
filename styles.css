@@ -83,6 +83,26 @@ button:disabled { opacity: .48; cursor: default; }
 .history-sets li { display: grid; grid-template-columns: minmax(52px, 28%) minmax(0, 1fr); align-items: start; gap: 4px 12px; padding: 6px 0; font-size: 14px; }
 .history-sets li > span { min-width: 0; overflow-wrap: anywhere; }
 .history-sets li + li { border-top: 1px solid var(--line); }
+.calendar-header { display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 12px; margin-bottom: 20px; }
+.calendar-header h2 { font-size: 20px; }
+.calendar-controls { gap: 4px; }
+.calendar-controls button { min-width: 40px; padding: 8px 10px; }
+.calendar-prev, .calendar-next { font-size: 22px; line-height: 1; }
+.calendar-today { font-size: 12px; }
+.calendar-weekdays, .calendar-days { display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 4px; }
+.calendar-weekdays { color: var(--muted); font-size: 11px; text-align: center; margin-bottom: 8px; }
+.calendar-day { min-width: 0; min-height: 44px; padding: 8px 0; border-radius: 10px; background: var(--bg); font-size: 14px; font-variant-numeric: tabular-nums; }
+.day-logged { background: var(--lime); color: #141615; border-color: var(--lime); }
+.day-rest { background: #c2cbb8; color: #192015; border-color: #c2cbb8; }
+.day-missed { background: #503322; color: #ffc497; border-color: #895d3a; }
+.calendar-day[aria-pressed=true] { outline: 2px solid var(--text); outline-offset: 1px; }
+.calendar-day[aria-current=date] { text-decoration: underline; text-underline-offset: 4px; }
+.calendar-legend { display: flex; flex-wrap: wrap; gap: 10px 16px; margin-top: 20px; color: var(--muted); font-size: 12px; }
+.calendar-legend span { display: inline-flex; align-items: center; gap: 6px; }
+.calendar-legend i { width: 9px; height: 9px; border-radius: 3px; }
+.calendar-note { margin-top: 12px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.calendar-entries { margin-top: 16px; overflow: hidden; scroll-margin-top: calc(18px + env(safe-area-inset-top)); }
+#history .calendar-entries > article:first-child { margin-top: 0; }
 .delete-workout { color: #ffb4a8; }
 .exercise-summary, #exerciseHint { margin-top: 8px; font-size: 14px; }
 .exercise-summary { margin-bottom: 0; padding: 0; list-style: none; }

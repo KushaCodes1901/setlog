@@ -557,33 +557,27 @@ function showHistory() {
     tell('Workout history could not be read on this device.', true);
     return;
   }
-  if (!sessions.length) {
-    const empty = document.createElement('section');
-    empty.textContent = 'Your saved workouts will appear here.';
-    historyView.append(empty);
-    return;
-  }
-  sessions.map((session, index) => ({ session, index })).reverse().forEach(({ session, index }) => {
+  historyCalendar.render(historyView, sessions, renderHistoryEntries);
+}
+
+function renderHistoryEntries(entries, target) {
+  [...entries].reverse().forEach(({ session, index }) => {
     const card = document.createElement('article');
     const details = document.createElement('details');
     const header = document.createElement('summary');
-    const label = document.createElement('span');
     const heading = document.createElement('span');
-    const metadata = document.createElement('small');
     const content = document.createElement('div');
     const actions = document.createElement('div');
     const edit = document.createElement('button');
     const remove = document.createElement('button');
     card.className = 'history-card';
-    details.open = index === sessions.length - 1;
+    details.open = true;
     heading.className = 'history-title';
-    heading.textContent = session.day + (session.restDay ? ' · Rest day' : ' workout');
     const exerciseCount = session.exercises.length;
     const setCount = session.exercises.reduce((total, exercise) => total + exercise.sets.length, 0);
-    metadata.textContent = session.restDay ? session.date : session.date + ' · ' + exerciseCount + (exerciseCount === 1 ? ' exercise' : ' exercises')
+    heading.textContent = session.restDay ? session.date + ' · Rest day' : session.date + ' · ' + exerciseCount + (exerciseCount === 1 ? ' exercise' : ' exercises')
       + ' · ' + setCount + (setCount === 1 ? ' set' : ' sets');
-    label.append(heading, metadata);
-    header.append(label);
+    header.append(heading);
     content.className = 'history-content';
     if (session.restDay) {
       const message = document.createElement('p');
@@ -594,13 +588,13 @@ function showHistory() {
     edit.type = 'button';
     edit.textContent = editing?.index === index ? 'Resume edit' : 'Edit';
     edit.disabled = Boolean(editing && editing.index !== index);
-    edit.setAttribute('aria-label', edit.textContent + ' · ' + heading.textContent + ' · ' + session.date);
+    edit.setAttribute('aria-label', edit.textContent + ' · ' + heading.textContent);
     edit.onclick = () => editWorkout(session, index);
     remove.type = 'button';
     remove.className = 'delete-workout';
     remove.textContent = 'Delete';
     remove.disabled = Boolean(editing);
-    remove.setAttribute('aria-label', 'Delete · ' + heading.textContent + ' · ' + session.date);
+    remove.setAttribute('aria-label', 'Delete · ' + heading.textContent);
     remove.onclick = () => deleteWorkout(session, index);
     actions.className = 'row history-actions';
     actions.append(edit, remove);
@@ -634,7 +628,7 @@ function showHistory() {
     content.append(actions);
     details.append(header, content);
     card.append(details);
-    historyView.append(card);
+    target.append(card);
   });
 }
 
@@ -783,6 +777,7 @@ workout.onsubmit = event => {
   editing = null;
   loadDraft(regularDraft);
   tell(isEdit ? 'Entry updated.' : session.restDay ? 'Rest day saved.' : '');
+  historyCalendar.select(session.date);
   selectView(false);
   if (!isEdit && !session.restDay) celebrateWorkout(workoutHighlight(session, previousSessions));
 };
