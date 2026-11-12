@@ -159,10 +159,14 @@
   focusToggle.onclick = () => start.click();
   document.querySelector('#restFocusReset').onclick = () => reset.click();
   document.querySelector('#restFocusClose').onclick = () => focus.close();
-  done.onclick = () => focus.close();
+  done.onclick = () => {
+    focus.close();
+    chooseDuration(state.duration);
+  };
   expand.onclick = openFocus;
   focus.addEventListener('close', () => {
     document.documentElement.classList.toggle('rest-focus-open', focus.open);
+    if (!focus.open && state.endsAt === null && state.remaining === 0) chooseDuration(state.duration);
   });
   durationInput.onchange = () => {
     if (durationInput.reportValidity()) chooseDuration(Number(durationInput.value));
