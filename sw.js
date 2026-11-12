@@ -1,4 +1,4 @@
-const cacheName = 'setlog-offline-v15';
+const cacheName = 'setlog-offline-v16';
 const home = new URL('./', self.location.href).href;
 const assets = ['startup.css', 'startup.js', 'styles.css', 'duration-picker.js', 'exercise-catalog.js', 'history-calendar.js', 'app.js', 'backup.js', 'rest-timer.js?v=rest-tab', 'exercise-illustrations.svg',
   'manifest.webmanifest', 'icon.png', 'icon-v2-192.png', 'icon-v2-512.png', 'apple-touch-icon-v2.png',

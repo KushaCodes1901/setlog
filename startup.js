@@ -1,13 +1,18 @@
 (() => {
   const screen = document.querySelector('#startupScreen');
   const shownAt = performance.now();
-  const minimumDisplayTime = 3000;
+  const minimumDisplayTime = 2000;
   function dismiss() {
     const remaining = Math.max(0, minimumDisplayTime - (performance.now() - shownAt));
     setTimeout(() => {
       requestAnimationFrame(() => {
-        screen.classList.add('is-ready');
-        setTimeout(() => screen.remove(), 300);
+        const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)').matches;
+        screen.classList.add('is-launching');
+        document.body.classList.add('startup-reveal');
+        setTimeout(() => {
+          screen.remove();
+          document.body.classList.remove('startup-reveal');
+        }, reducedMotion ? 0 : 850);
       });
     }, remaining);
   }
