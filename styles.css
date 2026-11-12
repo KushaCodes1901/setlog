@@ -77,7 +77,8 @@ button:disabled { opacity: .48; cursor: default; }
 .history-exercise { border-top: 1px solid var(--line); padding-top: 12px; }
 .history-exercise + .history-exercise { margin-top: 12px; }
 .history-sets { margin: 6px 0 0; padding: 0; list-style: none; }
-.history-sets li { display: flex; justify-content: space-between; flex-wrap: wrap; gap: 4px 12px; padding: 4px 0; font-size: 14px; }
+.history-sets li { display: grid; grid-template-columns: minmax(52px, 28%) minmax(0, 1fr); align-items: start; gap: 4px 12px; padding: 6px 0; font-size: 14px; }
+.history-sets li > span { min-width: 0; overflow-wrap: anywhere; }
 .history-sets li + li { border-top: 1px solid var(--line); }
 .delete-workout { color: #ffb4a8; }
 .exercise-summary, #exerciseHint { margin-top: 8px; font-size: 14px; }
