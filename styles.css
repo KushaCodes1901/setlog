@@ -108,6 +108,11 @@ button:disabled { opacity: .48; cursor: default; }
 .exercise-summary li + li { margin-top: 4px; }
 .remove { min-width: 46px; color: var(--muted); font-size: 20px; line-height: 1; }
 .set { margin-top: 12px; border-top: 1px solid var(--line); }
+.set-summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; margin-top: 10px; padding: 12px; text-align: left; font-weight: 400; background: var(--card); }
+.set-summary-text { display: grid; gap: 3px; min-width: 0; }
+.set-summary-title { font-size: 14px; }
+.set-summary-values { font-size: 13px; color: var(--muted); overflow-wrap: anywhere; }
+.set-edit-label { color: var(--lime); font-size: 12px; font-weight: 650; flex-shrink: 0; }
 .set-number { min-width: 3em; padding-bottom: 13px; }
 .plank-timer { margin-top: 10px; }
 .plank-clock { margin-left: 12px; color: var(--lime); font-size: 24px; font-variant-numeric: tabular-nums; }

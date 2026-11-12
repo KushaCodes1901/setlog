@@ -146,6 +146,11 @@
 </template>
 <template id="setTemplate">
   <div class="set">
+    <button class="set-summary" type="button" hidden>
+      <span class="set-summary-text"><strong class="set-summary-title"></strong><span class="set-summary-values"></span></span>
+      <span class="set-edit-label">Edit</span>
+    </button>
+    <div class="set-editor">
     <div class="fields">
       <small class="set-number"></small>
       <label><span class="quantity-label">Reps</span><input class="reps" type="number" inputmode="numeric" min="1" step="1" required></label>
@@ -163,6 +168,7 @@
         <div class="effort-options"></div>
       </fieldset>
       <label class="reps-left-label" title="How many more reps could you have done?">Reps left <small>(optional)</small><input class="reps-left" type="number" inputmode="numeric" min="0" step="1" placeholder="—"></label>
+    </div>
     </div>
   </div>
 </template>

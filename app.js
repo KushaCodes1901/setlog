@@ -46,26 +46,28 @@ function writeStorage(change) {
   }
 }
 
+function getSetValues(row) {
+  const quantity = row.querySelector('.reps').value;
+  const set = row.dataset.timed === 'true' ? { seconds: quantity } : { reps: quantity };
+  if (row.dataset.legacyReps && quantity === '') {
+    delete set.seconds;
+    set.reps = row.dataset.legacyReps;
+  }
+  if (row.dataset.holdEndsAt) {
+    set.holdEndsAt = Number(row.dataset.holdEndsAt);
+    set.holdStartedAt = Number(row.dataset.holdStartedAt);
+  }
+  const weight = row.querySelector('.weight');
+  if (!weight.disabled) set.weight = weight.value;
+  const effort = row.querySelector('.effort-options [aria-pressed=true]');
+  const repsLeft = row.querySelector('.reps-left').value;
+  if (effort) set.effort = Number(effort.value);
+  if (repsLeft !== '') set.repsLeft = Number(repsLeft);
+  return set;
+}
+
 function getSets(list) {
-  return Array.from(list.children, row => {
-    const quantity = row.querySelector('.reps').value;
-    const set = row.dataset.timed === 'true' ? { seconds: quantity } : { reps: quantity };
-    if (row.dataset.legacyReps && quantity === '') {
-      delete set.seconds;
-      set.reps = row.dataset.legacyReps;
-    }
-    if (row.dataset.holdEndsAt) {
-      set.holdEndsAt = Number(row.dataset.holdEndsAt);
-      set.holdStartedAt = Number(row.dataset.holdStartedAt);
-    }
-    const weight = row.querySelector('.weight');
-    if (!weight.disabled) set.weight = weight.value;
-    const effort = row.querySelector('.effort-options [aria-pressed=true]');
-    const repsLeft = row.querySelector('.reps-left').value;
-    if (effort) set.effort = Number(effort.value);
-    if (repsLeft !== '') set.repsLeft = Number(repsLeft);
-    return set;
-  });
+  return Array.from(list.children, getSetValues);
 }
 
 function isBodyweight(name) {
@@ -101,6 +103,7 @@ function getExercises() {
   return Array.from(exercises.children, card => ({
     name: card.querySelector('h3').textContent,
     sets: getSets(card.querySelector('.sets')),
+    openSet: Array.from(card.querySelector('.sets').children).findIndex(row => !row.querySelector('.set-editor').hidden),
     saved: card.querySelector('.exercise-editor').hidden
   }));
 }
@@ -297,10 +300,31 @@ function deleteWorkout(session, index) {
 
 function numberSets(list) {
   Array.from(list.children).forEach((row, index) => {
-    row.querySelector('small').textContent = 'Set ' + (index + 1);
+    row.querySelector('.set-number').textContent = 'Set ' + (index + 1);
     row.querySelector('.remove').setAttribute('aria-label', 'Remove set ' + (index + 1));
     row.querySelector('.remove').disabled = list.children.length === 1;
+    if (row.querySelector('.set-editor').hidden) collapseSet(row);
   });
+}
+
+function collapseSet(row) {
+  const set = getSetValues(row);
+  const name = row.closest('article').querySelector('h3').textContent;
+  const filled = Number(set.seconds ?? set.reps) > 0;
+  row.querySelector('.set-summary-title').textContent = row.querySelector('.set-number').textContent;
+  row.querySelector('.set-summary-values').textContent = filled
+    ? [setResult(set, name), setNotes(set)].filter(Boolean).join(' · ')
+    : 'Not filled in';
+  row.querySelector('.set-editor').hidden = true;
+  row.querySelector('.set-summary').hidden = false;
+}
+
+function showSetEditor(row) {
+  for (const other of row.parentElement.children) {
+    if (other !== row) collapseSet(other);
+  }
+  row.querySelector('.set-summary').hidden = true;
+  row.querySelector('.set-editor').hidden = false;
 }
 
 function validateSets(list) {
@@ -308,10 +332,16 @@ function validateSets(list) {
     const quantity = row.querySelector('.reps');
     if (row.dataset.timed === 'true' && !(Number(quantity.value) > 0)) {
       tell('Choose a duration for each timed set.', true);
+      showSetEditor(row);
       row.querySelector('.duration-trigger').click();
       return false;
     }
-    if (!Array.from(row.querySelectorAll('input')).every(input => input.reportValidity())) return false;
+    const invalid = Array.from(row.querySelectorAll('input')).find(input => !input.checkValidity());
+    if (invalid) {
+      showSetEditor(row);
+      invalid.reportValidity();
+      return false;
+    }
   }
   return true;
 }
@@ -366,14 +396,29 @@ function addSet(list, values = {}, focus = false) {
     options.append(rating);
   });
   row.querySelector('.remove').onclick = () => {
+    const index = Array.from(list.children).indexOf(row);
     row.remove();
+    const next = list.children[Math.min(index, list.children.length - 1)];
+    if (next) showSetEditor(next);
     numberSets(list);
     saveDraft();
+  };
+  row.querySelector('.set-summary').onclick = () => {
+    if (list.querySelector('[data-hold-ends-at]')) {
+      tell('Finish the running set timer before editing another set.', true);
+      return;
+    }
+    showSetEditor(row);
+    saveDraft();
+    (row.querySelector('.duration-trigger') ?? reps).focus();
   };
   list.append(row);
   if (timed) setupSetTimer(row, values);
   numberSets(list);
-  if (focus) (row.querySelector('.duration-trigger') ?? reps).focus();
+  if (focus) {
+    showSetEditor(row);
+    (row.querySelector('.duration-trigger') ?? reps).focus();
+  }
 }
 
 function setupSetTimer(row, values) {
@@ -500,7 +545,8 @@ function addExercise(exercise, focus = false) {
     tell('');
     setSaved(false);
     saveDraft();
-    (list.querySelector('.duration-trigger') ?? list.querySelector('.reps')).focus();
+    const open = list.querySelector('.set-editor:not([hidden])');
+    (open.querySelector('.duration-trigger') ?? open.querySelector('.reps')).focus();
   };
   card.querySelector('.save-exercise').onclick = () => {
     if (!validateSets(list)) return;
@@ -516,6 +562,10 @@ function addExercise(exercise, focus = false) {
   };
   exercises.append(card);
   exercise.sets.forEach((set, index) => addSet(list, set, focus && index === 0));
+  const openIndex = Number.isInteger(exercise.openSet) && exercise.openSet >= 0 && exercise.openSet < list.children.length
+    ? exercise.openSet : 0;
+  const running = list.querySelector('[data-hold-ends-at]');
+  if (list.children.length) showSetEditor(running ?? list.children[openIndex]);
   setSaved(exercise.saved === true);
 }
 
