@@ -2,7 +2,8 @@
 * { box-sizing: border-box; }
 [hidden] { display: none !important; }
 body { margin: 0; background: var(--bg); color: var(--text); font: 16px/1.5 system-ui, sans-serif; }
-main { width: min(100%, 620px); margin: auto; padding: calc(26px + env(safe-area-inset-top)) 18px calc(36px + env(safe-area-inset-bottom)); }
+main { width: min(100%, 620px); margin: auto; padding: calc(26px + env(safe-area-inset-top)) 18px calc(112px + env(safe-area-inset-bottom)); }
+main > header { margin-bottom: 24px; }
 h1, h2, h3, p { margin: 0; }
 h1 { font-size: clamp(44px, 12vw, 64px); letter-spacing: -.085em; line-height: 1; margin: 8px 0 12px; }
 .brand-dot { color: var(--lime); }
@@ -10,10 +11,12 @@ h2 { font-size: 22px; letter-spacing: -.04em; }
 h3 { font-size: 17px; overflow-wrap: anywhere; }
 .eyebrow { color: var(--lime); text-transform: uppercase; letter-spacing: .15em; font: 700 11px/1.5 system-ui; }
 .muted, small { color: var(--muted); }
-nav, .row, .fields { display: flex; align-items: center; gap: 10px; }
-nav { margin: 25px 0 18px; padding: 4px; border: 1px solid var(--line); border-radius: 14px; }
-nav button { flex: 1; border-color: transparent; background: transparent; }
-nav button[aria-pressed=true] { background: var(--line); color: var(--text); }
+.row, .fields { display: flex; align-items: center; gap: 10px; }
+.bottom-nav { position: fixed; bottom: calc(14px + env(safe-area-inset-bottom)); left: max(16px, env(safe-area-inset-left)); right: max(16px, env(safe-area-inset-right)); z-index: 20; width: auto; max-width: 420px; margin-inline: auto; padding: 6px; border: 1px solid #50584c; border-radius: 36px; background: rgb(25 29 26 / .88); box-shadow: 0 8px 28px rgb(0 0 0 / .24); backdrop-filter: blur(22px); -webkit-backdrop-filter: blur(22px); }
+.nav-items { display: flex; gap: 6px; }
+.bottom-nav button { display: flex; flex: 1; flex-direction: column; align-items: center; justify-content: center; gap: 5px; min-height: 64px; border-color: transparent; border-radius: 29px; background: transparent; color: var(--text); font-size: 12px; font-weight: 550; }
+.bottom-nav button[aria-pressed=true] { background: #35472a; color: var(--lime); }
+.bottom-nav svg { width: 25px; height: 25px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
 section, article { border: 1px solid var(--line); border-radius: 17px; padding: 16px; background: var(--card); }
 section + section, article + article, #exercises article, #history article { margin-top: 12px; }
 #exercises article { background: var(--bg); }

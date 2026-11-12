@@ -719,8 +719,14 @@ exercisePicker.ontoggle = () => {
   if (exercisePicker.open) renderExerciseChoices();
 };
 nameInput.addEventListener('input', renderExerciseChoices);
-document.querySelector('#logTab').onclick = () => selectView(true);
-document.querySelector('#historyTab').onclick = () => selectView(false);
+document.querySelector('#logTab').onclick = () => {
+  selectView(true);
+  window.scrollTo({ top: 0, behavior: 'auto' });
+};
+document.querySelector('#historyTab').onclick = () => {
+  selectView(false);
+  window.scrollTo({ top: 0, behavior: 'auto' });
+};
 day.onchange = saveDraft;
 restDay.onchange = saveDraft;
 workout.oninput = saveDraft;
