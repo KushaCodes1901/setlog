@@ -1,7 +1,7 @@
 (() => {
   const screen = document.querySelector('#startupScreen');
   const shownAt = performance.now();
-  const minimumDisplayTime = 1500;
+  const minimumDisplayTime = 3000;
   function dismiss() {
     const remaining = Math.max(0, minimumDisplayTime - (performance.now() - shownAt));
     setTimeout(() => {
