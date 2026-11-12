@@ -796,5 +796,9 @@ document.addEventListener('visibilitychange', () => {
   if (!document.hidden) refreshToday();
 });
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
-  navigator.serviceWorker.register('./sw.js').catch(() => {});
+  navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then(registration => {
+    document.addEventListener('visibilitychange', () => {
+      if (!document.hidden) registration.update().catch(() => {});
+    });
+  }).catch(() => {});
 }
