@@ -116,23 +116,31 @@
       <div class="settings-list">
         <div class="setting-item">
           <svg class="setting-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v18H7V3ZM7 7h4M7 11h3M7 15h4M7 19h3"/></svg>
-          <div class="setting-copy"><label for="profileHeight">Height</label><p id="profileHeightHelp">Your height in centimetres.</p></div>
-          <div class="profile-measurement"><input id="profileHeight" type="number" inputmode="decimal" min="0.1" step="any" placeholder="—" aria-describedby="profileHeightHelp"><span aria-hidden="true">cm</span></div>
+          <div class="setting-copy"><label for="profileHeight">Height</label><p id="profileHeightHelp">Your height, shown in your chosen height unit.</p></div>
+          <div class="profile-height-measurements">
+            <div class="profile-measurement"><input id="profileHeight" type="number" inputmode="decimal" min="0.0001" step="any" placeholder="—" aria-describedby="profileHeightHelp profileHeightUnit"><span id="profileHeightUnit">cm</span></div>
+            <div id="heightRemainderField" class="profile-measurement" hidden><input id="profileHeightRemainder" type="number" inputmode="decimal" min="0" max="11.9999" step="any" placeholder="0" aria-label="Additional inches" disabled><span id="profileHeightRemainderUnit" aria-hidden="true">in</span></div>
+          </div>
         </div>
         <div class="setting-item">
           <svg class="setting-icon" viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="3" width="18" height="18" rx="4"/><path d="M8 7a6 6 0 0 1 8 0l-4 5-4-5ZM12 7v3"/></svg>
-          <div class="setting-copy"><label for="profileWeight">Body weight</label><p id="profileWeightHelp">Your current body weight. Uses your chosen kg or lbs unit.</p></div>
+          <div class="setting-copy"><label for="profileWeight">Body weight</label><p id="profileWeightHelp">Your current body weight, shown in your chosen weight unit.</p></div>
           <div class="profile-measurement"><input id="profileWeight" type="number" inputmode="decimal" min="0.01" step="any" placeholder="—" aria-describedby="profileWeightHelp profileWeightUnit"><span id="profileWeightUnit">kg</span></div>
         </div>
       </div>
     </section>
     <section class="settings-group" aria-labelledby="unitsSettingsTitle">
-      <h3 id="unitsSettingsTitle">Workout units</h3>
+      <h3 id="unitsSettingsTitle">Units</h3>
       <div class="settings-list">
         <div class="setting-item">
+          <svg class="setting-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 3h10v18H7V3ZM7 7h4M7 11h3M7 15h4M7 19h3"/></svg>
+          <div class="setting-copy"><label for="heightUnit">Height unit</label><p id="heightUnitHelp">Choose how your profile height is displayed. Your height converts automatically.</p></div>
+          <select id="heightUnit" class="unit-select" aria-describedby="heightUnitHelp"><option value="mm">mm</option><option value="cm">cm</option><option value="m">m</option><option value="ft-in">ft + in</option><option value="ft">ft</option><option value="in">in</option></select>
+        </div>
+        <div class="setting-item">
           <svg class="setting-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4v16M3 7h6M3 17h6M18 4v16M15 7h6M15 17h6M6 12h12"/></svg>
-          <div class="setting-copy"><label for="weightUnit">Weight unit</label><p id="weightUnitHelp">Choose kilograms or pounds. Existing weights convert in your workouts and History.</p></div>
-          <select id="weightUnit" aria-describedby="weightUnitHelp"><option value="kg">kg</option><option value="lbs">lbs</option></select>
+          <div class="setting-copy"><label for="weightUnit">Weight unit</label><p id="weightUnitHelp">Used for body weight, workouts and History. Existing weights convert automatically.</p></div>
+          <select id="weightUnit" class="unit-select" aria-describedby="weightUnitHelp"><option value="kg">kg</option><option value="lbs">lbs</option><option value="st">st</option><option value="g">g</option><option value="oz">oz</option></select>
         </div>
       </div>
     </section>

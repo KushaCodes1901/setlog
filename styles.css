@@ -73,12 +73,14 @@ label { display: block; color: var(--muted); font-size: 13px; font-weight: 650; 
 .profile-measurement { display: flex; align-items: center; gap: 6px; flex: 0 0 106px; }
 .profile-measurement input { width: 74px; min-width: 0; margin: 0; padding: 8px 6px; text-align: right; font-size: 16px; color: var(--lime); }
 .profile-measurement span { font-size: 12px; color: var(--muted); }
+.profile-height-measurements { display: flex; flex-direction: column; gap: 6px; flex: 0 0 106px; }
+.profile-height-measurements .profile-measurement { flex: none; }
 .setting-copy > label { color: var(--text); font-size: 15px; font-weight: 500; }
 .setting-copy > p, .setting-description { display: block; margin-top: 5px; color: var(--muted); font-size: 12px; font-weight: 400; line-height: 1.5; }
-#weightUnit { flex-shrink: 0; }
+#settingsView .unit-select { flex-shrink: 0; }
 #restSoundStatus:empty { display: none; }
-#weightUnit { width: 84px; min-height: 38px; padding: 5px 8px; margin: 0 0 0 auto; color: var(--lime); background: transparent; border: 0; text-align: right; }
-#weightUnit option { color: var(--text); background: var(--card); }
+#settingsView .unit-select { width: 92px; min-height: 38px; padding: 5px 8px; margin: 0 0 0 auto; color: var(--lime); background: transparent; border: 0; text-align: right; }
+.unit-select option { color: var(--text); background: var(--card); }
 #settingsView .settings-switch { appearance: none; -webkit-appearance: none; position: relative; flex: 0 0 46px; width: 46px; height: 28px; min-height: 28px; margin: 0 0 0 auto; padding: 0; border: 1px solid #596056; border-radius: 20px; background: #3b413a; cursor: pointer; transition: background 150ms ease; }
 .settings-switch::after { content: ''; position: absolute; top: 3px; left: 3px; width: 20px; height: 20px; border-radius: 50%; background: var(--text); transition: transform 150ms ease; }
 #settingsView .settings-switch:checked { background: var(--lime); border-color: var(--lime); }

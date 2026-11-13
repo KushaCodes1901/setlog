@@ -71,14 +71,12 @@ function getSetValues(row) {
 function readWeight(input) {
   if (input.value === '') return '';
   if (input.value === input.dataset.displayValue) return input.dataset.kg;
-  return input.dataset.unit === 'lbs'
-    ? String(Number((Number(input.value) * 0.45359237).toPrecision(15)))
-    : input.value;
+  return String(appSettings.weightToKg(input.value, input.dataset.unit));
 }
 
 function weightDisplayValue(kg, unit) {
   if (kg == null || kg === '') return '';
-  const value = unit === 'lbs' ? Number(kg) / 0.45359237 : Number(kg);
+  const value = appSettings.weightFromKg(kg, unit);
   return String(Math.round((value + Number.EPSILON) * 100) / 100);
 }
 
