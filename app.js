@@ -694,6 +694,26 @@ function renderRecordsReport(records, sessions) {
   report.querySelector('.home-milestone p').textContent = records.exerciseBests.length
     ? remaining + (remaining === 1 ? ' new best to go. You’ve got this.' : ' new bests to go. One workout at a time.')
     : 'Your first weighted workout sets the starting line.';
+  const progressNames = exerciseProgress.names(sessions);
+  const explore = document.createElement('div');
+  explore.className = 'home-exercise-progress';
+  const progressHeading = document.createElement('h2');
+  progressHeading.textContent = 'Exercise Progress';
+  const progressHelp = document.createElement('p');
+  progressHelp.className = 'muted';
+  progressHelp.textContent = progressNames.length ? 'See the little wins between the big records.' : 'Log your first exercise to start your journey.';
+  explore.append(progressHeading, progressHelp);
+  if (progressNames.length) {
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.className = 'exercise-progress-link';
+    button.innerHTML = '<span class="progress-link-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path class="progress-link-bar" d="M7 24v-5M15 24V14M23 24V8"/><path d="m5 13 8-5 6 2 7-6M22 4h4v4"/></svg></span>'
+      + '<span class="progress-link-copy"><strong>See your progress</strong><small>Charts, sets &amp; personal bests</small></span>'
+      + '<span class="progress-link-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg></span>';
+    button.onclick = () => openExerciseProgress(progressNames[0]);
+    explore.append(button);
+  }
+  report.insertBefore(explore, report.querySelector('.records-body'));
   const body = report.querySelector('.records-body');
   const help = document.createElement('p');
   help.className = 'muted records-help';
@@ -730,11 +750,16 @@ function renderRecordsReport(records, sessions) {
     const name = document.createElement('span');
     const date = document.createElement('small');
     const value = document.createElement('strong');
+    const button = document.createElement('button');
+    button.type = 'button';
+    button.setAttribute('aria-label', 'View ' + best.name + ' progress');
+    button.onclick = () => openExerciseProgress(best.name);
     name.textContent = best.name;
-    date.textContent = best.date;
+    date.textContent = best.date + ' · View progress ↗';
     name.append(date);
     value.textContent = formatWeight(best.weightKg);
-    row.append(name, value);
+    button.append(name, value);
+    row.append(button);
     list.append(row);
   }
   body.append(list);
@@ -745,6 +770,10 @@ function renderRecordsReport(records, sessions) {
     : 'Log a weighted workout to set your starting marks. Timed, unweighted and assisted sets don’t count toward lifting records.';
   body.append(note);
   return report;
+}
+
+function openExerciseProgress(name) {
+  exerciseProgress.open({ name, readSessions: () => readStorage().sessions, formatWeight });
 }
 
 function renderHistoryEntries(entries, target, records) {

@@ -213,10 +213,76 @@ button:disabled { opacity: .48; cursor: default; }
 .record-week .record-week-explanation { margin-top: 10px; color: var(--muted); font-size: 12px; font-weight: 400; }
 .record-lifts { list-style: none; margin: 14px 0 0; padding: 0; }
 .record-lifts-title { margin-top: 20px; font-size: 14px; }
-.record-lifts li { display: flex; justify-content: space-between; align-items: center; gap: 16px; padding: 16px; margin-top: 10px; border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 14px; background: var(--card); }
-.record-lifts li > span { min-width: 0; overflow-wrap: anywhere; }
+.record-lifts li { padding: 0; margin-top: 10px; border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 14px; background: var(--card); }
+.record-lifts button { display: flex; justify-content: space-between; align-items: center; gap: 16px; width: 100%; padding: 16px; background: transparent; border: 0; text-align: left; font-weight: 500; }
+.record-lifts button:hover { background: #ffffff05; }
+.record-lifts button > span { min-width: 0; overflow-wrap: anywhere; }
 .record-lifts small { display: block; font-size: 12px; }
 .record-lifts strong { color: var(--lime); text-align: right; font-variant-numeric: tabular-nums; }
+.home-exercise-progress { margin: 0 0 28px; }
+.home-exercise-progress > p { margin: 6px 0 14px; font-size: 13px; }
+.exercise-progress-link { display: flex; align-items: center; gap: 14px; width: 100%; min-height: 108px; padding: 20px 16px; border: 1px solid #708d47; border-bottom: 5px solid #526d34; border-radius: 22px; color: var(--lime); background: radial-gradient(ellipse at top right, #48632f80, transparent 75%), #26351f; text-align: left; box-shadow: 0 7px 20px #0002; transition: transform 160ms ease, border-color 160ms ease, box-shadow 160ms ease; }
+.progress-link-icon { display: grid; place-items: center; flex: 0 0 56px; height: 56px; border: 1px solid #e5ffa4; border-bottom: 4px solid #9ebb55; border-radius: 17px; background: var(--lime); color: #26351f; transform: rotate(-7deg); transition: transform 160ms ease; }
+.progress-link-icon svg { width: 35px; height: 35px; fill: none; stroke: currentColor; stroke-width: 1.8; stroke-linecap: round; stroke-linejoin: round; }
+.progress-link-icon .progress-link-bar { stroke-width: 4; }
+.progress-link-copy { display: grid; gap: 5px; flex: 1; min-width: 0; }
+.progress-link-copy strong { font-size: 17px; line-height: 1.2; letter-spacing: -.02em; }
+.progress-link-copy small { color: #c2cfb6; font-size: 11px; font-weight: 450; line-height: 1.4; }
+.progress-link-arrow { display: grid; place-items: center; flex: 0 0 24px; color: #c2d6a4; transition: transform 160ms ease; }
+.progress-link-arrow svg { width: 21px; height: 21px; fill: none; stroke: currentColor; stroke-width: 2; stroke-linecap: round; stroke-linejoin: round; }
+@media (hover: hover) { .exercise-progress-link:hover { transform: translateY(-3px); border-color: #a3c367; box-shadow: 0 10px 24px #0004; } .exercise-progress-link:hover .progress-link-icon { transform: rotate(0deg); } .exercise-progress-link:hover .progress-link-arrow { transform: translateX(3px); } }
+.exercise-progress-link:active { transform: translateY(3px); box-shadow: none; }
+@media (max-width: 360px) { .exercise-progress-link { gap: 10px; padding: 18px 12px; } .progress-link-icon { flex-basis: 46px; height: 48px; } .progress-link-copy strong { font-size: 15px; } }
+@media (prefers-reduced-motion: reduce) { .exercise-progress-link, .progress-link-icon, .progress-link-arrow { transition: none; } }
+.exercise-progress-open { overflow: hidden; }
+.exercise-progress-dialog { position: fixed; inset: 0; width: 100%; max-width: none; height: 100%; height: 100dvh; max-height: none; margin: 0; padding: 0; border: 0; background: var(--bg); color: var(--text); overflow-y: auto; overscroll-behavior: contain; }
+.exercise-progress-dialog::backdrop { background: #141615; }
+.exercise-progress-page { width: min(100%, 620px); margin: auto; padding: env(safe-area-inset-top) 18px calc(30px + env(safe-area-inset-bottom)); }
+.progress-header { display: flex; align-items: center; justify-content: space-between; gap: 12px; position: sticky; top: 0; z-index: 2; margin: 0 -2px 20px; padding: 12px 2px; background: rgb(20 22 21 / .95); backdrop-filter: blur(16px); }
+.progress-header button { padding: 8px 12px; font-size: 14px; }
+.progress-header > span { color: var(--muted); font-size: 10px; font-weight: 750; letter-spacing: .11em; }
+#exerciseProgressTitle { font-size: clamp(28px, 7vw, 36px); line-height: 1.15; overflow-wrap: anywhere; margin-bottom: 16px; }
+.progress-exercise-label { font-size: 12px; }
+#progressExercise { background: var(--card); margin: 6px 0 20px; }
+.progress-win { position: relative; padding: 22px; background: #26351e; border: 1px solid #536d38; border-bottom-width: 5px; border-radius: 22px; }
+.progress-win-tag { display: inline-block; padding: 5px 9px; border-radius: 8px; color: #1a2310; background: var(--lime); font-size: 10px; font-weight: 850; letter-spacing: .08em; }
+.progress-win h3 { margin: 14px 0 8px; font-size: 25px; letter-spacing: -.035em; line-height: 1.15; }
+.progress-win p { color: #ccd8c4; font-size: 14px; }
+.progress-stats { display: grid; grid-template-columns: 1.2fr 1fr; gap: 10px; margin: 16px 0; }
+.progress-stats > div { padding: 16px 14px; border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 16px; background: var(--card); min-width: 0; }
+.progress-stats span, .progress-stats small { display: block; color: var(--muted); font-size: 11px; }
+.progress-stats strong { display: block; color: var(--lime); font-size: clamp(24px, 6vw, 31px); line-height: 1.2; margin: 8px 0; overflow-wrap: anywhere; }
+.progress-stats small { font-size: 10px; }
+.progress-chart-card { padding: 18px 12px 16px; border-radius: 20px; }
+.progress-chart-heading { display: flex; align-items: center; justify-content: space-between; padding: 0 4px; }
+.progress-chart-unit { color: var(--muted); font-size: 12px; }
+.progress-metrics { display: flex; gap: 6px; margin: 14px 4px; }
+.progress-metrics button { flex: 1; font-size: 13px; min-height: 42px; background: var(--bg); }
+.progress-metrics button[aria-pressed=true] { color: var(--lime); background: #35472a; border-color: #6d8748; }
+.progress-selected { display: grid; grid-template-columns: 1fr auto; gap: 3px 12px; padding: 12px; margin: 0 4px; min-height: 76px; border-radius: 12px; background: var(--bg); font-variant-numeric: tabular-nums; }
+.progress-selected > span { font-size: 12px; color: var(--muted); align-self: center; }
+.progress-selected strong { color: var(--lime); font-size: 20px; text-align: right; overflow-wrap: anywhere; }
+.progress-selected small { grid-column: 1 / -1; font-size: 12px; }
+.progress-chart { display: block; width: 100%; height: auto; overflow: visible; margin-top: 12px; }
+.progress-grid { stroke: #3b4539; stroke-width: 1; stroke-dasharray: 3 5; }
+.progress-axis { fill: var(--muted); font: 11px system-ui, sans-serif; }
+.progress-area { fill: #d4fa7d0b; }
+.progress-line { fill: none; stroke: var(--lime); stroke-width: 3; stroke-linecap: round; stroke-linejoin: round; }
+.progress-point { fill: transparent; stroke: none; cursor: pointer; }
+.progress-dot { fill: var(--lime); }
+.progress-point[aria-pressed=true] { fill: #d4fa7d20; stroke: var(--lime); stroke-width: 2; }
+.progress-point:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+.progress-chart-note { margin: 0 4px; font-size: 12px; }
+.progress-history-title { margin: 26px 0 14px; }
+.progress-history-title h3 { font-size: 19px; }
+.progress-history-title p { font-size: 12px; margin-top: 4px; }
+.progress-session-list { list-style: none; padding: 0; margin: 0; }
+.progress-session-list li { padding: 16px; margin-top: 10px; border: 1px solid var(--line); border-radius: 16px; background: var(--card); }
+.progress-session-list li > strong { font-size: 14px; }
+.progress-session-list li > small { float: right; font-size: 12px; }
+.progress-session-sets { margin-top: 12px; padding-top: 8px; border-top: 1px solid var(--line); }
+.progress-session-sets p { margin-top: 5px; font-size: 13px; color: var(--muted); }
+@media (prefers-reduced-motion: no-preference) { .exercise-progress-dialog[open] .progress-win { animation: settings-saved-in 250ms ease-out; } }
 .record-badges { list-style: none; margin: 8px 0 16px; padding: 0; }
 .record-badges li { color: var(--lime); background: #26321e; border: 1px solid #51663a; border-radius: 10px; padding: 10px 12px; margin-top: 6px; font-size: 13px; overflow-wrap: anywhere; }
 .celebration-records { padding-left: 20px; margin: 14px 0 0; }
