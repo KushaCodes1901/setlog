@@ -111,26 +111,46 @@
   </div>
   <div id="settingsView" hidden>
     <h2 class="settings-title">Settings</h2>
-    <p class="muted settings-intro">Make Setlog feel right for you. Preferences are saved on this device.</p>
+    <section class="settings-group" aria-labelledby="unitsSettingsTitle">
+      <h3 id="unitsSettingsTitle">Workout units</h3>
+      <div class="settings-list">
+        <div class="setting-item">
+          <svg class="setting-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M6 4v16M3 7h6M3 17h6M18 4v16M15 7h6M15 17h6M6 12h12"/></svg>
+          <div class="setting-copy"><label for="weightUnit">Weight unit</label><p id="weightUnitHelp">Choose kilograms or pounds. Existing weights convert in your workouts and History.</p></div>
+          <select id="weightUnit" aria-describedby="weightUnitHelp"><option value="kg">kg</option><option value="lbs">lbs</option></select>
+        </div>
+      </div>
+    </section>
     <section class="settings-group" aria-labelledby="timerSettingsTitle">
       <h3 id="timerSettingsTitle">Rest Timer</h3>
-      <div class="settings-row">
-        <label class="rest-day-choice"><input id="restSound" type="checkbox" checked> Sound when rest ends</label>
-        <p class="muted picker-help">Play a short chime when your break is over.</p>
+      <div class="settings-list">
+        <label class="setting-item" for="restSound">
+          <svg class="setting-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="M10 5 5 9H2v6h3l5 4V5ZM15 8a6 6 0 0 1 0 8M18 5a10 10 0 0 1 0 14"/></svg>
+          <span class="setting-copy"><span id="restSoundLabel">Sound when rest ends</span><span id="restSoundHelp" class="setting-description">Play a chime when your break is over. Keep Setlog open and your screen awake to hear it.</span></span><input id="restSound" class="settings-switch" type="checkbox" role="switch" aria-labelledby="restSoundLabel" aria-describedby="restSoundHelp" checked>
+        </label>
+        <div class="setting-volume-item">
+          <label class="settings-volume" for="restVolume">Alert volume <output id="restVolumeValue" for="restVolume">100%</output></label>
+          <p id="restVolumeHelp" class="setting-description">Adjust the rest chime’s loudness. Your phone’s volume also affects what you hear.</p>
+          <input id="restVolume" type="range" min="0" max="100" step="5" value="100" aria-describedby="restVolumeHelp">
+        </div>
+        <button id="testRestSound" class="setting-item settings-action" type="button">
+          <svg class="setting-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m8 5 11 7-11 7V5Z"/></svg>
+          <span class="setting-copy"><span>Test sound</span><span class="setting-description">Play a preview at your selected volume.</span></span><span class="settings-chevron" aria-hidden="true">›</span>
+        </button>
       </div>
-      <label class="settings-volume" for="restVolume">Alert volume <output id="restVolumeValue" for="restVolume">100%</output></label>
-      <input id="restVolume" type="range" min="0" max="100" step="5" value="100">
-      <button id="testRestSound" class="wide" type="button">Test sound</button>
-      <p id="restSoundStatus" class="muted picker-help" role="status">Keep Setlog open and your screen awake for sound alerts. Check your phone’s volume.</p>
+      <p id="restSoundStatus" class="muted picker-help" role="status"></p>
     </section>
     <section class="settings-group" aria-labelledby="celebrationSettingsTitle">
       <h3 id="celebrationSettingsTitle">Celebrations</h3>
-      <div class="settings-row">
-        <label class="rest-day-choice"><input id="showConfetti" type="checkbox" checked> Confetti</label>
-        <p class="muted picker-help">Celebrate completed workouts and rest breaks.</p>
+      <div class="settings-list">
+        <label class="setting-item" for="showConfetti">
+          <svg class="setting-icon" viewBox="0 0 24 24" aria-hidden="true"><path d="m4 20 4-13 9 9-13 4ZM8 7l9 9M15 3v4M20 9h-4M19 3l-2 2M4 3l1 2M21 18l-2 1"/></svg>
+          <span class="setting-copy"><span id="confettiLabel">Confetti</span><span id="confettiHelp" class="setting-description">Show a confetti animation when you save a workout or finish a rest break.</span></span><input id="showConfetti" class="settings-switch" type="checkbox" role="switch" aria-labelledby="confettiLabel" aria-describedby="confettiHelp" checked>
+        </label>
       </div>
     </section>
-    <p id="settingsStatus" class="muted picker-help" role="status"></p>
+    <button id="saveSettings" class="primary wide" type="button">Save Settings</button>
+    <p id="settingsStatus" class="muted picker-help" role="status" aria-atomic="true"></p>
   </div>
   <div id="history" hidden></div>
   <section id="backupPanel" class="backup-panel" hidden aria-labelledby="backupTitle">
@@ -144,7 +164,7 @@
     <p id="backupStatus" class="muted picker-help" role="status"></p>
   </section>
   <p id="status" role="status"></p>
-  <p class="muted foot">Stored on this device · Weights in kg</p>
+  <p class="muted foot">Stored on this device · Weights in <span id="weightUnitText">kg</span></p>
 </main>
 <nav class="bottom-nav" aria-label="Workout views">
   <div class="nav-items">
@@ -205,7 +225,7 @@
     <div class="fields">
       <small class="set-number"></small>
       <label><span class="quantity-label">Reps</span><input class="reps" type="number" inputmode="numeric" min="1" step="1" required></label>
-      <label>Weight (kg)<input class="weight" type="number" inputmode="decimal" min="0" step="any" required></label>
+      <label><span class="weight-label">Weight (kg)</span><input class="weight" type="number" inputmode="decimal" min="0" step="any" required></label>
       <button class="remove" type="button">×</button>
     </div>
     <div class="plank-timer" hidden>
@@ -248,6 +268,13 @@
     </div>
     <button id="restFocusDone" class="rest-focus-done" type="button" hidden>Back to workout →</button>
   </div>
+</dialog>
+<dialog id="settingsSavedDialog" class="settings-saved-dialog" aria-labelledby="settingsSavedTitle" aria-describedby="settingsSavedDescription">
+  <form method="dialog">
+    <div class="settings-saved-check" aria-hidden="true">✓</div>
+    <h2 id="settingsSavedTitle">Settings saved!</h2>
+    <p id="settingsSavedDescription" class="muted">You're all set. Your preferences are saved on this device.</p>
+  </form>
 </dialog>
 <dialog id="durationDialog" class="duration-dialog" aria-labelledby="durationTitle">
   <form method="dialog" id="durationForm">

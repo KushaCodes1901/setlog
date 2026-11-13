@@ -58,12 +58,40 @@ function getSetValues(row) {
     set.holdStartedAt = Number(row.dataset.holdStartedAt);
   }
   const weight = row.querySelector('.weight');
-  if (!weight.disabled) set.weight = weight.value;
+  if (!weight.disabled) set.weight = readWeight(weight);
   const effort = row.querySelector('.effort-options [aria-pressed=true]');
   const repsLeft = row.querySelector('.reps-left').value;
   if (effort) set.effort = Number(effort.value);
   if (repsLeft !== '') set.repsLeft = Number(repsLeft);
   return set;
+}
+
+// All stored weights are kilograms. Keep the original value when a rounded
+// converted display has not been edited, so unit changes never accumulate drift.
+function readWeight(input) {
+  if (input.value === '') return '';
+  if (input.value === input.dataset.displayValue) return input.dataset.kg;
+  return input.dataset.unit === 'lbs'
+    ? String(Number((Number(input.value) * 0.45359237).toPrecision(15)))
+    : input.value;
+}
+
+function weightDisplayValue(kg, unit) {
+  if (kg == null || kg === '') return '';
+  const value = unit === 'lbs' ? Number(kg) / 0.45359237 : Number(kg);
+  return String(Math.round((value + Number.EPSILON) * 100) / 100);
+}
+
+function formatWeight(kg) {
+  return weightDisplayValue(kg, appSettings.weightUnit()) + ' ' + appSettings.weightUnit();
+}
+
+function displayWeight(input, kg, unit) {
+  input.dataset.kg = kg ?? '';
+  input.dataset.unit = unit;
+  input.value = weightDisplayValue(kg, unit);
+  input.dataset.displayValue = input.value;
+  input.closest('label').querySelector('.weight-label').textContent = 'Weight (' + unit + ')';
 }
 
 function getSets(list) {
@@ -88,7 +116,7 @@ function setResult(set, name) {
   const quantity = set.seconds != null
     ? durationPicker.format(set.seconds)
     : set.reps + ' reps';
-  return quantity + (showWeight ? ' × ' + set.weight + ' kg' : '');
+  return quantity + (showWeight ? ' × ' + formatWeight(set.weight) : '');
 }
 
 function setNotes(set) {
@@ -106,6 +134,19 @@ function getExercises() {
     openSet: Array.from(card.querySelector('.sets').children).findIndex(row => !row.querySelector('.set-editor').hidden),
     saved: card.querySelector('.exercise-editor').hidden
   }));
+}
+
+function updateExerciseSummary(card) {
+  const summary = card.querySelector('.exercise-summary');
+  summary.replaceChildren();
+  const name = card.querySelector('h3').textContent;
+  getSets(card.querySelector('.sets')).forEach((set, index) => {
+    const item = document.createElement('li');
+    item.textContent = 'Set ' + (index + 1) + ' · ' + setResult(set, name);
+    const notes = setNotes(set);
+    if (notes) item.append(' · ' + notes);
+    summary.append(item);
+  });
 }
 
 function updateWorkoutControls() {
@@ -360,7 +401,7 @@ function addSet(list, values = {}, focus = false) {
     reps.type = 'hidden';
     reps.required = false;
   }
-  weight.value = values.weight ?? '';
+  displayWeight(weight, values.weight, appSettings.weightUnit());
   const bodyweight = isBodyweight(list.closest('article').querySelector('h3').textContent);
   // Keep extra weight visible in older records that explicitly logged it.
   weight.disabled = bodyweight && !(Number(values.weight) > 0);
@@ -527,13 +568,7 @@ function addExercise(exercise, focus = false) {
     summary.hidden = !saved;
     summary.replaceChildren();
     if (saved) {
-      getSets(list).forEach((set, index) => {
-        const item = document.createElement('li');
-        item.textContent = 'Set ' + (index + 1) + ' · ' + setResult(set, exercise.name);
-        const notes = setNotes(set);
-        if (notes) item.append(' · ' + notes);
-        summary.append(item);
-      });
+      updateExerciseSummary(card);
     }
   }
 
@@ -716,12 +751,12 @@ function workoutHighlight(session, previousSessions) {
         if (holds.length && extra > 0) return exercise.name + ' · Held ' + extra + ' seconds longer than last time.';
         continue;
       }
-      const comparable = previousSets.filter(entry => Number(entry.weight ?? 0) === Number(set.weight ?? 0));
+      const comparable = previousSets.filter(entry => Math.abs(Number(entry.weight ?? 0) - Number(set.weight ?? 0)) < .005);
       if (!comparable.length) continue;
       const extra = Number(set.reps) - Math.max(...comparable.map(entry => Number(entry.reps)));
       if (extra > 0) {
         return exercise.name + ' · ' + extra + (extra === 1 ? ' more rep' : ' more reps')
-          + (set.weight != null ? ' at ' + set.weight + ' kg' : '') + ' than last time.';
+          + (set.weight != null ? ' at ' + formatWeight(set.weight) : '') + ' than last time.';
       }
     }
   }
@@ -771,6 +806,21 @@ exercisePicker.ontoggle = () => {
   if (exercisePicker.open) renderExerciseChoices();
 };
 nameInput.addEventListener('input', renderExerciseChoices);
+document.querySelector('#weightUnitText').textContent = appSettings.weightUnit();
+window.addEventListener('weightunitchange', () => {
+  for (const input of exercises.querySelectorAll('.weight')) {
+    displayWeight(input, readWeight(input), appSettings.weightUnit());
+  }
+  for (const card of exercises.children) {
+    for (const row of card.querySelectorAll('.set')) {
+      if (row.querySelector('.set-editor').hidden) collapseSet(row);
+    }
+    if (!card.querySelector('.exercise-summary').hidden) updateExerciseSummary(card);
+  }
+  document.querySelector('#weightUnitText').textContent = appSettings.weightUnit();
+  if (hasDraft) saveDraft();
+  if (activeView === 'history') showHistory();
+});
 document.querySelector('#logTab').onclick = () => {
   selectView('log', { restoreScroll: true });
 };
