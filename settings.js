@@ -4,6 +4,8 @@ const appSettings = (() => {
   const volumeValue = document.querySelector('#restVolumeValue');
   const confetti = document.querySelector('#showConfetti');
   const weightUnit = document.querySelector('#weightUnit');
+  const profileHeight = document.querySelector('#profileHeight');
+  const profileWeight = document.querySelector('#profileWeight');
   const status = document.querySelector('#settingsStatus');
   const saveButton = document.querySelector('#saveSettings');
   const savedDialog = document.querySelector('#settingsSavedDialog');
@@ -19,10 +21,12 @@ const appSettings = (() => {
       return {
         volume: Number.isFinite(saved?.volume) ? Math.max(0, Math.min(100, saved.volume)) : 100,
         confetti: saved?.confetti !== false,
-        weightUnit: saved?.weightUnit === 'lbs' ? 'lbs' : 'kg'
+        weightUnit: saved?.weightUnit === 'lbs' ? 'lbs' : 'kg',
+        heightCm: Number.isFinite(saved?.heightCm) && saved.heightCm > 0 ? saved.heightCm : null,
+        bodyWeightKg: Number.isFinite(saved?.bodyWeightKg) && saved.bodyWeightKg > 0 ? saved.bodyWeightKg : null
       };
     } catch {
-      return { volume: 100, confetti: true, weightUnit: 'kg' };
+      return { volume: 100, confetti: true, weightUnit: 'kg', heightCm: null, bodyWeightKg: null };
     }
   }
 
@@ -49,12 +53,26 @@ const appSettings = (() => {
     volumeValue.value = preferences.volume + '%';
     confetti.checked = preferences.confetti;
     weightUnit.value = preferences.weightUnit;
+    profileHeight.value = preferences.heightCm ?? '';
+    const displayedWeight = preferences.bodyWeightKg === null ? '' : String(Math.round(
+      (preferences.weightUnit === 'lbs' ? preferences.bodyWeightKg / .45359237 : preferences.bodyWeightKg) * 100
+    ) / 100);
+    profileWeight.value = displayedWeight;
+    profileWeight.dataset.displayValue = displayedWeight;
+    profileWeight.dataset.unit = preferences.weightUnit;
+    document.querySelector('#profileWeightUnit').textContent = preferences.weightUnit;
   }
 
   function save(change, includeSound = false) {
+    if (!profileHeight.reportValidity() || !profileWeight.reportValidity()) return;
     saveButton.textContent = 'Save Settings';
     const previousUnit = preferences.weightUnit;
-    const updated = { ...preferences, ...change };
+    const bodyWeightKg = profileWeight.value === '' ? null
+      : profileWeight.value === profileWeight.dataset.displayValue ? preferences.bodyWeightKg
+      : Number((Number(profileWeight.value) * (profileWeight.dataset.unit === 'lbs' ? .45359237 : 1)).toPrecision(15));
+    const updated = { ...preferences,
+      heightCm: profileHeight.value === '' ? null : Number(profileHeight.value),
+      bodyWeightKg, ...change };
     const current = { ...updated, sound: document.querySelector('#restSound').checked };
     const changed = Object.keys(current).some(name => current[name] !== confirmed[name]);
     let saved = false;
@@ -84,6 +102,8 @@ const appSettings = (() => {
   volume.onchange = () => save({ volume: Number(volume.value) });
   confetti.onchange = () => save({ confetti: confetti.checked });
   weightUnit.onchange = () => save({ weightUnit: weightUnit.value });
+  profileHeight.onchange = () => save({});
+  profileWeight.onchange = () => save({});
   saveButton.onclick = () => save({
     volume: Number(volume.value),
     confetti: confetti.checked,
