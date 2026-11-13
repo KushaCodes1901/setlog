@@ -51,8 +51,8 @@
       oscillator.type = 'sine';
       oscillator.frequency.value = frequency;
       gain.gain.setValueAtTime(0, when);
-      gain.gain.linearRampToValueAtTime(.16, when + .015);
-      gain.gain.exponentialRampToValueAtTime(.001, when + .24);
+      gain.gain.linearRampToValueAtTime(.16 * appSettings.volume(), when + .015);
+      gain.gain.linearRampToValueAtTime(0, when + .24);
       oscillator.connect(gain);
       gain.connect(audio.destination);
       oscillator.start(when);
@@ -63,7 +63,12 @@
   }
 
   sound.onchange = () => {
-    try { localStorage.setItem(soundKey, String(sound.checked)); } catch {}
+    try {
+      localStorage.setItem(soundKey, String(sound.checked));
+      soundStatus.textContent = 'Sound preference saved. Keep Setlog open and your screen awake for alerts.';
+    } catch {
+      soundStatus.textContent = 'Sound changed for this session. The preference could not be saved.';
+    }
     if (sound.checked) prepareSound();
   };
   document.querySelector('#testRestSound').onclick = async () => {
@@ -80,7 +85,7 @@
 
   function celebrateCompletion() {
     done.focus({ preventScroll: true });
-    if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+    if (!appSettings.confetti() || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
     const colors = ['#141615', '#426829', '#ffffff', '#86b83a'];
     for (let index = 0; index < 40; index++) {
       const piece = document.createElement('span');
@@ -262,5 +267,6 @@
   });
   window.addEventListener('storage', event => {
     if (event.key === storageKey) restore(event.newValue);
+    if (event.key === soundKey) sound.checked = event.newValue !== 'false';
   });
 })();

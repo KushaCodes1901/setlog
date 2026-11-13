@@ -21,7 +21,7 @@ let storageReadable = true;
 let hasDraft = false;
 let editing = null;
 let activeView = 'log';
-const viewScroll = { log: 0, rest: 0, history: 0 };
+const viewScroll = { log: 0, rest: 0, history: 0, settings: 0 };
 
 function tell(message, error = false) {
   const status = document.querySelector('#status');
@@ -688,11 +688,13 @@ function selectView(view, { restoreScroll = false } = {}) {
   activeView = view;
   document.querySelector('#log').hidden = view !== 'log';
   document.querySelector('#restView').hidden = view !== 'rest';
+  document.querySelector('#settingsView').hidden = view !== 'settings';
   historyView.hidden = view !== 'history';
   document.querySelector('#backupPanel').hidden = view !== 'history';
   document.querySelector('#logTab').setAttribute('aria-pressed', view === 'log');
   document.querySelector('#restTab').setAttribute('aria-pressed', view === 'rest');
   document.querySelector('#historyTab').setAttribute('aria-pressed', view === 'history');
+  document.querySelector('#settingsTab').setAttribute('aria-pressed', view === 'settings');
   if (view === 'history') showHistory();
   window.scrollTo({ top: restoreScroll ? viewScroll[view] : 0, behavior: 'auto' });
 }
@@ -737,7 +739,7 @@ function celebrateWorkout(highlight) {
   card.append(heading, message);
   historyView.prepend(card);
   heading.focus();
-  if (matchMedia('(prefers-reduced-motion: reduce)').matches) return;
+  if (!appSettings.confetti() || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
   const colors = ['#d4fa7d', '#ffe091', '#ffb4a8', '#a9d7ff'];
   for (let index = 0; index < 24; index++) {
     const piece = document.createElement('span');
@@ -777,6 +779,9 @@ document.querySelector('#restTab').onclick = () => {
 };
 document.querySelector('#historyTab').onclick = () => {
   selectView('history', { restoreScroll: true });
+};
+document.querySelector('#settingsTab').onclick = () => {
+  selectView('settings', { restoreScroll: true });
 };
 day.onchange = saveDraft;
 restDay.onchange = saveDraft;
