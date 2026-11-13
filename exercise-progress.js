@@ -106,11 +106,12 @@ const exerciseProgress = (() => {
     if (!data.entries.length) return;
     if (!data.metrics.includes(selectedMetric)) selectedMetric = data.metrics[0];
     const result = insight(data);
-    const headings = { start: 'Your story starts here.', reps: 'Those extra reps add up.', weight: 'A new challenge, logged.',
-      assistance: 'A little less help this time.', time: 'More time on the clock.', steady: 'Another session in the books.' };
-    const tags = { start: 'STARTING MARK', reps: 'MORE REPS', weight: 'MORE WEIGHT', assistance: 'LESS ASSISTANCE', time: 'MORE TIME', steady: 'KEEP SHOWING UP' };
-    let message = 'Progress isn’t always a bigger number. Your history keeps the full picture.';
-    if (result.kind === 'start') message = 'Your first session is in. Log another to see how your numbers change.';
+    const headings = { start: 'First recorded session', reps: 'More reps at the same weight', weight: 'Heavier top set',
+      assistance: 'Less assistance', time: 'Longer timed set', steady: 'Latest session' };
+    const tags = { start: 'Starting mark', reps: 'Compared with last session', weight: 'Compared with last session', assistance: 'Compared with last session', time: 'Compared with last session', steady: 'Session comparison' };
+    let message = 'Review your sets below to compare weights, reps and time.';
+    if (result.kind === 'start') message = 'Log another session to compare it with this one.';
+    if (result.kind === 'reps' && result.weight === 0) headings.reps = 'More reps';
     if (result.kind === 'reps') message = result.amount + (result.amount === 1 ? ' more rep' : ' more reps')
       + (result.weight > 0 ? (data.assisted ? ' with ' : ' at ') + formatWeight(result.weight) + (data.assisted ? ' assistance' : '') : '')
       + (result.weight > 0 ? ' than your previous session at the same weight.' : ' than your previous session.');
@@ -261,5 +262,81 @@ const exerciseProgress = (() => {
     dialog.scrollTop = 0;
   }
 
-  return { analyze, names, insight, open };
+  function overview(sessions, weightFormatter, onOpen) {
+    const card = document.createElement('div');
+    card.className = 'home-progress-chart';
+    card.innerHTML = '<div class="home-chart-heading"><h3>Exercise progress</h3><span class="home-chart-period">Recent sessions</span></div>'
+      + '<label class="home-chart-exercise-label" for="homeChartExercise">Exercise</label><select id="homeChartExercise"></select>'
+      + '<div class="home-chart-reading"><strong></strong><span></span></div>'
+      + '<svg viewBox="0 0 360 150" class="home-chart-plot" role="img"></svg>'
+      + '<p class="home-chart-caption"></p><button class="home-chart-open" type="button">View session details <span aria-hidden="true">›</span></button>';
+    const options = names(sessions).map(name => analyze(sessions, name));
+    // Prefer an exercise with a useful history; don't invent a trend for a first session.
+    options.sort((a, b) => b.entries.length - a.entries.length || b.entries.at(-1).timestamp - a.entries.at(-1).timestamp || a.name.localeCompare(b.name));
+    const select = card.querySelector('select');
+    select.replaceChildren(...options.map(data => new Option(data.name, data.name)));
+    const plot = card.querySelector('svg');
+    const ns = 'http://www.w3.org/2000/svg';
+    const add = (tag, attributes, text) => {
+      const element = document.createElementNS(ns, tag);
+      for (const [name, value] of Object.entries(attributes)) element.setAttribute(name, value);
+      if (text != null) element.textContent = text;
+      plot.append(element);
+      return element;
+    };
+    const draw = () => {
+      plot.replaceChildren();
+      const data = options.find(item => item.name === select.value);
+      card.querySelector('.home-chart-exercise-label').hidden = !data;
+      select.hidden = !data;
+      card.querySelector('.home-chart-open').hidden = !data;
+      if (!data) {
+        card.querySelector('.home-chart-reading strong').textContent = 'A place for your progress';
+        card.querySelector('.home-chart-reading span').textContent = 'Your first workout sets the starting mark.';
+        card.querySelector('.home-chart-caption').textContent = 'Log a session and your exercise history will appear here.';
+        plot.hidden = true;
+        return;
+      }
+      const metric = data.metrics[0];
+      const entries = data.entries.filter(entry => entry[metric] !== null).slice(-8);
+      const latest = entries.at(-1);
+      const format = value => metric === 'weight' ? weightFormatter(value) : metric === 'reps' ? value + ' reps' : duration(value);
+      card.querySelector('.home-chart-reading strong').textContent = format(latest[metric]);
+      card.querySelector('.home-chart-reading span').textContent = metricLabel(metric, data.assisted) + ' · ' + latest.date
+        + (metric === 'weight' ? ' · ' + latest.topSet.reps + ' reps' : '');
+      const high = Math.max(...entries.map(entry => entry[metric]), 1) * 1.2;
+      const firstX = 14, lastX = 346, bottom = 120, top = 16;
+      [35, 77, 120].forEach(y => add('line', { x1: firstX, x2: lastX, y1: y, y2: y, class: 'home-chart-grid' }));
+      const points = entries.map((entry, index) => ({
+        x: entries.length === 1 ? (firstX + lastX) / 2 : firstX + (lastX - firstX) * index / (entries.length - 1),
+        y: bottom - entry[metric] / high * (bottom - top)
+      }));
+      if (points.length > 1) {
+        const path = points.map((point, index) => (index ? 'L' : 'M') + point.x + ' ' + point.y).join(' ');
+        add('path', { d: path + ' L' + lastX + ' ' + bottom + ' L' + firstX + ' ' + bottom + ' Z', class: 'home-chart-area' });
+        add('path', { d: path, class: 'home-chart-line' });
+      }
+      points.forEach((point, index) => {
+        if (index === points.length - 1) add('circle', { cx: point.x, cy: point.y, r: 10, class: 'home-chart-halo' });
+        add('circle', { cx: point.x, cy: point.y, r: 4, class: 'home-chart-dot' });
+      });
+      const firstDate = shortDate(entries[0]);
+      const lastDate = shortDate(latest);
+      if (entries.length === 1) add('text', { x: 180, y: 144, 'text-anchor': 'middle', class: 'home-chart-date' }, lastDate);
+      else {
+        add('text', { x: firstX, y: 144, class: 'home-chart-date' }, firstDate);
+        add('text', { x: lastX, y: 144, 'text-anchor': 'end', class: 'home-chart-date' }, lastDate);
+      }
+      plot.setAttribute('aria-label', data.name + ': ' + metricLabel(metric, data.assisted) + ' over ' + entries.length + (entries.length === 1 ? ' recorded session.' : ' recorded sessions.') + ' Latest: ' + format(latest[metric]) + '.');
+      card.querySelector('.home-chart-caption').textContent = entries.length === 1
+        ? 'One session recorded. Your next workout adds the next point.'
+        : 'Each point is one session.' + (metric === 'weight' ? (data.assisted ? ' Lower means less assistance.' : ' Open session details to compare reps too.') : '');
+      card.querySelector('.home-chart-open').onclick = () => onOpen(data.name);
+    };
+    select.onchange = draw;
+    draw();
+    return card;
+  }
+
+  return { analyze, names, insight, open, overview };
 })();

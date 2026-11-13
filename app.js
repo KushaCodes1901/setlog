@@ -667,20 +667,15 @@ function recordDescription(record) {
 function renderRecordsReport(records, sessions) {
   const report = document.createElement('section');
   report.className = 'home-records';
-  report.innerHTML = '<div class="home-hero"><span class="home-eyebrow">YOUR PROGRESS</span><span class="home-trophy" aria-hidden="true">'
-    + '<svg viewBox="0 0 24 24"><path d="M7 3h10v5a5 5 0 0 1-10 0V3ZM7 5H3v2a4 4 0 0 0 4 4M17 5h4v2a4 4 0 0 1-4 4M12 13v6M8 21h8M9 19h6"/></svg>'
-    + '</span><h2 class="home-headline"></h2><p class="home-message"></p><button class="home-log-button" type="button"></button></div>'
+  report.innerHTML = '<div class="home-hero"><div><h2 class="home-headline">Overview</h2><p class="home-message"></p></div><button class="home-log-button" type="button"></button></div>'
     + '<div class="home-stats"><div><strong class="home-workouts-count"></strong><span>Workouts logged</span></div>'
     + '<div><strong class="home-pr-count"></strong><span>Personal records</span></div></div>'
     + '<div class="home-milestone"><div><strong>Next milestone</strong><span class="home-milestone-label"></span></div>'
     + '<progress aria-label="Personal records toward your next milestone"></progress><p></p></div>'
     + '<div class="records-body"><h2>Personal records</h2></div>';
-  report.querySelector('.home-headline').textContent = records.milestoneCount ? 'Look how far you’ve come.' : 'Small wins. Stronger you.';
-  report.querySelector('.home-message').textContent = records.milestoneCount
-    ? 'Every new best starts with showing up. Let’s keep going.'
-    : 'Log your lifts. Set your starting marks. Then chase your next best.';
+  report.querySelector('.home-message').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   const log = report.querySelector('.home-log-button');
-  log.textContent = hasDraft ? 'Continue workout →' : 'Let’s log a workout →';
+  log.textContent = hasDraft ? 'Resume workout' : 'Log workout';
   log.onclick = () => selectView('log', { restoreScroll: true });
   report.querySelector('.home-workouts-count').textContent = sessions.filter(session => !session.restDay).length;
   report.querySelector('.home-pr-count').textContent = records.milestoneCount;
@@ -692,28 +687,10 @@ function renderRecordsReport(records, sessions) {
   progress.max = next;
   progress.value = records.milestoneCount;
   report.querySelector('.home-milestone p').textContent = records.exerciseBests.length
-    ? remaining + (remaining === 1 ? ' new best to go. You’ve got this.' : ' new bests to go. One workout at a time.')
-    : 'Your first weighted workout sets the starting line.';
-  const progressNames = exerciseProgress.names(sessions);
-  const explore = document.createElement('div');
-  explore.className = 'home-exercise-progress';
-  const progressHeading = document.createElement('h2');
-  progressHeading.textContent = 'Exercise Progress';
-  const progressHelp = document.createElement('p');
-  progressHelp.className = 'muted';
-  progressHelp.textContent = progressNames.length ? 'See the little wins between the big records.' : 'Log your first exercise to start your journey.';
-  explore.append(progressHeading, progressHelp);
-  if (progressNames.length) {
-    const button = document.createElement('button');
-    button.type = 'button';
-    button.className = 'exercise-progress-link';
-    button.innerHTML = '<span class="progress-link-icon" aria-hidden="true"><svg viewBox="0 0 32 32"><path class="progress-link-bar" d="M7 24v-5M15 24V14M23 24V8"/><path d="m5 13 8-5 6 2 7-6M22 4h4v4"/></svg></span>'
-      + '<span class="progress-link-copy"><strong>See your progress</strong><small>Charts, sets &amp; personal bests</small></span>'
-      + '<span class="progress-link-arrow" aria-hidden="true"><svg viewBox="0 0 24 24"><path d="m9 5 7 7-7 7"/></svg></span>';
-    button.onclick = () => openExerciseProgress(progressNames[0]);
-    explore.append(button);
-  }
-  report.insertBefore(explore, report.querySelector('.records-body'));
+    ? remaining + (remaining === 1 ? ' record until the next milestone.' : ' records until the next milestone.')
+    : 'Log a weighted workout to establish your first marks.';
+  const overview = exerciseProgress.overview(sessions, formatWeight, openExerciseProgress);
+  report.insertBefore(overview, report.querySelector('.home-stats'));
   const body = report.querySelector('.records-body');
   const help = document.createElement('p');
   help.className = 'muted records-help';
@@ -755,7 +732,7 @@ function renderRecordsReport(records, sessions) {
     button.setAttribute('aria-label', 'View ' + best.name + ' progress');
     button.onclick = () => openExerciseProgress(best.name);
     name.textContent = best.name;
-    date.textContent = best.date + ' · View progress ↗';
+    date.textContent = best.date;
     name.append(date);
     value.textContent = formatWeight(best.weightKg);
     button.append(name, value);
@@ -914,7 +891,7 @@ function celebrateWorkout(highlight, records = []) {
   card.className = 'workout-celebration';
   heading.tabIndex = -1;
   heading.textContent = records.length ? (records.length === 1 ? 'New personal record!' : 'New personal records!') : 'Workout saved!';
-  message.textContent = records.length ? 'That’s a new best. You earned this one.' : highlight || 'Nice work showing up today.';
+  message.textContent = records.length ? 'You improved on your previous best.' : highlight || 'Your session has been added to History.';
   card.append(heading, message);
   if (records.length) {
     const list = document.createElement('ul');

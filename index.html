@@ -17,7 +17,7 @@
 <link rel="manifest" href="manifest.webmanifest">
 <link rel="apple-touch-icon" sizes="180x180" href="apple-touch-icon-v2.png">
 <link rel="icon" type="image/png" sizes="192x192" href="icon-v2-192.png">
-<title>Setlog · Workout journal</title>
+<title>Setlog - Workout journal</title>
 <link rel="preload" as="image" href="icon-v2-192.png">
 <link rel="stylesheet" href="startup.css">
 <link rel="stylesheet" href="styles.css">
@@ -28,16 +28,15 @@
     <div class="startup-flight">
       <img class="startup-logo" src="icon-v2-192.png" width="116" height="116" alt="" fetchpriority="high">
     </div>
-    <div class="startup-wordmark">Setlog<span>.</span></div>
-    <div class="startup-caption">Your workout, one set at a time.</div>
+    <div class="startup-wordmark">Setlog</div>
+    <div class="startup-caption">Workout journal</div>
     <div class="startup-dots"><i></i><i></i><i></i></div>
   </div>
 </div>
 <main>
   <header>
-    <p class="eyebrow">Workout journal</p>
-    <h1>Setlog<span class="brand-dot">.</span></h1>
-    <p class="muted">Log your lifts, one set at a time.</p>
+    <h1>Setlog</h1>
+    <p class="masthead-label">Workout journal</p>
   </header>
   <div id="log">
     <section aria-labelledby="sessionTitle">
@@ -299,22 +298,22 @@
 </dialog>
 <dialog id="exerciseProgressDialog" class="exercise-progress-dialog" aria-labelledby="exerciseProgressTitle">
   <div class="exercise-progress-page">
-    <header class="progress-header"><button id="progressBack" type="button" autofocus>‹ Back</button><span>EXERCISE PROGRESS</span></header>
+    <header class="progress-header"><button id="progressBack" type="button" autofocus>‹ Back</button><span>Exercise progress</span></header>
     <h2 id="exerciseProgressTitle">Exercise Progress</h2>
     <label class="progress-exercise-label" for="progressExercise">Choose exercise</label>
     <select id="progressExercise"></select>
-    <p class="progress-empty muted" hidden>Log an exercise to start your progress story.</p>
+    <p class="progress-empty muted" hidden>No recorded sessions for this exercise.</p>
     <div class="progress-content">
       <section class="progress-win"><span class="progress-win-tag"></span><h3></h3><p></p></section>
-      <div class="progress-stats"><div><span class="progress-best-label"></span><strong class="progress-best-value"></strong><small>Across your saved sessions</small></div><div><span>Sessions logged</span><strong class="progress-session-count"></strong><small>Every one counts</small></div></div>
+      <div class="progress-stats"><div><span class="progress-best-label"></span><strong class="progress-best-value"></strong><small>Across saved sessions</small></div><div><span>Sessions logged</span><strong class="progress-session-count"></strong><small>All time</small></div></div>
       <section class="progress-chart-card" aria-label="Exercise performance chart">
-        <div class="progress-chart-heading"><h3>Your journey</h3><span class="progress-chart-unit"></span></div>
+        <div class="progress-chart-heading"><h3>Session trend</h3><span class="progress-chart-unit"></span></div>
         <div class="progress-metrics" role="group" aria-label="Chart measurement"></div>
         <div class="progress-selected" aria-live="polite" aria-atomic="true"></div>
         <svg class="progress-chart" viewBox="0 0 360 200" role="group" aria-label="Session chart. Select a point to see its details."></svg>
         <p class="progress-chart-note muted"></p>
       </section>
-      <div class="progress-history-title"><h3>The work behind the numbers</h3><p class="muted">Your sessions, newest first.</p></div>
+      <div class="progress-history-title"><h3>Session history</h3><p class="muted">Newest first</p></div>
       <ol class="progress-session-list"></ol>
       <button id="progressMore" class="wide" type="button">Show older sessions</button>
     </div>
