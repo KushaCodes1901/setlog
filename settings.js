@@ -32,6 +32,9 @@ const appSettings = (() => {
   try { confirmed.sound = localStorage.getItem('setlog-rest-sound-v1') !== 'false'; } catch {}
 
   function showConfirmation(changed) {
+    const icon = document.querySelector('.settings-saved-check');
+    icon.textContent = changed ? '✓' : 'i';
+    icon.classList.toggle('settings-info-icon', !changed);
     document.querySelector('#settingsSavedTitle').textContent = changed ? 'Settings saved!' : 'You’re already up to date';
     document.querySelector('#settingsSavedDescription').textContent = changed
       ? 'Your preferences are saved on this device.'
