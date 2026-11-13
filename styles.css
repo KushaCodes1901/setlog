@@ -46,6 +46,9 @@ label { display: block; color: var(--muted); font-size: 13px; font-weight: 650; 
 .timer-presets button[aria-pressed=true] { color: var(--lime); border-color: var(--lime); }
 .timer-content .fields { flex-wrap: wrap; }
 .timer-content label { min-width: 100px; }
+.rest-sound-controls { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap; gap: 10px; margin-top: 16px; padding-top: 14px; border-top: 1px solid var(--line); }
+.rest-sound-controls .rest-day-choice { margin-top: 0; font-size: 13px; }
+#testRestSound { font-size: 12px; }
 #exercisePicker > summary { cursor: pointer; font-weight: 700; color: var(--lime); min-height: 46px; padding: 10px 0; }
 .picker-help { margin-top: 10px; font-size: 13px; }
 .picker-filters { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px; margin-top: 12px; }

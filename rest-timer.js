@@ -14,10 +14,64 @@
   const focusToggle = document.querySelector('#restFocusToggle');
   const expand = document.querySelector('#restExpand');
   const done = document.querySelector('#restFocusDone');
+  const sound = document.querySelector('#restSound');
+  const soundStatus = document.querySelector('#restSoundStatus');
+  const soundKey = 'setlog-rest-sound-v1';
+  let audio = null;
+  try {
+    sound.checked = localStorage.getItem(soundKey) !== 'false';
+  } catch {
+    // The sound toggle remains usable when preferences cannot be stored.
+  }
   const storageKey = 'setlog-rest-v1';
   let state = { duration: 90, remaining: 90, endsAt: null, paused: false };
   let interval = null;
   const durationControl = durationPicker.attach(durationInput, { label: 'Custom rest time', maximum: 3600 });
+
+  async function prepareSound() {
+    try {
+      const AudioContext = window.AudioContext || window.webkitAudioContext;
+      if (!AudioContext) throw new Error('Audio is unavailable.');
+      if (!audio || audio.state === 'closed') audio = new AudioContext();
+      if (audio.state !== 'running') await audio.resume();
+      return audio.state === 'running';
+    } catch {
+      soundStatus.textContent = 'Sound is unavailable in this browser. The completion screen will still appear.';
+      return false;
+    }
+  }
+
+  function playChime() {
+    if (!audio || audio.state !== 'running') return false;
+    const began = audio.currentTime;
+    [880, 1108.73, 1318.51].forEach((frequency, index) => {
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+      const when = began + index * .18;
+      oscillator.type = 'sine';
+      oscillator.frequency.value = frequency;
+      gain.gain.setValueAtTime(0, when);
+      gain.gain.linearRampToValueAtTime(.16, when + .015);
+      gain.gain.exponentialRampToValueAtTime(.001, when + .24);
+      oscillator.connect(gain);
+      gain.connect(audio.destination);
+      oscillator.start(when);
+      oscillator.stop(when + .25);
+      oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
+    });
+    return true;
+  }
+
+  sound.onchange = () => {
+    try { localStorage.setItem(soundKey, String(sound.checked)); } catch {}
+    if (sound.checked) prepareSound();
+  };
+  document.querySelector('#testRestSound').onclick = async () => {
+    if (await prepareSound()) {
+      playChime();
+      soundStatus.textContent = 'Test chime played. Keep Setlog open and your screen awake for timer alerts.';
+    }
+  };
 
   function openFocus() {
     if (!focus.open) focus.showModal();
@@ -101,6 +155,7 @@
 
   function tick() {
     if (state.endsAt !== null && remainingSeconds() === 0) {
+      const justFinished = Date.now() - state.endsAt < 2000;
       state.endsAt = null;
       state.remaining = 0;
       state.paused = false;
@@ -111,6 +166,9 @@
       openFocus();
       render();
       celebrateCompletion();
+      if (sound.checked && !document.hidden && justFinished && !playChime()) {
+        soundStatus.textContent = 'Tap Test sound to enable audio before your next rest.';
+      }
       return;
     }
     render();
@@ -139,6 +197,7 @@
       status.textContent = state.remaining ? 'Timer paused.' : 'Rest complete. Ready for your next set?';
     } else {
       if (!durationInput.reportValidity()) return;
+      if (sound.checked) prepareSound();
       const duration = Number(durationInput.value);
       if (duration !== state.duration) {
         state.duration = duration;
