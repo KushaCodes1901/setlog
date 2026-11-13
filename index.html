@@ -109,6 +109,7 @@
       </div>
     </section>
   </div>
+  <div id="homeView" hidden aria-label="Home"></div>
   <div id="settingsView" hidden>
     <h2 class="settings-title">Settings</h2>
     <section class="settings-group" aria-labelledby="profileSettingsTitle">
@@ -191,6 +192,10 @@
 </main>
 <nav class="bottom-nav" aria-label="Workout views">
   <div class="nav-items">
+    <button id="homeTab" type="button" aria-controls="homeView" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10Z"/></svg>
+      <span>Home</span>
+    </button>
     <button id="logTab" type="button" aria-controls="log" aria-pressed="true">
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
         <path d="M7 12h10M4 8v8m3-10v12M20 8v8M17 6v12"/>
@@ -319,6 +324,7 @@
 <script defer src="duration-picker.js"></script>
 <script defer src="exercise-catalog.js"></script>
 <script defer src="history-calendar.js"></script>
+<script defer src="personal-records.js"></script>
 <script defer src="app.js"></script>
 <script defer src="backup.js"></script>
 <script defer src="rest-timer.js?v=settings"></script>

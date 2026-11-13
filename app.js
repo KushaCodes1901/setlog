@@ -21,7 +21,7 @@ let storageReadable = true;
 let hasDraft = false;
 let editing = null;
 let activeView = 'log';
-const viewScroll = { log: 0, rest: 0, history: 0, settings: 0 };
+const viewScroll = { home: 0, log: 0, rest: 0, history: 0, settings: 0 };
 
 function tell(message, error = false) {
   const status = document.querySelector('#status');
@@ -641,10 +641,113 @@ function showHistory() {
     tell('Workout history could not be read on this device.', true);
     return;
   }
-  historyCalendar.render(historyView, sessions, renderHistoryEntries);
+  const records = personalRecords.analyze(sessions);
+  historyCalendar.render(historyView, sessions, (entries, target) => renderHistoryEntries(entries, target, records));
 }
 
-function renderHistoryEntries(entries, target) {
+function showHome() {
+  const home = document.querySelector('#homeView');
+  home.replaceChildren();
+  try {
+    const sessions = readStorage().sessions;
+    home.append(renderRecordsReport(personalRecords.analyze(sessions), sessions));
+  } catch {
+    const message = document.createElement('p');
+    message.textContent = 'Your progress couldn’t be loaded. Please try reopening Setlog.';
+    home.append(message);
+  }
+}
+
+function recordDescription(record) {
+  return record.type === 'weight'
+    ? record.name + ' · ' + formatWeight(record.weightKg) + ' (previous best: ' + formatWeight(record.previous) + ')'
+    : 'New weekly total · ' + formatWeight(record.volumeKg) + ' lifted across all reps';
+}
+
+function renderRecordsReport(records, sessions) {
+  const report = document.createElement('section');
+  report.className = 'home-records';
+  report.innerHTML = '<div class="home-hero"><span class="home-eyebrow">YOUR PROGRESS</span><span class="home-trophy" aria-hidden="true">'
+    + '<svg viewBox="0 0 24 24"><path d="M7 3h10v5a5 5 0 0 1-10 0V3ZM7 5H3v2a4 4 0 0 0 4 4M17 5h4v2a4 4 0 0 1-4 4M12 13v6M8 21h8M9 19h6"/></svg>'
+    + '</span><h2 class="home-headline"></h2><p class="home-message"></p><button class="home-log-button" type="button"></button></div>'
+    + '<div class="home-stats"><div><strong class="home-workouts-count"></strong><span>Workouts logged</span></div>'
+    + '<div><strong class="home-pr-count"></strong><span>Personal records</span></div></div>'
+    + '<div class="home-milestone"><div><strong>Next milestone</strong><span class="home-milestone-label"></span></div>'
+    + '<progress aria-label="Personal records toward your next milestone"></progress><p></p></div>'
+    + '<div class="records-body"><h2>Personal records</h2></div>';
+  report.querySelector('.home-headline').textContent = records.milestoneCount ? 'Look how far you’ve come.' : 'Small wins. Stronger you.';
+  report.querySelector('.home-message').textContent = records.milestoneCount
+    ? 'Every new best starts with showing up. Let’s keep going.'
+    : 'Log your lifts. Set your starting marks. Then chase your next best.';
+  const log = report.querySelector('.home-log-button');
+  log.textContent = hasDraft ? 'Continue workout →' : 'Let’s log a workout →';
+  log.onclick = () => selectView('log', { restoreScroll: true });
+  report.querySelector('.home-workouts-count').textContent = sessions.filter(session => !session.restDay).length;
+  report.querySelector('.home-pr-count').textContent = records.milestoneCount;
+  const next = [1, 5, 10, 25, 50, 100].find(value => value > records.milestoneCount)
+    ?? (Math.floor(records.milestoneCount / 100) + 1) * 100;
+  const remaining = next - records.milestoneCount;
+  report.querySelector('.home-milestone-label').textContent = next === 1 ? 'Your first PR' : next + ' personal records';
+  const progress = report.querySelector('progress');
+  progress.max = next;
+  progress.value = records.milestoneCount;
+  report.querySelector('.home-milestone p').textContent = records.exerciseBests.length
+    ? remaining + (remaining === 1 ? ' new best to go. You’ve got this.' : ' new bests to go. One workout at a time.')
+    : 'Your first weighted workout sets the starting line.';
+  const body = report.querySelector('.records-body');
+  const help = document.createElement('p');
+  help.className = 'muted records-help';
+  help.textContent = 'Your first lift sets the starting mark. Beat it to earn a PR.';
+  body.append(help);
+  if (records.weeklyBest) {
+    const week = document.createElement('div');
+    const label = document.createElement('strong');
+    const value = document.createElement('p');
+    const note = document.createElement('small');
+    week.className = 'record-week';
+    label.textContent = 'Total weight lifted in a week';
+    value.textContent = formatWeight(records.weeklyBest.volumeKg);
+    const [year, month, day] = records.weeklyBest.week.split('-').map(Number);
+    note.textContent = 'Week of ' + new Date(year, month - 1, day, 12).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
+    week.append(label, value, note);
+    const explanation = document.createElement('p');
+    explanation.className = 'record-week-explanation';
+    const unit = appSettings.weightUnit();
+    explanation.textContent = 'Your highest weekly total, adding up every rep. For example, 10 reps × 20 ' + unit + ' = 200 ' + unit + '. A week runs Monday–Sunday.';
+    week.append(explanation);
+    body.append(week);
+  }
+  const list = document.createElement('ul');
+  list.className = 'record-lifts';
+  if (records.exerciseBests.length) {
+    const title = document.createElement('h3');
+    title.className = 'record-lifts-title';
+    title.textContent = 'Heaviest lifts';
+    body.append(title);
+  }
+  for (const best of records.exerciseBests) {
+    const row = document.createElement('li');
+    const name = document.createElement('span');
+    const date = document.createElement('small');
+    const value = document.createElement('strong');
+    name.textContent = best.name;
+    date.textContent = best.date;
+    name.append(date);
+    value.textContent = formatWeight(best.weightKg);
+    row.append(name, value);
+    list.append(row);
+  }
+  body.append(list);
+  const note = document.createElement('p');
+  note.className = 'muted records-help';
+  note.textContent = records.exerciseBests.length
+    ? 'Best lifts are tracked per exercise. Weekly totals exclude timed, unweighted and assisted sets.'
+    : 'Log a weighted workout to set your starting marks. Timed, unweighted and assisted sets don’t count toward lifting records.';
+  body.append(note);
+  return report;
+}
+
+function renderHistoryEntries(entries, target, records) {
   [...entries].reverse().forEach(({ session, index }) => {
     const card = document.createElement('article');
     const details = document.createElement('details');
@@ -663,6 +766,17 @@ function renderHistoryEntries(entries, target) {
       + ' · ' + setCount + (setCount === 1 ? ' set' : ' sets');
     header.append(heading);
     content.className = 'history-content';
+    const milestones = records.bySession.get(index) ?? [];
+    if (milestones.length) {
+      const list = document.createElement('ul');
+      list.className = 'record-badges';
+      for (const record of milestones) {
+        const badge = document.createElement('li');
+        badge.textContent = 'PR · ' + recordDescription(record);
+        list.append(badge);
+      }
+      content.append(list);
+    }
     if (session.restDay) {
       const message = document.createElement('p');
       message.className = 'muted';
@@ -719,6 +833,7 @@ function renderHistoryEntries(entries, target) {
 function selectView(view, { restoreScroll = false } = {}) {
   if (activeView !== view) viewScroll[activeView] = window.scrollY;
   activeView = view;
+  document.querySelector('#homeView').hidden = view !== 'home';
   document.querySelector('#log').hidden = view !== 'log';
   document.querySelector('#restView').hidden = view !== 'rest';
   document.querySelector('#settingsView').hidden = view !== 'settings';
@@ -728,6 +843,8 @@ function selectView(view, { restoreScroll = false } = {}) {
   document.querySelector('#restTab').setAttribute('aria-pressed', view === 'rest');
   document.querySelector('#historyTab').setAttribute('aria-pressed', view === 'history');
   document.querySelector('#settingsTab').setAttribute('aria-pressed', view === 'settings');
+  document.querySelector('#homeTab').setAttribute('aria-pressed', view === 'home');
+  if (view === 'home') showHome();
   if (view === 'history') showHistory();
   window.scrollTo({ top: restoreScroll ? viewScroll[view] : 0, behavior: 'auto' });
 }
@@ -761,15 +878,25 @@ function workoutHighlight(session, previousSessions) {
   return '';
 }
 
-function celebrateWorkout(highlight) {
+function celebrateWorkout(highlight, records = []) {
   const card = document.createElement('section');
   const heading = document.createElement('h2');
   const message = document.createElement('p');
   card.className = 'workout-celebration';
   heading.tabIndex = -1;
-  heading.textContent = 'Workout saved!';
-  message.textContent = highlight || 'Nice work showing up today.';
+  heading.textContent = records.length ? (records.length === 1 ? 'New personal record!' : 'New personal records!') : 'Workout saved!';
+  message.textContent = records.length ? 'That’s a new best. You earned this one.' : highlight || 'Nice work showing up today.';
   card.append(heading, message);
+  if (records.length) {
+    const list = document.createElement('ul');
+    list.className = 'celebration-records';
+    for (const record of records) {
+      const item = document.createElement('li');
+      item.textContent = recordDescription(record);
+      list.append(item);
+    }
+    card.append(list);
+  }
   historyView.prepend(card);
   heading.focus();
   if (!appSettings.confetti() || matchMedia('(prefers-reduced-motion: reduce)').matches) return;
@@ -818,7 +945,12 @@ window.addEventListener('weightunitchange', () => {
   document.querySelector('#weightUnitText').textContent = appSettings.weightUnit();
   if (hasDraft) saveDraft();
   if (activeView === 'history') showHistory();
+  if (activeView === 'home') showHome();
 });
+
+document.querySelector('#homeTab').onclick = () => {
+  selectView('home', { restoreScroll: true });
+};
 document.querySelector('#logTab').onclick = () => {
   selectView('log', { restoreScroll: true });
 };
@@ -889,7 +1021,10 @@ workout.onsubmit = event => {
   tell(isEdit ? 'Entry updated.' : session.restDay ? 'Rest day saved.' : '');
   historyCalendar.select(session.date);
   selectView('history');
-  if (!isEdit && !session.restDay) celebrateWorkout(workoutHighlight(session, previousSessions));
+  if (!isEdit && !session.restDay) {
+    const records = personalRecords.analyze([...previousSessions, session]).bySession.get(previousSessions.length) ?? [];
+    celebrateWorkout(workoutHighlight(session, previousSessions), records);
+  }
 };
 
 refreshToday();
@@ -903,6 +1038,11 @@ try {
   storageReadable = false;
   tell('Stored workouts are unavailable. Reload to try again.', true);
 }
+selectView(editing ? 'log' : 'home');
+
+window.addEventListener('storage', event => {
+  if (event.key === storageKey && activeView === 'home') showHome();
+});
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) refreshToday();
 });
