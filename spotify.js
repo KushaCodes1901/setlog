@@ -175,6 +175,61 @@ const spotifyMusic = (() => {
       }
     }
   }
+  async function withRestAlert(playAlert) {
+    // Timer alerts also run when the Music tab is closed. Read fresh playback;
+    // never resume a track/device that changed during the alert.
+    if (!client.connected || busy || connecting || document.hidden || Date.now() < client.retryAt) {
+      await playAlert();
+      return;
+    }
+    const version = ++revision;
+    clearTimeout(poll);
+    loading = false;
+    busy = true;
+    pendingToggle = null;
+    render();
+    let original = null;
+    let pausedByUs = false;
+    const valid = () => version === revision && client.connected;
+    try {
+      try {
+        original = await client.playback();
+        if (valid() && original?.is_playing && original.device?.id && original.item?.uri) {
+          await client.command('pause', original);
+          pausedByUs = true;
+          if (valid()) {
+            player = { ...original, is_playing: false };
+            receivedAt = Date.now();
+            render();
+          }
+          // Allow Spotify Connect's accepted pause to reach the active device.
+          for (let attempt = 0; attempt < 4 && valid(); attempt++) {
+            await new Promise(resolve => setTimeout(resolve, 250));
+            const current = await client.playback();
+            if (!current?.is_playing) break;
+          }
+        }
+      } catch {
+        // A disconnected/restricted Spotify device must never suppress the chime.
+      }
+      await playAlert();
+    } finally {
+      if (pausedByUs && valid()) {
+        try {
+          const current = await client.playback();
+          if (valid() && current && !current.is_playing && current.device?.id === original.device.id
+            && current.item?.uri === original.item.uri) await client.command('play', current);
+        } catch {
+          tell('Your break is over. Tap Play in Spotify to continue your music.', true);
+        }
+      }
+      if (version === revision) {
+        busy = false;
+        render();
+        if (active && !document.hidden) await refreshPlayback(); else schedule();
+      }
+    }
+  }
   $('musicArtwork').onerror = () => { $('musicArtwork').hidden = true; $('musicArtworkPlaceholder').removeAttribute('hidden'); };
   $('musicConnect').onclick = async () => {
     if (!spotifyClient.validId(clientId)) {
@@ -231,5 +286,5 @@ const spotifyMusic = (() => {
       .catch(error => { if (version === revision) tell(error.message, true); })
       .finally(() => { if (version === revision) { connecting = false; render(); setActive(active); } });
   }
-  return { setActive, wasCallback };
+  return { setActive, wasCallback, withRestAlert };
 })();

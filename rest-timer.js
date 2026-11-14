@@ -62,6 +62,24 @@
     return true;
   }
 
+  async function alertRestComplete(preview = false) {
+    if ((!preview && !sound.checked) || appSettings.volume() <= 0 || document.hidden) return;
+    const chime = async () => {
+      if (document.hidden || (!preview && !sound.checked)) return;
+      if (await prepareSound() && playChime()) {
+        // Keep music paused until all three notes have finished.
+        await new Promise(resolve => setTimeout(resolve, 1000));
+      } else {
+        soundStatus.textContent = 'Tap Test sound to enable audio before your next rest.';
+      }
+    };
+    try {
+      await spotifyMusic.withRestAlert(chime);
+    } catch {
+      soundStatus.textContent = 'Sound was interrupted. Tap Test sound before your next rest.';
+    }
+  }
+
   sound.onchange = () => {
     try {
       localStorage.setItem(soundKey, String(sound.checked));
@@ -72,10 +90,8 @@
     if (sound.checked) prepareSound();
   };
   document.querySelector('#testRestSound').onclick = async () => {
-    if (await prepareSound()) {
-      playChime();
-      soundStatus.textContent = 'Test chime played. Keep Setlog open and your screen awake for timer alerts.';
-    }
+    // Unlock audio directly from the tap before any Spotify network requests.
+    if (await prepareSound()) await alertRestComplete(true);
   };
 
   function openFocus() {
@@ -171,9 +187,7 @@
       openFocus();
       render();
       celebrateCompletion();
-      if (sound.checked && !document.hidden && justFinished && !playChime()) {
-        soundStatus.textContent = 'Tap Test sound to enable audio before your next rest.';
-      }
+      if (justFinished) void alertRestComplete();
       return;
     }
     render();

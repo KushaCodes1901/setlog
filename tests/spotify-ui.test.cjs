@@ -41,7 +41,9 @@ function setup(initial = playback()) {
   });
   vm.runInContext(fs.readFileSync(path.join(__dirname, '../spotify.js'), 'utf8'), context);
   vm.runInContext('spotifyMusic.setActive(true)', context);
-  return { element, client, setPlayer: value => { current = value; },
+  return { element, client, alert: callback => vm.runInContext('spotifyMusic', context).withRestAlert(callback),
+    setActive: value => vm.runInContext('spotifyMusic', context).setActive(value),
+    setPlayer: value => { current = value; },
     setCommand: fn => { commandImpl = fn; }, advance: ms => { now += ms; intervals.forEach(fn => fn()); },
     async poll() { const [id, job] = [...timeouts][0]; timeouts.delete(id); await job.fn(); },
     pollDelay: () => [...timeouts.values()][0]?.delay };
@@ -64,6 +66,65 @@ test('Pause changes the button and freezes elapsed time before the request compl
   s.setPlayer(playback(false, 13000)); await s.poll();
   assert.equal(s.element('musicDevice').textContent, 'Paused on Phone');
   assert.equal(s.pollDelay(), 5000);
+});
+
+test('Rest chime pauses fresh Spotify playback even outside Music and resumes after the chime', async () => {
+  const s = setup(); await flush(); s.setActive(false);
+  const events = [], chime = deferred();
+  s.setCommand(async action => { events.push(action); s.setPlayer(playback(action === 'play')); });
+  const alert = s.alert(async () => { events.push('chime'); await chime.promise; });
+  await flush();
+  assert.deepEqual(events, ['pause']);
+  // Run the pause-settling timeout without advancing the outstanding chime.
+  await s.poll(); await flush();
+  assert.deepEqual(events, ['pause', 'chime']);
+  chime.resolve(); await alert;
+  assert.deepEqual(events, ['pause', 'chime', 'play']);
+});
+
+test('Rest chime leaves already-paused music paused', async () => {
+  const s = setup(playback(false)); await flush();
+  const commands = []; s.setCommand(async action => commands.push(action));
+  let heard = false; await s.alert(async () => { heard = true; });
+  assert.equal(heard, true); assert.deepEqual(commands, []);
+});
+
+test('Rest chime still plays when Spotify rejects the pause or is disconnected', async () => {
+  for (const connected of [true, false]) {
+    const s = setup(); await flush(); s.client.connected = connected;
+    const commands = []; let heard = false;
+    s.setCommand(async action => { commands.push(action); throw new Error('Unavailable'); });
+    await s.alert(async () => { heard = true; });
+    assert.equal(heard, true); assert.deepEqual(commands, connected ? ['pause'] : []);
+  }
+});
+
+test('Rest alert never resumes a different track or device, or a disconnected account', async () => {
+  for (const change of ['track', 'device', 'disconnect', 'already-resumed']) {
+    const s = setup(); await flush();
+    const commands = [];
+    s.setCommand(async action => { commands.push(action); s.setPlayer(playback(false)); });
+    const alert = s.alert(async () => {
+      const changed = playback(false);
+      if (change === 'track') changed.item.uri = 'spotify:track:another';
+      if (change === 'device') changed.device.id = 'another-device';
+      if (change === 'already-resumed') changed.is_playing = true;
+      if (change === 'disconnect') s.element('musicDisconnect').onclick();
+      s.setPlayer(changed);
+    });
+    await flush(); await s.poll(); await alert;
+    assert.deepEqual(commands, ['pause'], change);
+  }
+});
+
+test('A chime failure still restores Spotify music paused for the alert', async () => {
+  const s = setup(); await flush();
+  const commands = [];
+  s.setCommand(async action => { commands.push(action); s.setPlayer(playback(action === 'play')); });
+  const alert = s.alert(async () => { throw new Error('Audio interrupted'); });
+  const rejected = assert.rejects(alert, /Audio interrupted/);
+  await flush(); await s.poll(); await rejected;
+  assert.deepEqual(commands, ['pause', 'play']);
 });
 
 test('Play starts the clock immediately and ignores a briefly stale paused response', async () => {
