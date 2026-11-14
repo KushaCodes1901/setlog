@@ -4,6 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
 <meta name="theme-color" content="#141615">
+<meta name="referrer" content="no-referrer">
 <meta name="apple-mobile-web-app-capable" content="yes">
 <link rel="apple-touch-startup-image" href="launch-1290x2796.png" media="screen and (device-width: 430px) and (device-height: 932px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
 <link rel="apple-touch-startup-image" href="launch-1179x2556.png" media="screen and (device-width: 393px) and (device-height: 852px) and (-webkit-device-pixel-ratio: 3) and (orientation: portrait)">
@@ -21,6 +22,7 @@
 <link rel="preload" as="image" href="icon-v2-192.png">
 <link rel="stylesheet" href="startup.css">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="music.css">
 </head>
 <body>
 <div id="startupScreen" class="startup-screen" aria-hidden="true">
@@ -107,6 +109,29 @@
         <button id="restExpand" class="wide" type="button" hidden>Open full-screen timer</button>
       </div>
     </section>
+  </div>
+  <div id="musicView" hidden>
+    <div class="music-heading"><h2>Music</h2><button id="musicDisconnect" type="button" class="music-text-button" hidden>Disconnect</button></div>
+    <div class="music-source"><a href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer" aria-label="Spotify"><img src="spotify-logo.svg" alt="Spotify" width="78" height="24"></a><span id="musicDevice">Not connected</span></div>
+    <div id="musicWelcome" class="music-welcome">
+      <button id="musicConnect" type="button" class="primary">Connect Spotify</button>
+    </div>
+    <div id="musicPlayer" hidden>
+      <a id="musicArtworkLink" class="music-artwork" href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer" aria-label="Open current track in Spotify">
+        <img id="musicArtwork" alt="" hidden referrerpolicy="no-referrer">
+        <svg id="musicArtworkPlaceholder" viewBox="0 0 80 80" aria-hidden="true"><path d="M32 55V20l30-6v35M32 30l30-6"/><ellipse cx="23" cy="57" rx="9" ry="7"/><ellipse cx="53" cy="51" rx="9" ry="7"/></svg>
+      </a>
+      <div class="music-track"><a id="musicTrackLink" href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer"><h3 id="musicTitle">Nothing playing yet</h3></a><p id="musicArtist" class="muted">Open Spotify and start a song.</p><span id="musicExplicit" class="music-explicit" hidden aria-label="Explicit content">Explicit</span></div>
+      <label class="sr-only" for="musicSeek">Playback position</label><input id="musicSeek" type="range" min="0" max="1" value="0" step="1000" disabled>
+      <div class="music-times"><span id="musicElapsed">0:00</span><span id="musicDuration">0:00</span></div>
+      <div class="music-controls">
+        <button id="musicPrevious" type="button" aria-label="Previous track" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 5v14M19 5 8 12l11 7V5Z"/></svg></button>
+        <button id="musicPlay" type="button" aria-label="Play" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path id="musicPlayShape" d="m8 5 11 7-11 7V5Z"/></svg></button>
+        <button id="musicNext" type="button" aria-label="Next track" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5v14M5 5l11 7-11 7V5Z"/></svg></button>
+      </div>
+      <div class="music-footer"><p class="muted">Music keeps playing in Spotify.</p><div class="row"><a id="musicOpen" class="music-open" href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer">Open Spotify</a><button id="musicRefresh" type="button">Refresh</button></div></div>
+    </div>
+    <p id="musicStatus" class="music-status" role="status" aria-atomic="true"></p>
   </div>
   <div id="homeView" hidden aria-label="Home"></div>
   <div id="settingsView" hidden>
@@ -215,6 +240,10 @@
         <path d="M12 7v5l3 2"/>
       </svg>
       <span>History</span>
+    </button>
+    <button id="musicTab" type="button" aria-controls="musicView" aria-pressed="false">
+      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="M9 18V5l11-2v13M9 9l11-2"/><ellipse cx="6" cy="18" rx="3" ry="2.5"/><ellipse cx="17" cy="16" rx="3" ry="2.5"/></svg>
+      <span>Music</span>
     </button>
     <button id="settingsTab" type="button" aria-controls="settingsView" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
@@ -348,6 +377,9 @@
 <script defer src="history-calendar.js"></script>
 <script defer src="personal-records.js"></script>
 <script defer src="exercise-progress.js"></script>
+<script defer src="spotify-config.js"></script>
+<script defer src="spotify-core.js"></script>
+<script defer src="spotify.js"></script>
 <script defer src="app.js"></script>
 <script defer src="backup.js"></script>
 <script defer src="rest-timer.js?v=settings"></script>
