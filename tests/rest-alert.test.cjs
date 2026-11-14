@@ -3,7 +3,7 @@ const assert = require('node:assert/strict');
 const fs = require('node:fs');
 const path = require('node:path');
 const vm = require('node:vm');
-const flush = async () => { for (let i = 0; i < 12; i++) await Promise.resolve(); };
+const flush = () => new Promise(resolve => setImmediate(resolve));
 
 function setup({ enabled = true, volume = 1, hidden = false, sessionSupported = true, resumeStuck = false } = {}) {
   const elements = new Map(), intervals = new Map(), timeouts = new Map(), events = [];
@@ -19,7 +19,9 @@ function setup({ enabled = true, volume = 1, hidden = false, sessionSupported = 
     return elements.get(selector);
   };
   class AudioContext {
-    constructor() { this.state = 'suspended'; this.currentTime = 0; audio = this; }
+    constructor() { this.state = 'suspended'; this.currentTime = 0; audio = this;
+      if (sessionSupported && sessionType !== 'ambient') events.push('music-interrupted');
+    }
     resume() { events.push('audio-resume'); if (resumeStuck) return new Promise(() => {}); this.state = 'running'; return Promise.resolve(); }
     async suspend() { events.push('audio-release'); this.state = 'suspended'; }
     createBuffer() { return {}; }
@@ -44,7 +46,8 @@ function setup({ enabled = true, volume = 1, hidden = false, sessionSupported = 
     selectView() {}
   });
   vm.runInContext(fs.readFileSync(path.join(__dirname, '../rest-timer.js'), 'utf8'), context);
-  return { element, events, oscillators, async start() { element('#restDuration').value = 1; element('#restStart').onclick(); await flush(); },
+  return { element, events, oscillators, audioState: () => audio?.state,
+    async start() { element('#restDuration').value = 1; element('#restStart').onclick(); await flush(); },
     finish() { now += 1000; [...intervals.values()].forEach(fn => fn()); },
     interrupt() { audio.state = 'interrupted'; },
     async timeout(delay) { for (const [id, job] of [...timeouts]) { if (job.delay === delay) { timeouts.delete(id); job.fn(); } } await flush(); },
@@ -63,12 +66,19 @@ test('Rest completion restores interrupted audio, chimes once, and holds Spotify
   assert.equal(s.events.filter(event => event === 'spotify-pause').length, 1);
   await s.endChime(8);
   assert.equal(s.events.includes('spotify-resume'), false, 'music waits for the final note');
-  await s.endChime(); assert.deepEqual(s.events.slice(-3), ['audio-release', 'session-auto', 'spotify-resume']);
+  await s.endChime(); assert.deepEqual(s.events.slice(-3), ['audio-release', 'session-ambient', 'spotify-resume']);
 });
 
-test('Start unlocks an actual source immediately and does not claim playback during the rest', async () => {
+test('Start and Resume prime audio in mixing mode, then leave it idle during the rest', async () => {
   const s = setup(); await s.start();
-  assert.deepEqual(s.events, ['unlock-source', 'audio-resume']);
+  assert.deepEqual(s.events, ['session-ambient', 'unlock-source', 'audio-resume', 'audio-release']);
+  assert.equal(s.audioState(), 'suspended');
+  s.events.length = 0;
+  s.element('#restStart').onclick(); // Pause the countdown.
+  s.element('#restStart').onclick(); // Resume it.
+  await flush();
+  assert.deepEqual(s.events, ['session-ambient', 'unlock-source', 'audio-resume', 'audio-release']);
+  assert.equal(s.audioState(), 'suspended');
 });
 
 test('A stalled audio clock times out, releases Spotify and shows an honest failure message', async () => {
@@ -77,7 +87,7 @@ test('A stalled audio clock times out, releases Spotify and shows an honest fail
   await s.timeout(6000);
   assert.equal(s.events.at(-1), 'spotify-resume');
   assert.match(s.element('#restFocusAnnouncement').textContent, /Sound couldn’t play/);
-  assert.deepEqual(s.events.slice(-3), ['audio-release', 'session-auto', 'spotify-resume']);
+  assert.deepEqual(s.events.slice(-3), ['audio-release', 'session-ambient', 'spotify-resume']);
 });
 
 test('A stuck resume cannot leave Spotify paused indefinitely', async () => {

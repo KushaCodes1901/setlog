@@ -30,6 +30,11 @@
 
   async function prepareSound(unlock = false) {
     try {
+      if (unlock) {
+        // Priming from Start/Resume/Test must mix with existing music. Safari
+        // can otherwise claim exclusive playback even for a silent source.
+        try { if (navigator.audioSession) navigator.audioSession.type = 'ambient'; } catch {}
+      }
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (!AudioContext) throw new Error('Audio is unavailable.');
       if (!audio || audio.state === 'closed') audio = new AudioContext();
@@ -43,7 +48,11 @@
         source.start(0);
       }
       if (audio.state !== 'running') await bounded(audio.resume(), 1500);
-      return audio.state === 'running';
+      const ready = audio.state === 'running';
+      // Keep the unlocked context idle throughout the countdown. The completion
+      // path alone claims playback and resumes it for the four-second chime.
+      if (unlock && ready) await bounded(audio.suspend(), 500);
+      return ready;
     } catch {
       soundStatus.textContent = 'Sound is unavailable in this browser. The completion screen will still appear.';
       return false;
