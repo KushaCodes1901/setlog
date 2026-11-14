@@ -19,9 +19,7 @@ function setup({ enabled = true, volume = 1, hidden = false, sessionSupported = 
     return elements.get(selector);
   };
   class AudioContext {
-    constructor() { this.state = 'suspended'; this.currentTime = 0; audio = this;
-      if (sessionSupported && sessionType !== 'ambient') events.push('music-interrupted');
-    }
+    constructor() { this.state = 'suspended'; this.currentTime = 0; audio = this; events.push('audio-create'); }
     resume() { events.push('audio-resume'); if (resumeStuck) return new Promise(() => {}); this.state = 'running'; return Promise.resolve(); }
     async suspend() { events.push('audio-release'); this.state = 'suspended'; }
     createBuffer() { return {}; }
@@ -54,10 +52,10 @@ function setup({ enabled = true, volume = 1, hidden = false, sessionSupported = 
     async endChime(count = Infinity) { oscillators.filter(oscillator => !oscillator.ended).slice(0, count).forEach(oscillator => { oscillator.ended = true; oscillator.onended(); }); await flush(); } };
 }
 
-test('Rest completion restores interrupted audio, chimes once, and holds Spotify until notes finish', async () => {
-  const s = setup(); await s.start(); s.interrupt(); s.events.length = 0;
+test('Rest completion first requests audio, chimes once, and holds Spotify until notes finish', async () => {
+  const s = setup(); await s.start(); s.events.length = 0;
   s.finish(); await flush();
-  assert.deepEqual(s.events.slice(0, 3), ['spotify-pause', 'session-playback', 'audio-resume']);
+  assert.deepEqual(s.events.slice(0, 4), ['spotify-pause', 'session-playback', 'audio-create', 'audio-resume']);
   assert.equal(s.events.filter(event => event === 'note').length, 9);
   assert.ok(Math.abs(s.oscillators.at(-1).stopTime - s.oscillators[0].startTime - 4) < .001,
     'alert lasts four seconds from the first note to the final stop');
@@ -66,19 +64,19 @@ test('Rest completion restores interrupted audio, chimes once, and holds Spotify
   assert.equal(s.events.filter(event => event === 'spotify-pause').length, 1);
   await s.endChime(8);
   assert.equal(s.events.includes('spotify-resume'), false, 'music waits for the final note');
-  await s.endChime(); assert.deepEqual(s.events.slice(-3), ['audio-release', 'session-ambient', 'spotify-resume']);
+  await s.endChime(); assert.deepEqual(s.events.slice(-3), ['audio-release', 'session-auto', 'spotify-resume']);
 });
 
-test('Start and Resume prime audio in mixing mode, then leave it idle during the rest', async () => {
+test('Start and Resume never create or activate audio or request Spotify control', async () => {
   const s = setup(); await s.start();
-  assert.deepEqual(s.events, ['session-ambient', 'unlock-source', 'audio-resume', 'audio-release']);
-  assert.equal(s.audioState(), 'suspended');
+  assert.deepEqual(s.events, []);
+  assert.equal(s.audioState(), undefined);
   s.events.length = 0;
   s.element('#restStart').onclick(); // Pause the countdown.
   s.element('#restStart').onclick(); // Resume it.
   await flush();
-  assert.deepEqual(s.events, ['session-ambient', 'unlock-source', 'audio-resume', 'audio-release']);
-  assert.equal(s.audioState(), 'suspended');
+  assert.deepEqual(s.events, []);
+  assert.equal(s.audioState(), undefined);
 });
 
 test('A stalled audio clock times out, releases Spotify and shows an honest failure message', async () => {
@@ -87,15 +85,37 @@ test('A stalled audio clock times out, releases Spotify and shows an honest fail
   await s.timeout(6000);
   assert.equal(s.events.at(-1), 'spotify-resume');
   assert.match(s.element('#restFocusAnnouncement').textContent, /Sound couldn’t play/);
-  assert.deepEqual(s.events.slice(-3), ['audio-release', 'session-ambient', 'spotify-resume']);
+  assert.equal(s.element('#restRetrySound').hidden, false);
+  assert.deepEqual(s.events.slice(-3), ['audio-release', 'session-auto', 'spotify-resume']);
 });
 
 test('A stuck resume cannot leave Spotify paused indefinitely', async () => {
   const s = setup({ resumeStuck: true });
-  await s.start(); await s.timeout(1500);
+  await s.start();
   s.finish(); await flush(); await s.timeout(1500);
   assert.equal(s.events.at(-1), 'spotify-resume');
   assert.equal(s.events.includes('note'), false);
+});
+
+test('An interrupted previously-unlocked context resumes at completion, not at Start', async () => {
+  const s = setup();
+  const preview = s.element('#testRestSound').onclick(); await flush(); await s.endChime(); await preview;
+  s.events.length = 0;
+  await s.start(); s.interrupt(); assert.deepEqual(s.events, []);
+  s.finish(); await flush(); assert.ok(s.events.includes('audio-resume'));
+  await s.endChime(); assert.equal(s.events.at(-1), 'spotify-resume');
+});
+
+test('A blocked automatic alert offers a direct-tap retry and clears it for the next rest', async () => {
+  const s = setup(); await s.start(); s.finish(); await flush(); await s.timeout(6000);
+  assert.equal(s.element('#restRetrySound').hidden, false);
+  // Old nodes have ended/stopped; only the retry's notes should finish next.
+  s.oscillators.forEach(oscillator => { oscillator.ended = true; });
+  const retry = s.element('#restRetrySound').onclick(); await flush();
+  assert.ok(s.events.includes('unlock-source'));
+  await s.endChime(); await retry;
+  assert.equal(s.element('#restRetrySound').hidden, true);
+  await s.start(); assert.equal(s.element('#restRetrySound').hidden, true);
 });
 
 test('Browsers without Audio Session support still play and complete the chime', async () => {

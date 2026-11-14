@@ -14,6 +14,7 @@
   const focusToggle = document.querySelector('#restFocusToggle');
   const expand = document.querySelector('#restExpand');
   const done = document.querySelector('#restFocusDone');
+  const retrySound = document.querySelector('#restRetrySound');
   const sound = document.querySelector('#restSound');
   const soundStatus = document.querySelector('#restSoundStatus');
   const soundKey = 'setlog-rest-sound-v1';
@@ -31,7 +32,7 @@
   async function prepareSound(unlock = false) {
     try {
       if (unlock) {
-        // Priming from Start/Resume/Test must mix with existing music. Safari
+        // Explicit Test/Play-chime taps may unlock audio. Safari
         // can otherwise claim exclusive playback even for a silent source.
         try { if (navigator.audioSession) navigator.audioSession.type = 'ambient'; } catch {}
       }
@@ -39,7 +40,7 @@
       if (!AudioContext) throw new Error('Audio is unavailable.');
       if (!audio || audio.state === 'closed') audio = new AudioContext();
       if (unlock) {
-        // Start an actual (silent) source inside the Start/Test tap, before any
+        // Start an actual (silent) source inside the Test/Play-chime tap, before any
         // awaits. Merely constructing/resuming a context may not unlock iOS audio.
         const source = audio.createBufferSource();
         source.buffer = audio.createBuffer(1, 1, audio.sampleRate);
@@ -49,8 +50,7 @@
       }
       if (audio.state !== 'running') await bounded(audio.resume(), 1500);
       const ready = audio.state === 'running';
-      // Keep the unlocked context idle throughout the countdown. The completion
-      // path alone claims playback and resumes it for the four-second chime.
+      // Release the unlocked context until the actual alert requests it.
       if (unlock && ready) await bounded(audio.suspend(), 500);
       return ready;
     } catch {
@@ -123,9 +123,12 @@
           if (session) { previousType = session.type; session.type = 'playback'; }
         } catch {}
         if (!await prepareSound() || !await playChime()) {
-          const message = 'Sound couldn’t play. Check your media volume and try Test sound in Settings.';
+          const message = 'Sound couldn’t play. Tap Play chime to try again.';
           soundStatus.textContent = message;
-          if (!preview) document.querySelector('#restFocusAnnouncement').textContent = 'Break’s over! ' + message;
+          if (!preview && state.endsAt === null && state.remaining === 0) {
+            document.querySelector('#restFocusAnnouncement').textContent = 'Break’s over! ' + message;
+            retrySound.hidden = false;
+          }
         }
       } finally {
         // Release the phone's audio session before Spotify resumes.
@@ -147,11 +150,19 @@
     } catch {
       soundStatus.textContent = 'Sound changed for this session. The preference could not be saved.';
     }
-    if (sound.checked) prepareSound(true);
   };
   document.querySelector('#testRestSound').onclick = async () => {
     // Unlock audio directly from the tap before any Spotify network requests.
     if (await prepareSound(true)) await alertRestComplete(true);
+  };
+  retrySound.onclick = async () => {
+    retrySound.disabled = true;
+    try {
+      if (await prepareSound(true)) {
+        retrySound.hidden = true;
+        await alertRestComplete();
+      }
+    } finally { retrySound.disabled = false; }
   };
 
   function openFocus() {
@@ -217,6 +228,7 @@
     focus.querySelector('.focus-dial').hidden = complete;
     focus.querySelector('.rest-focus-actions').hidden = complete;
     done.hidden = !complete;
+    if (!complete) retrySound.hidden = true;
     if (!complete) focus.querySelectorAll('.rest-confetti').forEach(piece => piece.remove());
     focusTime.textContent = dialTime.textContent;
     focusLabel.textContent = complete ? 'Rest complete' : dialLabel.textContent;
@@ -276,7 +288,8 @@
       status.textContent = state.remaining ? 'Timer paused.' : 'Rest complete. Ready for your next set?';
     } else {
       if (!durationInput.reportValidity()) return;
-      if (sound.checked) prepareSound(true);
+      // No audio creation, resume, or silent source here: even a silent warmup
+      // can interrupt Spotify on iOS. Request audio only when the break ends.
       const duration = Number(durationInput.value);
       if (duration !== state.duration) {
         state.duration = duration;
