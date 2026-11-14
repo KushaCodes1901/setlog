@@ -1,4 +1,4 @@
-const cacheName = 'setlog-offline-v49';
+const cacheName = 'setlog-offline-v50';
 const home = new URL('./', self.location.href).href;
 const assets = ['startup.css', 'startup.js', 'styles.css', 'music.css', 'settings.js', 'duration-picker.js', 'exercise-catalog.js', 'history-calendar.js', 'personal-records.js', 'exercise-progress.js', 'spotify-config.js', 'spotify-core.js', 'spotify.js', 'spotify-logo.svg', 'app.js', 'backup.js', 'rest-timer.js?v=settings', 'exercise-illustrations.svg',
   'manifest.webmanifest', 'icon.png', 'icon-v2-192.png', 'icon-v2-512.png', 'apple-touch-icon-v2.png',

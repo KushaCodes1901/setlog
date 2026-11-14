@@ -18,6 +18,8 @@ Music controls the connected account’s existing Spotify playback. It does not 
 
 With rest sound enabled and its volume above zero, a foreground rest completion briefly pauses connected Spotify playback for the chime, then resumes only if the same track and device are still paused. Already-paused music stays paused. Spotify failures do not suppress the local chime. Keep Setlog open and the screen awake: this is not a reliable background/lock-screen alarm, and other music services cannot be paused by Setlog.
 
+Start/Test taps unlock a silent audio source before awaiting anything. During the chime, supported browsers use an explicit playback audio session, which is released before Spotify resumes. The app waits for the notes' audio completion rather than a fixed wall-clock delay; stalled audio times out and displays a message. Actual audibility and phone routing still require device testing.
+
 The public Client ID is in `spotify-config.js`. This is not a secret. The app uses Authorization Code with PKCE, requests only `user-read-playback-state` and `user-modify-playback-state`, and never needs a Client Secret. Each tester must authorize their own account. Spotify Premium and development-mode allowlisting are required under [Spotify’s current rules](https://developer.spotify.com/documentation/web-api/concepts/quota-modes).
 
 Registered callback addresses must match exactly, including the trailing slash:

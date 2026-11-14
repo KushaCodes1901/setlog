@@ -28,12 +28,21 @@
   let interval = null;
   const durationControl = durationPicker.attach(durationInput, { label: 'Custom rest time', maximum: 3600 });
 
-  async function prepareSound() {
+  async function prepareSound(unlock = false) {
     try {
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (!AudioContext) throw new Error('Audio is unavailable.');
       if (!audio || audio.state === 'closed') audio = new AudioContext();
-      if (audio.state !== 'running') await audio.resume();
+      if (unlock) {
+        // Start an actual (silent) source inside the Start/Test tap, before any
+        // awaits. Merely constructing/resuming a context may not unlock iOS audio.
+        const source = audio.createBufferSource();
+        source.buffer = audio.createBuffer(1, 1, audio.sampleRate);
+        source.connect(audio.destination);
+        source.onended = () => source.disconnect();
+        source.start(0);
+      }
+      if (audio.state !== 'running') await bounded(audio.resume(), 1500);
       return audio.state === 'running';
     } catch {
       soundStatus.textContent = 'Sound is unavailable in this browser. The completion screen will still appear.';
@@ -41,36 +50,74 @@
     }
   }
 
+  function bounded(promise, milliseconds) {
+    let timeout;
+    return Promise.race([promise, new Promise((_, reject) => {
+      timeout = setTimeout(() => reject(new Error('Audio did not respond.')), milliseconds);
+    })]).finally(() => clearTimeout(timeout));
+  }
+
   function playChime() {
     if (!audio || audio.state !== 'running') return false;
-    const began = audio.currentTime;
-    [880, 1108.73, 1318.51].forEach((frequency, index) => {
-      const oscillator = audio.createOscillator();
-      const gain = audio.createGain();
-      const when = began + index * .18;
-      oscillator.type = 'sine';
-      oscillator.frequency.value = frequency;
-      gain.gain.setValueAtTime(0, when);
-      gain.gain.linearRampToValueAtTime(.16 * appSettings.volume(), when + .015);
-      gain.gain.linearRampToValueAtTime(0, when + .24);
-      oscillator.connect(gain);
-      gain.connect(audio.destination);
-      oscillator.start(when);
-      oscillator.stop(when + .25);
-      oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
+    return new Promise(resolve => {
+      const began = audio.currentTime + .05;
+      const nodes = [];
+      let ended = 0;
+      let finished = false;
+      const finish = played => {
+        if (finished) return;
+        finished = true;
+        clearTimeout(timeout);
+        nodes.forEach(({ oscillator, gain }) => {
+          try { oscillator.stop(); } catch {}
+          oscillator.disconnect(); gain.disconnect();
+        });
+        resolve(played);
+      };
+      // Wall-clock time alone cannot prove the audio clock advanced on a phone.
+      const timeout = setTimeout(() => finish(false), 2500);
+      try {
+        [880, 1108.73, 1318.51].forEach((frequency, index) => {
+          const oscillator = audio.createOscillator();
+          const gain = audio.createGain();
+          nodes.push({ oscillator, gain });
+          const when = began + index * .18;
+          oscillator.type = 'sine';
+          oscillator.frequency.value = frequency;
+          gain.gain.setValueAtTime(0, when);
+          gain.gain.linearRampToValueAtTime(.16 * appSettings.volume(), when + .015);
+          gain.gain.linearRampToValueAtTime(0, when + .24);
+          oscillator.connect(gain);
+          gain.connect(audio.destination);
+          oscillator.onended = () => { if (++ended === 3) finish(true); };
+          oscillator.start(when);
+          oscillator.stop(when + .25);
+        });
+      } catch { finish(false); }
     });
-    return true;
   }
 
   async function alertRestComplete(preview = false) {
     if ((!preview && !sound.checked) || appSettings.volume() <= 0 || document.hidden) return;
     const chime = async () => {
       if (document.hidden || (!preview && !sound.checked)) return;
-      if (await prepareSound() && playChime()) {
-        // Keep music paused until all three notes have finished.
-        await new Promise(resolve => setTimeout(resolve, 1000));
-      } else {
-        soundStatus.textContent = 'Tap Test sound to enable audio before your next rest.';
+      let session, previousType;
+      try {
+        // Safari's default Web Audio session can be ambient (and silent with the
+        // ring/silent switch). Claim media playback only for the actual alert.
+        try {
+          session = navigator.audioSession;
+          if (session) { previousType = session.type; session.type = 'playback'; }
+        } catch {}
+        if (!await prepareSound() || !await playChime()) {
+          const message = 'Sound couldn’t play. Check your media volume and try Test sound in Settings.';
+          soundStatus.textContent = message;
+          if (!preview) document.querySelector('#restFocusAnnouncement').textContent = 'Break’s over! ' + message;
+        }
+      } finally {
+        // Release the phone's audio session before Spotify resumes.
+        try { if (audio?.state === 'running') await bounded(audio.suspend(), 500); } catch {}
+        try { if (session && previousType !== undefined) session.type = previousType; } catch {}
       }
     };
     try {
@@ -87,11 +134,11 @@
     } catch {
       soundStatus.textContent = 'Sound changed for this session. The preference could not be saved.';
     }
-    if (sound.checked) prepareSound();
+    if (sound.checked) prepareSound(true);
   };
   document.querySelector('#testRestSound').onclick = async () => {
     // Unlock audio directly from the tap before any Spotify network requests.
-    if (await prepareSound()) await alertRestComplete(true);
+    if (await prepareSound(true)) await alertRestComplete(true);
   };
 
   function openFocus() {
@@ -216,7 +263,7 @@
       status.textContent = state.remaining ? 'Timer paused.' : 'Rest complete. Ready for your next set?';
     } else {
       if (!durationInput.reportValidity()) return;
-      if (sound.checked) prepareSound();
+      if (sound.checked) prepareSound(true);
       const duration = Number(durationInput.value);
       if (duration !== state.duration) {
         state.duration = duration;
