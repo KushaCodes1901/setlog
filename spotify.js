@@ -22,6 +22,7 @@ const spotifyMusic = (() => {
   let seeking = false;
   let stale = false;
   let revision = 0;
+  let pendingToggle = null;
 
   function newClient() {
     let session;
@@ -79,10 +80,10 @@ const spotifyMusic = (() => {
     try { const url = new URL(images[0]?.url); if (url.protocol === 'https:') image = url.href; } catch {}
     const artwork = $('musicArtwork');
     if (image) {
-      if (artwork.getAttribute('src') !== image) { artwork.hidden = false; $('musicArtworkPlaceholder').hidden = true; artwork.src = image; }
+      if (artwork.getAttribute('src') !== image) { artwork.hidden = false; $('musicArtworkPlaceholder').setAttribute('hidden', ''); artwork.src = image; }
       artwork.alt = 'Artwork for ' + (item.name || 'the current track');
     } else {
-      artwork.removeAttribute('src'); artwork.hidden = true; $('musicArtworkPlaceholder').hidden = false;
+      artwork.removeAttribute('src'); artwork.hidden = true; $('musicArtworkPlaceholder').removeAttribute('hidden');
     }
     const playing = Boolean(player?.is_playing);
     $('musicPlay').setAttribute('aria-label', playing ? 'Pause' : 'Play');
@@ -102,7 +103,7 @@ const spotifyMusic = (() => {
   function schedule() {
     clearTimeout(poll);
     if (active && !document.hidden && client.connected && !connecting) {
-      poll = setTimeout(refreshPlayback, Math.max(5000, client.retryAt - Date.now() + 250));
+      poll = setTimeout(refreshPlayback, Math.max(pendingToggle ? 750 : 5000, client.retryAt - Date.now() + 250));
     }
   }
   async function refreshPlayback() {
@@ -113,6 +114,12 @@ const spotifyMusic = (() => {
     try {
       const result = await client.playback();
       if (version !== revision) return;
+      // Spotify can briefly return the state from before an accepted command.
+      // Keep the immediate button/clock response until it confirms, or the grace period ends.
+      if (pendingToggle && Date.now() < pendingToggle.until && (!result ||
+        (result.item?.uri === player?.item?.uri && result.device?.id === player?.device?.id
+          && Boolean(result.is_playing) !== pendingToggle.playing))) return;
+      pendingToggle = null;
       player = result;
       receivedAt = Date.now();
       stale = false;
@@ -130,18 +137,32 @@ const spotifyMusic = (() => {
   async function command(action, position) {
     if (!can(action)) return;
     const version = revision;
+    const previousPlayer = player;
+    const previousReceivedAt = receivedAt;
     clearTimeout(poll);
+    pendingToggle = null;
+    if (action === 'pause' || action === 'play') {
+      const now = Date.now();
+      const progress = Math.min(Number(player.item?.duration_ms) || Infinity,
+        (Number(player.progress_ms) || 0) + (player.is_playing ? now - receivedAt : 0));
+      player = { ...player, progress_ms: progress, is_playing: action === 'play' };
+      receivedAt = now;
+      pendingToggle = { playing: action === 'play', until: Infinity };
+    }
     busy = true;
     render();
     let succeeded = false;
     try {
-      await client.command(action, player, position);
+      await client.command(action, previousPlayer, position);
       if (version !== revision) return;
       succeeded = true;
-      // Wait for Spotify's actual state rather than pretending a command succeeded locally.
+      if (pendingToggle) pendingToggle.until = Date.now() + 5000;
       tell('Updating playback…');
     } catch (error) {
       if (version !== revision) return;
+      pendingToggle = null;
+      player = previousPlayer;
+      receivedAt = previousReceivedAt;
       tell(error.message, true);
       if (error.kind === 'inactive') player = null;
       if (['network', 'rate', 'permission', 'auth'].includes(error.kind)) stale = true;
@@ -154,7 +175,7 @@ const spotifyMusic = (() => {
       }
     }
   }
-  $('musicArtwork').onerror = () => { $('musicArtwork').hidden = true; $('musicArtworkPlaceholder').hidden = false; };
+  $('musicArtwork').onerror = () => { $('musicArtwork').hidden = true; $('musicArtworkPlaceholder').removeAttribute('hidden'); };
   $('musicConnect').onclick = async () => {
     if (!spotifyClient.validId(clientId)) {
       tell('Spotify isn’t configured for this version yet.', true);
@@ -176,6 +197,7 @@ const spotifyMusic = (() => {
     clearTimeout(poll);
     clearInterval(ticker);
     player = null;
+    pendingToggle = null;
     busy = loading = connecting = seeking = stale = false;
     render();
     tell('Disconnected from Setlog. Your music stays in Spotify.');

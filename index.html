@@ -121,6 +121,7 @@
         <img id="musicArtwork" alt="" hidden referrerpolicy="no-referrer">
         <svg id="musicArtworkPlaceholder" viewBox="0 0 80 80" aria-hidden="true"><path d="M32 55V20l30-6v35M32 30l30-6"/><ellipse cx="23" cy="57" rx="9" ry="7"/><ellipse cx="53" cy="51" rx="9" ry="7"/></svg>
       </a>
+      <div class="music-player-panel">
       <div class="music-track"><a id="musicTrackLink" href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer"><h3 id="musicTitle">Nothing playing yet</h3></a><p id="musicArtist" class="muted">Open Spotify and start a song.</p><span id="musicExplicit" class="music-explicit" hidden aria-label="Explicit content">Explicit</span></div>
       <label class="sr-only" for="musicSeek">Playback position</label><input id="musicSeek" type="range" min="0" max="1" value="0" step="1000" disabled>
       <div class="music-times"><span id="musicElapsed">0:00</span><span id="musicDuration">0:00</span></div>
@@ -129,7 +130,8 @@
         <button id="musicPlay" type="button" aria-label="Play" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path id="musicPlayShape" d="m8 5 11 7-11 7V5Z"/></svg></button>
         <button id="musicNext" type="button" aria-label="Next track" disabled><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M19 5v14M5 5l11 7-11 7V5Z"/></svg></button>
       </div>
-      <div class="music-footer"><p class="muted">Music keeps playing in Spotify.</p><div class="row"><a id="musicOpen" class="music-open" href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer">Open Spotify</a><button id="musicRefresh" type="button">Refresh</button></div></div>
+      <div class="music-footer"><div class="row"><a id="musicOpen" class="music-open" href="https://open.spotify.com/" target="_blank" rel="noopener noreferrer">Open Spotify</a><button id="musicRefresh" type="button">Refresh</button></div></div>
+      </div>
     </div>
     <p id="musicStatus" class="music-status" role="status" aria-atomic="true"></p>
   </div>

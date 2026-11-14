@@ -839,6 +839,7 @@ function renderHistoryEntries(entries, target, records) {
 function selectView(view, { restoreScroll = false } = {}) {
   if (activeView !== view) viewScroll[activeView] = window.scrollY;
   activeView = view;
+  document.body.classList.toggle('music-mode', view === 'music');
   document.querySelector('#homeView').hidden = view !== 'home';
   document.querySelector('#log').hidden = view !== 'log';
   document.querySelector('#restView').hidden = view !== 'rest';
