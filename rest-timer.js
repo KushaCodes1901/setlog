@@ -61,6 +61,9 @@
     if (!audio || audio.state !== 'running') return false;
     return new Promise(resolve => {
       const began = audio.currentTime + .05;
+      const notes = Array.from({ length: 3 }, (_, round) =>
+        [880, 1108.73, 1318.51].map((frequency, index) => ({ frequency, offset: round * 1.5 + index * .29 }))
+      ).flat();
       const nodes = [];
       let ended = 0;
       let finished = false;
@@ -75,23 +78,24 @@
         resolve(played);
       };
       // Wall-clock time alone cannot prove the audio clock advanced on a phone.
-      const timeout = setTimeout(() => finish(false), 2500);
+      const timeout = setTimeout(() => finish(false), 6000);
       try {
-        [880, 1108.73, 1318.51].forEach((frequency, index) => {
+        notes.forEach(({ frequency, offset }) => {
           const oscillator = audio.createOscillator();
           const gain = audio.createGain();
           nodes.push({ oscillator, gain });
-          const when = began + index * .18;
-          oscillator.type = 'sine';
+          const when = began + offset;
+          oscillator.type = 'triangle';
           oscillator.frequency.value = frequency;
           gain.gain.setValueAtTime(0, when);
-          gain.gain.linearRampToValueAtTime(.16 * appSettings.volume(), when + .015);
-          gain.gain.linearRampToValueAtTime(0, when + .24);
+          gain.gain.linearRampToValueAtTime(.20 * appSettings.volume(), when + .02);
+          gain.gain.linearRampToValueAtTime(.13 * appSettings.volume(), when + .15);
+          gain.gain.linearRampToValueAtTime(0, when + .40);
           oscillator.connect(gain);
           gain.connect(audio.destination);
-          oscillator.onended = () => { if (++ended === 3) finish(true); };
+          oscillator.onended = () => { if (++ended === notes.length) finish(true); };
           oscillator.start(when);
-          oscillator.stop(when + .25);
+          oscillator.stop(when + .42);
         });
       } catch { finish(false); }
     });
