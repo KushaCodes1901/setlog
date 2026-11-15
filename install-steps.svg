@@ -1,0 +1,81 @@
+<svg xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <g id="phone-bottom"><path d="M13-10v84q0 25 25 25h132" fill="none" stroke="#151715" stroke-width="6"/><rect x="24" y="-7" width="146" height="94" rx="16" fill="#fff"/><path d="M60 92h65" stroke="#151715" stroke-width="4" stroke-linecap="round"/></g>
+    <g id="phone-top"><rect x="12" y="5" width="156" height="170" rx="29" fill="#151715"/><rect x="18" y="11" width="144" height="165" rx="23" fill="#fff"/><rect x="65" y="14" width="53" height="12" rx="6" fill="#151715"/></g>
+    <g id="tap-ring"><circle r="16" fill="#d4fa7d" fill-opacity=".3"/><circle r="11" fill="#d4fa7d" stroke="#7c984a" stroke-width=".5"/></g>
+    <g id="share-icon" stroke="currentColor" fill="none" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M-4-1v7h9v-7M.5 2v-10m-3 3 3-3 3 3"/></g>
+    <g id="home-icon" stroke="currentColor" fill="none" stroke-width="1.4" stroke-linecap="round" stroke-linejoin="round"><rect x="-5" y="-6" width="11" height="13" rx="2"/><path d="M-2 0h5M.5-2.5v5"/></g>
+  </defs>
+  <symbol id="iphone-1" viewBox="0 0 160 108">
+    <rect width="160" height="108" fill="#f1f2f4"/>
+    <use href="#phone-bottom"/>
+    <path d="M32 24h109M32 34h76" stroke="#dfe2e8" stroke-width="6" stroke-linecap="round"/>
+    <rect x="24" y="49" width="146" height="35" rx="17" fill="#f1f2f4"/>
+    <path d="m35 61-5 5 5 5" stroke="#151715" fill="none" stroke-width="1.6"/>
+    <use href="#tap-ring" x="55" y="66"/>
+    <path d="M50 63h10M50 67h7" stroke="#151715" stroke-width="1.5" stroke-linecap="round"/>
+    <text x="73" y="70" font-size="10" font-family="Arial,sans-serif" fill="#151715">Setlog</text>
+  </symbol>
+  <symbol id="iphone-2" viewBox="0 0 160 108">
+    <rect width="160" height="108" fill="#f1f2f4"/>
+    <rect x="10" y="9" width="147" height="114" rx="10" fill="#fff"/>
+    <rect x="15" y="15" width="138" height="26" rx="5" fill="#d4fa7d"/>
+    <use href="#share-icon" x="30" y="29"/>
+    <g fill="#151715" font-family="Arial,sans-serif" font-size="10"><text x="45" y="32" font-weight="700">Share</text><text x="45" y="60">Add to Bookmarks</text><text x="45" y="84">Add Bookmark to…</text></g>
+    <path d="M25 51h8v12l-4-3-4 3ZM25 76h8v12h-8Z" fill="none" stroke="#151715"/>
+    <path d="M20 69h128M20 94h128" stroke="#eceef1"/>
+  </symbol>
+  <symbol id="iphone-3" viewBox="0 0 160 108">
+    <rect width="160" height="108" fill="#f1f2f4"/><use href="#phone-bottom"/>
+    <g fill="#e2e5eb"><rect x="25" y="-5" width="24" height="19" rx="5"/><rect x="66" y="-5" width="24" height="19" rx="5"/><rect x="107" y="-5" width="24" height="19" rx="5"/></g>
+    <g fill="#f0f1f4"><circle cx="37" cy="46" r="16"/><circle cx="78" cy="46" r="16"/></g>
+    <use href="#tap-ring" x="119" y="46"/>
+    <path d="m115 44 4 5 4-5M33 40h8v11l-4-3-4 3" stroke="#151715" fill="none" stroke-width="1.3"/>
+    <circle cx="74" cy="46" r="2" fill="none" stroke="#151715"/><circle cx="81" cy="46" r="2" fill="none" stroke="#151715"/>
+    <g font-size="6.5" font-family="Arial,sans-serif" fill="#151715" text-anchor="middle"><text x="37" y="71">Bookmarks</text><text x="78" y="71">Reading List</text><text x="119" y="71">View More</text></g>
+  </symbol>
+  <symbol id="iphone-4" viewBox="0 0 160 108">
+    <rect width="160" height="108" fill="#f1f2f4"/><path d="M12-5v118" stroke="#151715" stroke-width="6"/>
+    <rect x="20" y="-5" width="148" height="121" fill="#fff"/>
+    <g fill="#151715" font-size="9.5" font-family="Arial,sans-serif"><text x="44" y="17">Add Bookmark</text><text x="44" y="42">Add to Favorites</text><text x="44" y="96">Markup</text></g>
+    <rect x="21" y="53" width="143" height="27" rx="3" fill="#d4fa7d"/>
+    <use href="#home-icon" x="33" y="67"/>
+    <text x="44" y="70" fill="#151715" font-size="10" font-family="Arial,sans-serif" font-weight="700">Add to Home Screen</text>
+    <path d="m29 38 2-5 2 5 5 1-4 3 1 5-4-3-4 3 1-5-4-3Z" stroke="#151715" fill="none" stroke-width=".7"/>
+  </symbol>
+  <symbol id="iphone-5" viewBox="0 0 160 108">
+    <rect width="160" height="108" fill="#f1f2f4"/><use href="#phone-top"/>
+    <text x="30" y="46" font-size="7.5" font-family="Arial,sans-serif" fill="#151715">Add to Home Screen</text>
+    <rect x="115" y="34" width="34" height="20" rx="10" fill="#d4fa7d" stroke="#b7d76c" stroke-width="2"/>
+    <text x="123" y="47" font-size="10" font-family="Arial,sans-serif" fill="#151715" font-weight="700">Add</text>
+    <rect x="31" y="66" width="31" height="31" rx="8" fill="#141615"/><text x="39" y="89" fill="#d4fa7d" font-size="25" font-family="Arial,sans-serif" font-weight="700">S</text>
+    <text x="73" y="85" font-size="10" font-family="Arial,sans-serif" fill="#151715">Setlog</text>
+  </symbol>
+  <symbol id="android-1" viewBox="0 0 160 108">
+    <rect width="160" height="108" fill="#f1f2f4"/><use href="#phone-top"/>
+    <rect x="28" y="39" width="121" height="30" rx="15" fill="#eef0f3"/>
+    <text x="38" y="58" font-size="10" font-family="Arial,sans-serif" fill="#151715">Setlog</text>
+    <use href="#tap-ring" x="135" y="54"/>
+    <g fill="#151715"><circle cx="135" cy="48" r="1.3"/><circle cx="135" cy="54" r="1.3"/><circle cx="135" cy="60" r="1.3"/></g>
+  </symbol>
+  <symbol id="android-2" viewBox="0 0 160 108">
+    <rect width="160" height="108" fill="#f1f2f4"/><rect x="24" y="7" width="137" height="110" rx="10" fill="#fff"/>
+    <g fill="#151715" font-size="10" font-family="Arial,sans-serif"><text x="36" y="29">New tab</text><text x="36" y="54">History</text></g>
+    <rect x="30" y="66" width="130" height="29" rx="5" fill="#d4fa7d"/>
+    <text x="39" y="84" font-size="10" font-family="Arial,sans-serif" font-weight="700" fill="#151715">Install app</text>
+  </symbol>
+  <symbol id="android-3" viewBox="0 0 160 108">
+    <rect width="160" height="108" fill="#f1f2f4"/><rect x="11" y="12" width="141" height="86" rx="12" fill="#fff"/>
+    <text x="24" y="35" font-size="12" font-family="Arial,sans-serif" font-weight="700" fill="#151715">Install Setlog?</text>
+    <text x="24" y="56" font-size="8" font-family="Arial,sans-serif" fill="#6b7267">Your workout journal</text>
+    <rect x="91" y="65" width="50" height="23" rx="11" fill="#d4fa7d"/>
+    <text x="103" y="80" font-size="10" font-family="Arial,sans-serif" fill="#151715" font-weight="700">Install</text>
+  </symbol>
+  <symbol id="android-4" viewBox="0 0 160 108">
+    <rect width="160" height="108" fill="#f1f2f4"/><use href="#phone-top"/>
+    <g fill="#e2e7dc"><rect x="29" y="43" width="27" height="27" rx="7"/><rect x="71" y="43" width="27" height="27" rx="7"/></g>
+    <rect x="112" y="42" width="29" height="29" rx="7" fill="#141615"/>
+    <text x="119" y="64" fill="#d4fa7d" font-size="24" font-family="Arial,sans-serif" font-weight="700">S</text>
+    <text x="114" y="83" font-size="9" font-family="Arial,sans-serif" fill="#151715">Setlog</text>
+  </symbol>
+</svg>

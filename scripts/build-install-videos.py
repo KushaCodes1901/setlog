@@ -174,6 +174,7 @@ for platform in CAPTIONS:
     process = subprocess.Popen([imageio_ffmpeg.get_ffmpeg_exe(), '-y', '-loglevel', 'error',
         '-f', 'rawvideo', '-vcodec', 'rawvideo', '-s', f'{W}x{H}', '-pix_fmt', 'rgb24', '-r', str(FPS),
         '-i', '-', '-an', '-c:v', 'libx264', '-preset', 'medium', '-crf', '24', '-pix_fmt', 'yuv420p',
+        '-profile:v', 'baseline', '-level:v', '3.1', '-tag:v', 'avc1', '-bf', '0', '-g', '30',
         '-movflags', '+faststart', str(video)], stdin=subprocess.PIPE)
     for index in range(SECONDS * FPS):
         process.stdin.write(frame(platform, index / FPS).tobytes())

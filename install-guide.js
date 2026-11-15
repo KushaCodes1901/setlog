@@ -12,12 +12,13 @@
     iphone: {
       hint: 'On your iPhone or iPad, open Setlog in Safari.',
       steps: [
-        ['Open the page menu, then Share', 'Tap the menu beside the address, then Share. If Share is already in your toolbar, tap it directly.'],
-        ['Choose Add to Home Screen', 'Scroll down the share sheet to find it.'],
-        ['Keep Open as Web App on', 'If this option appears, leave it switched on for the app experience.'],
-        ['Tap Add. You’re ready.', 'Find the Setlog icon on your Home Screen and open it.']
+        ['Tap the menu icon in the address bar', 'Already see Share? Skip this step.'],
+        ['Tap “Share”', ''],
+        ['Tap “View More”', 'Only if your share sheet shows this option.'],
+        ['Tap “Add to Home Screen”', 'Scroll down if needed.'],
+        ['Tap “Add”, then open Setlog from your Home Screen', '']
       ],
-      help: 'Missing Add to Home Screen? Scroll to the bottom of the share sheet, tap Edit Actions, then add it to the list.'
+      help: 'Keep Open as Web App on if it appears. Missing Add to Home Screen? Scroll to the bottom of the share sheet, tap Edit Actions, then add it to the list.'
     },
     android: {
       hint: 'On your Android phone, open Setlog in Chrome.',
@@ -42,8 +43,11 @@
     platform = value;
     const guide = guides[value];
     video.pause();
+    video.hidden = false;
+    $('installVideoFallback').hidden = true;
     video.src = 'install-' + value + '.mp4';
     video.poster = 'install-' + value + '.jpg';
+    $('installFallbackPoster').src = video.poster;
     video.replaceChildren();
     const track = document.createElement('track');
     track.kind = 'captions'; track.srclang = 'en'; track.label = 'English';
@@ -54,12 +58,26 @@
     $('installExtraHelp').textContent = guide.help;
     const list = $('installSteps');
     list.replaceChildren();
-    guide.steps.forEach(([title, description]) => {
+    guide.steps.forEach(([title, description], index) => {
       const item = document.createElement('li');
       const copy = document.createElement('div'); copy.className = 'install-step-copy';
-      const heading = document.createElement('strong'); heading.textContent = title;
+      const heading = document.createElement('p'); heading.className = 'install-step-title';
+      const parts = title.split(/(“[^”]+”)/g);
+      parts.forEach(part => {
+        const text = document.createElement(part.startsWith('“') ? 'strong' : 'span');
+        text.textContent = part; heading.append(text);
+      });
       const help = document.createElement('span'); help.textContent = description;
-      copy.append(heading, help); item.append(copy); list.append(item);
+      help.className = 'install-step-help'; help.hidden = !description;
+      const illustration = document.createElementNS('http://www.w3.org/2000/svg', 'svg');
+      illustration.setAttribute('viewBox', '0 0 160 108');
+      illustration.setAttribute('class', 'install-step-picture');
+      illustration.setAttribute('aria-hidden', 'true');
+      illustration.setAttribute('focusable', 'false');
+      const drawing = document.createElementNS('http://www.w3.org/2000/svg', 'use');
+      drawing.setAttribute('href', 'install-steps.svg#' + value + '-' + (index + 1));
+      illustration.append(drawing);
+      copy.append(heading, help); item.append(copy, illustration); list.append(item);
     });
     dialog.querySelectorAll('[data-install-platform]').forEach(button => {
       button.setAttribute('aria-pressed', button.dataset.installPlatform === platform);
@@ -75,6 +93,18 @@
   $('openInstallGuide').onclick = openGuide;
   $('settingsInstallGuide').onclick = openGuide;
   $('closeInstallGuide').onclick = () => dialog.close();
+  video.onerror = () => {
+    video.hidden = true;
+    $('installVideoFallback').hidden = false;
+  };
+  $('retryInstallVideo').onclick = () => {
+    video.hidden = false;
+    $('installVideoFallback').hidden = true;
+    video.load();
+    // A direct tap can retry playback without an autoplay permission prompt.
+    const playback = video.play();
+    if (playback) playback.catch(() => { video.onerror(); });
+  };
   dialog.addEventListener('close', () => {
     video.pause();
     document.documentElement.classList.remove('install-guide-open');

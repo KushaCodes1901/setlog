@@ -20,13 +20,20 @@
 .install-video { margin: 0; }
 .install-video video { display: block; width: 100%; aspect-ratio: 12 / 11; background: #1e241e; border: 1px solid var(--line); border-radius: 14px; }
 .install-video figcaption { margin-top: 8px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.install-video-fallback { padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: #1e241e; }
+.install-video-fallback img { display: block; width: 100%; border-radius: 8px; }
+.install-video-fallback p { color: var(--muted); font-size: 12px; margin: 12px 0; }
+.install-video-fallback button { width: 100%; font-size: 13px; }
 .install-browser-hint { margin-top: 20px; color: var(--text); font-weight: 550; font-size: 14px; }
 .install-steps { list-style: none; counter-reset: install-step; padding: 0; margin: 8px 0 0; }
-.install-steps li { counter-increment: install-step; display: grid; grid-template-columns: 28px minmax(0, 1fr); gap: 12px; padding: 17px 0; border-bottom: 1px solid var(--line); }
-.install-steps li::before { content: counter(install-step); display: grid; place-items: center; width: 26px; height: 26px; border-radius: 50%; background: #2a3226; color: var(--lime); font-size: 12px; font-weight: 600; }
-.install-step-copy { display: grid; gap: 4px; }
-.install-step-copy strong { font-size: 14px; font-weight: 600; }
-.install-step-copy span { font-size: 12px; color: var(--muted); line-height: 1.5; }
+.install-steps li { counter-increment: install-step; display: grid; grid-template-columns: minmax(0, 1fr) 40%; align-items: center; gap: 16px; min-height: 136px; padding: 16px 0; border-bottom: 1px solid var(--line); }
+.install-steps li:last-child { border-bottom: 0; }
+.install-step-copy { min-width: 0; }
+.install-step-copy::before { content: counter(install-step); display: grid; place-items: center; width: 28px; height: 28px; margin-bottom: 9px; border-radius: 50%; background: #2a3226; color: var(--lime); font-size: 12px; font-weight: 500; }
+.install-step-title { color: var(--text); font-size: 13px; line-height: 1.4; }
+.install-step-title strong { font-weight: 650; }
+.install-step-help { display: block; font-size: 11px; margin-top: 4px; color: var(--muted); line-height: 1.4; }
+.install-step-picture { display: block; width: 100%; aspect-ratio: 40 / 27; border-radius: 15px; overflow: hidden; background: #f1f2f4; color: #151715; }
 .install-extra-help, .install-data-note { font-size: 12px; line-height: 1.6; color: var(--muted); margin-top: 17px; }
 .install-data-note { padding-top: 16px; border-top: 1px solid var(--line); }
 .install-feedback { color: var(--lime); font-size: 13px; margin-top: 12px; }

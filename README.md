@@ -20,6 +20,8 @@ A dismissible Add Setlog banner opens a guide with original, silent 12-second il
 
 Instructions follow [Apple's Home Screen guide](https://support.apple.com/en-az/guide/iphone/iphea86e5236/26/ios/26) and [Chrome's web app guide](https://support.google.com/chrome/answer/9658361?co=GENIE.Platform%3DAndroid&hl=en). Browser layouts vary. The videos are locally drawn illustrations, not recordings or third-party AI media; no paid service is used. Rebuild them with `scripts/build-install-videos.py` using Pillow and imageio-ffmpeg.
 
+Clips use H.264 Constrained Baseline, level 3.1, 4:2:0 MP4 with fast-start metadata. The service worker caches complete videos and answers byte-range requests with proper 206 responses, including offline Safari probes. Failed playback offers a poster and retry button. Browser playback and byte ranges are checked locally; iPhone playback still needs a real device test.
+
 ## Rest timer
 
 The rest timer plays one short chime (about one second) at completion when sound is enabled and its volume is above zero. Start and Resume do not create or activate audio. Keep Setlog open and the screen awake; this is not a reliable background or lock-screen alarm.

@@ -14,7 +14,7 @@ function setup({ installed = false, userAgent = 'iPhone Safari', dismissed = 0, 
         append(...children) { this.children.push(...children); }, replaceChildren() { this.children = []; },
         addEventListener: (type, fn) => listeners.set(type, fn),
         showModal() { this.open = true; }, close() { this.open = false; listeners.get('close')?.(); },
-        pause() { this.pauses++; }, load() {}, querySelectorAll: () => [iphone, android] });
+        pause() { this.pauses++; }, play: () => Promise.resolve(), load() {}, querySelectorAll: () => [iphone, android] });
     }
     return elements.get(id);
   };
@@ -25,7 +25,7 @@ function setup({ installed = false, userAgent = 'iPhone Safari', dismissed = 0, 
     navigator: { userAgent }, Date,
     matchMedia: () => media,
     localStorage: { getItem: key => { if (storageFails) throw Error('Blocked'); return stored.get(key); }, setItem: (key, value) => stored.set(key, value) },
-    document: { getElementById: element, createElement: tag => element(tag + Math.random()), documentElement: { classList: { add() {}, remove() {} } } },
+    document: { getElementById: element, createElement: tag => element(tag + Math.random()), createElementNS: (_, tag) => element(tag + Math.random()), documentElement: { classList: { add() {}, remove() {} } } },
     window: { addEventListener: (name, fn) => events.set(name, fn) }
   });
   return { element, events, stored, android, media };
@@ -50,7 +50,7 @@ test('Guide selects matching videos and steps, pauses on platform switch and clo
   const s = setup(); s.element('openInstallGuide').onclick();
   const video = s.element('installVideo');
   assert.equal(video.src, 'install-iphone.mp4');
-  assert.equal(s.element('installSteps').children.length, 4);
+  assert.equal(s.element('installSteps').children.length, 5);
   s.android.onclick(); assert.equal(video.src, 'install-android.mp4');
   assert.match(s.element('installBrowserHint').textContent, /Chrome/);
   const pauses = video.pauses; s.element('closeInstallGuide').onclick();
@@ -62,6 +62,18 @@ test('Android is detected and blocked preference storage does not break the guid
   const s = setup({ userAgent: 'Android Chrome', storageFails: true });
   s.element('openInstallGuide').onclick();
   assert.equal(s.element('installVideo').src, 'install-android.mp4');
+});
+
+test('An unsupported video shows a poster and retry, and switching platform clears the error', () => {
+  const s = setup(); s.element('openInstallGuide').onclick();
+  s.element('installVideo').onerror();
+  assert.equal(s.element('installVideo').hidden, true);
+  assert.equal(s.element('installVideoFallback').hidden, false);
+  assert.match(s.element('installFallbackPoster').src, /install-iphone.jpg$/);
+  s.element('retryInstallVideo').onclick();
+  assert.equal(s.element('installVideo').hidden, false);
+  s.element('installVideo').onerror(); s.android.onclick();
+  assert.equal(s.element('installVideoFallback').hidden, true);
 });
 
 test('Native prompt is never automatic, runs once per event, and appinstalled hides install controls', async () => {
