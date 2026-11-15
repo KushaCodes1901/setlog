@@ -255,7 +255,7 @@ function renderExerciseChoices() {
       const metadata = document.createElement('span');
       metadata.className = 'exercise-metadata';
       metadata.textContent = knownExercise ? knownExercise.equipment : 'Custom exercise';
-      hint.textContent = previous.has(exerciseKey(name)) ? 'Use last workout’s sets' : 'Start with a blank set';
+      hint.textContent = previous.has(exerciseKey(name)) ? 'Last session shown for reference' : 'Start with a blank set';
       text.append(title, metadata, hint);
       choice.append(illustration, text);
       choice.onclick = () => {
@@ -538,9 +538,43 @@ function setupSetTimer(row, values) {
   }
 }
 
+function updateLastTime(card) {
+  const reference = card.querySelector('.exercise-last-time');
+  reference.hidden = true;
+  try {
+    const canonical = name => exerciseDefinition(name)?.name ?? exerciseKey(name);
+    const name = canonical(card.querySelector('h3').textContent);
+    const sessions = readStorage().sessions.map(session => ({ ...session,
+      exercises: session.exercises.map(exercise => ({ ...exercise, name: canonical(exercise.name) })) }));
+    const previous = exerciseProgress.previousSession(sessions, name, editing?.index);
+    if (!previous) return;
+    const date = new Date(previous.timestamp);
+    const time = reference.querySelector('time');
+    time.textContent = date.toLocaleDateString('en-GB', { day: 'numeric', month: 'short',
+      ...(date.getFullYear() !== new Date().getFullYear() ? { year: 'numeric' } : {}) });
+    time.dateTime = [date.getFullYear(), String(date.getMonth() + 1).padStart(2, '0'), String(date.getDate()).padStart(2, '0')].join('-');
+    time.title = historyCalendar.formatDate(previous.date);
+    const list = reference.querySelector('.last-time-sets');
+    list.replaceChildren();
+    previous.sets.forEach((set, index) => {
+      const row = document.createElement('li');
+      const label = document.createElement('span');
+      label.textContent = 'Set ' + (index + 1);
+      const result = document.createElement('span');
+      result.textContent = setResult(set, name);
+      row.append(label, result);
+      list.append(row);
+    });
+    reference.hidden = false;
+  } catch {
+    // A reference must never prevent today's exercise from being edited.
+  }
+}
+
 function addExercise(exercise, focus = false) {
   const card = document.querySelector('#exerciseTemplate').content.firstElementChild.cloneNode(true);
   card.querySelector('h3').textContent = exercise.name;
+  updateLastTime(card);
   const list = card.querySelector('.sets');
   const editor = card.querySelector('.exercise-editor');
   const summary = card.querySelector('.exercise-summary');
@@ -610,25 +644,9 @@ function addNamedExercise() {
     nameInput.focus();
     return;
   }
-  let previous;
-  try {
-    const savedExercises = previousExercises();
-    const definition = exerciseDefinition(name);
-    previous = savedExercises.get(exerciseKey(name));
-    if (!previous && definition) {
-      previous = [...savedExercises.values()].find(exercise => exerciseDefinition(exercise.name)?.name === definition.name);
-    }
-  } catch {
-    tell('Previous exercises could not be read. Reload to try again.', true);
-    return;
-  }
-  tell(previous ? 'Previous sets filled in. Adjust them for today.' : '');
+  tell('');
   nameInput.value = '';
-  const sets = previous?.sets.length
-    ? previous.sets.map(({ reps, weight, seconds }) => isTimedExercise(name) ? { seconds }
-      : isBodyweight(name) ? { reps } : { reps, weight })
-    : [{}];
-  addExercise({ name: previous?.name ?? name, sets }, true);
+  addExercise({ name: exerciseDefinition(name)?.name ?? name, sets: [{}] }, true);
   saveDraft();
 }
 
@@ -947,6 +965,7 @@ window.addEventListener('weightunitchange', () => {
     displayWeight(input, readWeight(input), appSettings.weightUnit());
   }
   for (const card of exercises.children) {
+    updateLastTime(card);
     for (const row of card.querySelectorAll('.set')) {
       if (row.querySelector('.set-editor').hidden) collapseSet(row);
     }

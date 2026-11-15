@@ -338,5 +338,15 @@ const exerciseProgress = (() => {
     return card;
   }
 
-  return { analyze, names, insight, open, overview };
+  function previousSession(sessions, name, beforeIndex = null) {
+    let entries = analyze(sessions, name).entries;
+    if (Number.isInteger(beforeIndex)) {
+      const cutoff = dateValue(sessions[beforeIndex]?.date);
+      if (cutoff === null) return null;
+      entries = entries.filter(entry => entry.timestamp < cutoff || (entry.timestamp === cutoff && entry.index < beforeIndex));
+    }
+    return entries.at(-1) ?? null;
+  }
+
+  return { analyze, names, insight, open, overview, previousSession };
 })();

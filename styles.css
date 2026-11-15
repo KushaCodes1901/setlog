@@ -162,6 +162,14 @@ button:disabled { opacity: .48; cursor: default; }
 .exercise-summary, #exerciseHint { margin-top: 8px; font-size: 14px; }
 .exercise-summary { margin-bottom: 0; padding: 0; list-style: none; }
 .exercise-summary li + li { margin-top: 4px; }
+.exercise-last-time { margin-top: 14px; padding: 12px 14px; background: #1c211c; border-left: 2px solid #718b4e; border-radius: 0 8px 8px 0; }
+.last-time-heading { display: flex; justify-content: space-between; gap: 12px; margin-bottom: 7px; font-size: 12px; }
+.last-time-heading > span { font-weight: 600; color: var(--lime); }
+.last-time-heading time { color: var(--muted); }
+.last-time-sets { list-style: none; padding: 0; margin: 0; display: grid; gap: 4px; }
+.last-time-sets li { display: grid; grid-template-columns: 46px minmax(0, 1fr); gap: 12px; font-size: 13px; font-variant-numeric: tabular-nums; }
+.last-time-sets li > span:first-child { color: var(--muted); }
+.last-time-sets li > span:last-child { overflow-wrap: anywhere; }
 .remove { min-width: 46px; color: var(--muted); font-size: 20px; line-height: 1; }
 .set { margin-top: 12px; border-top: 1px solid var(--line); }
 .set-summary { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; margin-top: 10px; padding: 12px; text-align: left; font-weight: 400; background: var(--card); }

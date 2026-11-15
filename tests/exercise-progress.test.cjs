@@ -16,6 +16,28 @@ const insight = data => {
 };
 const workout = (date, sets, name = 'Chest Press') => ({ date, exercises: [{ name, sets }] });
 
+test('Last time uses the most recent dated session, including all sets, rather than insertion order', () => {
+  context.sessions = [workout('14/11/2026', [{ reps: 12, weight: 20 }, { reps: 10, weight: 22 }]),
+    workout('10/11/2026', [{ reps: 8, weight: 18 }])];
+  const previous = vm.runInContext("exerciseProgress.previousSession(sessions, 'Chest Press')", context);
+  assert.equal(previous.date, '14/11/2026');
+  assert.equal(previous.sets.length, 2);
+});
+
+test('Editing a historical workout shows only an earlier session and excludes itself and later logs', () => {
+  context.sessions = [workout('10/11/2026', [{ reps: 8 }]), workout('14/11/2026', [{ reps: 12 }]),
+    workout('12/11/2026', [{ reps: 10 }]), workout('12/11/2026', [{ reps: 11 }])];
+  const previous = vm.runInContext("exerciseProgress.previousSession(sessions, 'Chest Press', 3)", context);
+  assert.equal(previous.index, 2);
+  assert.equal(vm.runInContext("exerciseProgress.previousSession(sessions, 'Chest Press', 0)", context), null);
+});
+
+test('Last time has no invented baseline for an unseen exercise or empty/rest records', () => {
+  context.sessions = [workout('14/11/2026', []), { ...workout('13/11/2026', [{ reps: 10 }]), restDay: true }];
+  assert.equal(vm.runInContext("exerciseProgress.previousSession(sessions, 'Chest Press')", context), null);
+  assert.equal(vm.runInContext("exerciseProgress.previousSession(sessions, 'Plank')", context), null);
+});
+
 test('chronological sessions include every matching set, including duplicate exercise entries', () => {
   const older = workout('02/11/2026', [{ reps: 8, weight: 20 }], ' chest press ');
   older.exercises.push({ name: 'Chest Press', sets: [{ reps: 10, weight: 20 }, { reps: 4, weight: 25 }] });

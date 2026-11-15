@@ -62,7 +62,7 @@
           <label>Search or add your own<input id="name" type="text" maxlength="100" placeholder="Search exercises…" enterkeyhint="go" autocomplete="off"></label>
           <button id="addExercise" type="button">Add</button>
         </div>
-          <p class="muted picker-help">Tap an exercise to add it. Previous sets fill in automatically.</p>
+          <p class="muted picker-help">Start with a blank set. Your last session appears above for reference.</p>
           <div class="picker-filters">
             <label>Body area<select id="exerciseArea"><option value="">All areas</option></select></label>
             <label>Equipment<select id="exerciseEquipment">
@@ -265,6 +265,10 @@
     </div>
     <ul class="exercise-summary muted" aria-label="Saved sets" hidden></ul>
     <div class="exercise-editor">
+      <aside class="exercise-last-time" hidden aria-label="Previous session">
+        <div class="last-time-heading"><span>Last time</span><time></time></div>
+        <ol class="last-time-sets"></ol>
+      </aside>
       <div class="sets"></div>
       <div class="row exercise-actions">
         <button class="add-set" type="button">+ Set</button>
