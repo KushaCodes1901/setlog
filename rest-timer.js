@@ -70,9 +70,7 @@
     if (!audio || audio.state !== 'running') return false;
     return new Promise(resolve => {
       const began = audio.currentTime + .05;
-      const notes = Array.from({ length: 3 }, (_, round) =>
-        [880, 1108.73, 1318.51].map((frequency, index) => ({ frequency, offset: round * 1.5 + index * .29 }))
-      ).flat();
+      const notes = [880, 1108.73, 1318.51].map((frequency, index) => ({ frequency, offset: index * .29 }));
       const nodes = [];
       let ended = 0;
       let finished = false;
@@ -87,7 +85,7 @@
         resolve(played);
       };
       // Wall-clock time alone cannot prove the audio clock advanced on a phone.
-      const timeout = setTimeout(() => finish(false), 6000);
+      const timeout = setTimeout(() => finish(false), 2500);
       try {
         notes.forEach(({ frequency, offset }) => {
           const oscillator = audio.createOscillator();

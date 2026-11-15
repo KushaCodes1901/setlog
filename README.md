@@ -16,7 +16,7 @@ Run the record and exercise-progress checks with `node --test tests/*.test.cjs`.
 
 ## Rest timer
 
-The rest timer plays a four-second chime at completion when sound is enabled and its volume is above zero. Start and Resume do not create or activate audio. Keep Setlog open and the screen awake; this is not a reliable background or lock-screen alarm.
+The rest timer plays one short chime (about one second) at completion when sound is enabled and its volume is above zero. Start and Resume do not create or activate audio. Keep Setlog open and the screen awake; this is not a reliable background or lock-screen alarm.
 
 If the browser blocks automatic sound, the completion screen offers Play chime. Test sound in Settings can also unlock audio for the current page. Setlog does not connect to or control music services; audio interruptions and routing are managed by the phone and browser.
 

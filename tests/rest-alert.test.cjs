@@ -51,17 +51,17 @@ function setup({ enabled = true, volume = 1, hidden = false, sessionSupported = 
     async endChime(count = Infinity) { oscillators.filter(oscillator => !oscillator.ended).slice(0, count).forEach(oscillator => { oscillator.ended = true; oscillator.onended(); }); await flush(); } };
 }
 
-test('Rest completion plays the full four-second chime without a music service', async () => {
+test('Rest completion plays the single short chime without a music service', async () => {
   const s = setup(); await s.start(); s.events.length = 0;
   s.finish(); await flush();
   assert.deepEqual(s.events.slice(0, 4), ['session-playback', 'audio-create', 'audio-resume', 'note']);
-  assert.equal(s.events.filter(event => event === 'note').length, 9);
-  assert.ok(Math.abs(s.oscillators.at(-1).stopTime - s.oscillators[0].startTime - 4) < .001,
-    'alert lasts four seconds from the first note to the final stop');
+  assert.equal(s.events.filter(event => event === 'note').length, 3);
+  assert.ok(Math.abs(s.oscillators.at(-1).stopTime - s.oscillators[0].startTime - 1) < .001,
+    'alert plays once and ends after one second');
   assert.equal(s.element('#restFocusTitle').textContent, 'Break’s over!');
   s.finish(); await flush();
-  assert.equal(s.events.filter(event => event === 'note').length, 9);
-  await s.endChime(8);
+  assert.equal(s.events.filter(event => event === 'note').length, 3);
+  await s.endChime(2);
   assert.equal(s.events.includes('audio-release'), false, 'audio stays active through the final note');
   await s.endChime(); assert.deepEqual(s.events.slice(-2), ['audio-release', 'session-auto']);
 });
@@ -81,7 +81,7 @@ test('Start and Resume never create or activate audio', async () => {
 test('A stalled audio clock times out, releases the audio session and shows a retry', async () => {
   const s = setup(); await s.start(); s.finish(); await flush();
   assert.equal(s.events.includes('audio-release'), false);
-  await s.timeout(6000);
+  await s.timeout(2500);
   assert.equal(s.events.at(-1), 'session-auto');
   assert.match(s.element('#restFocusAnnouncement').textContent, /Sound couldn’t play/);
   assert.equal(s.element('#restRetrySound').hidden, false);
@@ -106,7 +106,7 @@ test('An interrupted previously-unlocked context resumes at completion, not at S
 });
 
 test('A blocked automatic alert offers a direct-tap retry and clears it for the next rest', async () => {
-  const s = setup(); await s.start(); s.finish(); await flush(); await s.timeout(6000);
+  const s = setup(); await s.start(); s.finish(); await flush(); await s.timeout(2500);
   assert.equal(s.element('#restRetrySound').hidden, false);
   // Old nodes have ended/stopped; only the retry's notes should finish next.
   s.oscillators.forEach(oscillator => { oscillator.ended = true; });
@@ -119,7 +119,7 @@ test('A blocked automatic alert offers a direct-tap retry and clears it for the 
 
 test('Browsers without Audio Session support still play and complete the chime', async () => {
   const s = setup({ sessionSupported: false }); await s.start(); s.finish(); await flush();
-  assert.equal(s.events.filter(event => event === 'note').length, 9);
+  assert.equal(s.events.filter(event => event === 'note').length, 3);
   await s.endChime(); assert.equal(s.events.at(-1), 'audio-release');
 });
 
@@ -133,7 +133,7 @@ test('Muted, disabled and background completions never request audio', async () 
 test('Test sound still previews the chime when automatic rest sounds are disabled', async () => {
   const s = setup({ enabled: false });
   const preview = s.element('#testRestSound').onclick(); await flush();
-  assert.equal(s.events.filter(event => event === 'note').length, 9);
+  assert.equal(s.events.filter(event => event === 'note').length, 3);
   await s.endChime(); await preview;
   assert.equal(s.events.at(-1), 'session-ambient');
 });
