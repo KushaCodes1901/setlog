@@ -22,6 +22,7 @@
 <link rel="preload" as="image" href="icon-v2-192.png">
 <link rel="stylesheet" href="startup.css">
 <link rel="stylesheet" href="styles.css">
+<link rel="stylesheet" href="install-guide.css">
 </head>
 <body>
 <div id="startupScreen" class="startup-screen" aria-hidden="true">
@@ -35,6 +36,12 @@
   </div>
 </div>
 <main>
+  <div id="installBanner" class="install-banner" hidden>
+    <button id="dismissInstall" class="install-dismiss" type="button" aria-label="Dismiss install suggestion">×</button>
+    <img src="icon-v2-192.png" width="40" height="40" alt="">
+    <div class="install-banner-copy"><strong>Add Setlog</strong><span>Your workout journal, one tap away.</span></div>
+    <button id="openInstallGuide" class="install-add" type="button">Add</button>
+  </div>
   <header>
     <h1>Setlog</h1>
     <p class="masthead-label">Workout journal</p>
@@ -112,6 +119,7 @@
   <div id="homeView" hidden aria-label="Home"></div>
   <div id="settingsView" hidden>
     <h2 class="settings-title">Settings</h2>
+    <button id="settingsInstallGuide" class="install-settings-link" type="button">Add Setlog to your Home Screen <span aria-hidden="true">›</span></button>
     <section class="settings-group" aria-labelledby="profileSettingsTitle">
       <h3 id="profileSettingsTitle">Profile</h3>
       <div class="settings-list">
@@ -347,7 +355,27 @@
     </div>
   </form>
 </dialog>
+<dialog id="installGuide" class="install-guide" aria-labelledby="installGuideTitle" aria-describedby="installGuideIntro">
+  <div class="install-guide-header"><img src="icon-v2-192.png" width="44" height="44" alt=""><button id="closeInstallGuide" type="button" aria-label="Close installation guide">×</button></div>
+  <h2 id="installGuideTitle">A home for your workouts.</h2>
+  <p id="installGuideIntro">Add Setlog to your Home Screen. Open your journal with one tap.</p>
+  <div class="install-platforms" role="group" aria-label="Choose your phone">
+    <button type="button" data-install-platform="iphone" aria-pressed="true">iPhone / iPad</button>
+    <button type="button" data-install-platform="android" aria-pressed="false">Android</button>
+  </div>
+  <figure class="install-video">
+    <video id="installVideo" controls muted playsinline preload="none" aria-label="Animated Home Screen installation walkthrough" aria-describedby="installVideoCaption"></video>
+    <figcaption id="installVideoCaption">A quick illustrated walkthrough. Buttons may look a little different on your phone.</figcaption>
+  </figure>
+  <p id="installBrowserHint" class="install-browser-hint"></p>
+  <ol id="installSteps" class="install-steps"></ol>
+  <p id="installExtraHelp" class="install-extra-help"></p>
+  <p class="install-data-note">Already using Setlog in your browser? Export a backup from History first. Your Home Screen app may have separate storage.</p>
+  <button id="installNative" class="primary wide" type="button" hidden>Install Setlog</button>
+  <p id="installFeedback" role="status" class="install-feedback"></p>
+</dialog>
 <script defer src="startup.js"></script>
+<script defer src="install-guide.js"></script>
 <script defer src="settings.js"></script>
 <script defer src="duration-picker.js"></script>
 <script defer src="exercise-catalog.js"></script>

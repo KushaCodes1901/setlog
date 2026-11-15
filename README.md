@@ -14,6 +14,12 @@ Tap a lift on Home, or choose Explore your progress, to open Exercise Progress. 
 
 Run the record and exercise-progress checks with `node --test tests/*.test.cjs`.
 
+## Home Screen guide
+
+A dismissible Add Setlog banner opens a guide with original, silent 12-second illustrated videos for iPhone/Safari and Android/Chrome, followed by written steps. The banner hides in standalone mode; dismissing it hides it for seven days, and Settings can reopen the guide. Where supported, a native install prompt is offered only after a user tap. Installing can use separate device storage, so the guide reminds existing users to export a backup first.
+
+Instructions follow [Apple's Home Screen guide](https://support.apple.com/en-az/guide/iphone/iphea86e5236/26/ios/26) and [Chrome's web app guide](https://support.google.com/chrome/answer/9658361?co=GENIE.Platform%3DAndroid&hl=en). Browser layouts vary. The videos are locally drawn illustrations, not recordings or third-party AI media; no paid service is used. Rebuild them with `scripts/build-install-videos.py` using Pillow and imageio-ffmpeg.
+
 ## Rest timer
 
 The rest timer plays one short chime (about one second) at completion when sound is enabled and its volume is above zero. Start and Resume do not create or activate audio. Keep Setlog open and the screen awake; this is not a reliable background or lock-screen alarm.
