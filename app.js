@@ -21,7 +21,12 @@ let storageReadable = true;
 let hasDraft = false;
 let editing = null;
 let activeView = 'log';
-const viewScroll = { home: 0, log: 0, rest: 0, history: 0, music: 0, settings: 0 };
+const viewScroll = { home: 0, log: 0, rest: 0, history: 0, settings: 0 };
+// Retire the removed music prototype's local sign-in data.
+try {
+  sessionStorage.removeItem('setlog-spotify-session-v1');
+  sessionStorage.removeItem('setlog-spotify-pkce-v1');
+} catch {}
 
 function tell(message, error = false) {
   const status = document.querySelector('#status');
@@ -857,12 +862,10 @@ function renderHistoryEntries(entries, target, records) {
 function selectView(view, { restoreScroll = false } = {}) {
   if (activeView !== view) viewScroll[activeView] = window.scrollY;
   activeView = view;
-  document.body.classList.toggle('music-mode', view === 'music');
   document.querySelector('#homeView').hidden = view !== 'home';
   document.querySelector('#log').hidden = view !== 'log';
   document.querySelector('#restView').hidden = view !== 'rest';
   document.querySelector('#settingsView').hidden = view !== 'settings';
-  document.querySelector('#musicView').hidden = view !== 'music';
   historyView.hidden = view !== 'history';
   document.querySelector('#backupPanel').hidden = view !== 'history';
   document.querySelector('#logTab').setAttribute('aria-pressed', view === 'log');
@@ -870,8 +873,6 @@ function selectView(view, { restoreScroll = false } = {}) {
   document.querySelector('#historyTab').setAttribute('aria-pressed', view === 'history');
   document.querySelector('#settingsTab').setAttribute('aria-pressed', view === 'settings');
   document.querySelector('#homeTab').setAttribute('aria-pressed', view === 'home');
-  document.querySelector('#musicTab').setAttribute('aria-pressed', view === 'music');
-  spotifyMusic.setActive(view === 'music');
   if (view === 'home') showHome();
   if (view === 'history') showHistory();
   window.scrollTo({ top: restoreScroll ? viewScroll[view] : 0, behavior: 'auto' });
@@ -992,9 +993,6 @@ document.querySelector('#historyTab').onclick = () => {
 document.querySelector('#settingsTab').onclick = () => {
   selectView('settings', { restoreScroll: true });
 };
-document.querySelector('#musicTab').onclick = () => {
-  selectView('music', { restoreScroll: true });
-};
 day.onchange = saveDraft;
 restDay.onchange = saveDraft;
 workout.oninput = saveDraft;
@@ -1070,7 +1068,7 @@ try {
   storageReadable = false;
   tell('Stored workouts are unavailable. Reload to try again.', true);
 }
-selectView(spotifyMusic.wasCallback ? 'music' : editing ? 'log' : 'home');
+selectView(editing ? 'log' : 'home');
 
 window.addEventListener('storage', event => {
   if (event.key === storageKey && activeView === 'home') showHome();

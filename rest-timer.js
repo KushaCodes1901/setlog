@@ -32,8 +32,8 @@
   async function prepareSound(unlock = false) {
     try {
       if (unlock) {
-        // Explicit Test/Play-chime taps may unlock audio. Safari
-        // can otherwise claim exclusive playback even for a silent source.
+        // Explicit Test/Play-chime taps may unlock audio. Use a mixing session
+        // while priming to avoid claiming exclusive playback for a silent source.
         try { if (navigator.audioSession) navigator.audioSession.type = 'ambient'; } catch {}
       }
       const AudioContext = window.AudioContext || window.webkitAudioContext;
@@ -131,13 +131,13 @@
           }
         }
       } finally {
-        // Release the phone's audio session before Spotify resumes.
+        // Release the phone's audio session after the chime.
         try { if (audio?.state === 'running') await bounded(audio.suspend(), 500); } catch {}
         try { if (session && previousType !== undefined) session.type = previousType; } catch {}
       }
     };
     try {
-      await spotifyMusic.withRestAlert(chime);
+      await chime();
     } catch {
       soundStatus.textContent = 'Sound was interrupted. Tap Test sound before your next rest.';
     }
@@ -152,7 +152,7 @@
     }
   };
   document.querySelector('#testRestSound').onclick = async () => {
-    // Unlock audio directly from the tap before any Spotify network requests.
+    // Unlock audio directly from this explicit preview tap.
     if (await prepareSound(true)) await alertRestComplete(true);
   };
   retrySound.onclick = async () => {
@@ -289,7 +289,7 @@
     } else {
       if (!durationInput.reportValidity()) return;
       // No audio creation, resume, or silent source here: even a silent warmup
-      // can interrupt Spotify on iOS. Request audio only when the break ends.
+      // can interrupt other audio on iOS. Request audio only when the break ends.
       const duration = Number(durationInput.value);
       if (duration !== state.duration) {
         state.duration = duration;

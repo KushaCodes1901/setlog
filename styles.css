@@ -16,7 +16,6 @@ h3 { font-size: 16px; font-weight: 600; overflow-wrap: anywhere; }
 .nav-items { display: flex; gap: 6px; }
 .bottom-nav { max-width: 480px; }
 .nav-items { gap: 3px; }
-.bottom-nav { max-width: 540px; }
 @media (max-width: 460px) { .bottom-nav .nav-items button { font-size: 10px; padding-inline: 0; } .bottom-nav svg { width: 22px; height: 22px; } }
 .bottom-nav button span { line-height: 1.2; }
 @media (max-width: 360px) { .bottom-nav button span { font-size: 10px; } }
