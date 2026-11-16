@@ -22,7 +22,7 @@ A dismissible Add Setlog banner opens a guide with original, silent 12-second il
 
 Instructions follow [Apple's Home Screen guide](https://support.apple.com/en-az/guide/iphone/iphea86e5236/26/ios/26) and [Chrome's web app guide](https://support.google.com/chrome/answer/9658361?co=GENIE.Platform%3DAndroid&hl=en). Browser layouts vary. The videos are locally drawn illustrations, not recordings or third-party AI media; no paid service is used. Rebuild them with `scripts/build-install-videos.py` using Pillow and imageio-ffmpeg.
 
-Clips use H.264 Constrained Baseline, level 3.1, 4:2:0 MP4 with fast-start metadata. The service worker caches complete videos and answers byte-range requests with proper 206 responses, including offline Safari probes. Failed playback offers a poster and retry button. Browser playback and byte ranges are checked locally; iPhone playback still needs a real device test.
+Clips use H.264 Constrained Baseline, level 3.1, 4:2:0 MP4 with fast-start metadata. Safari on the user's phone plays the direct file, while the embedded cached player has failed. Videos now bypass the service worker entirely so the native media loader and host handle byte ranges; they require an internet connection. Illustrated steps, captions and posters remain available offline. The dialog opens before loading media, with a fresh video URL and an Open video separately link. Failed playback offers a poster and retry button. Embedded playback still needs an iPhone test.
 
 ## Rest timer
 

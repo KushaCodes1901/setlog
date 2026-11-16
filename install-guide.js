@@ -45,7 +45,9 @@
     video.pause();
     video.hidden = false;
     $('installVideoFallback').hidden = true;
-    video.src = 'install-' + value + '.mp4';
+    // A fresh URL also bypasses media caches in older installed service workers.
+    video.src = 'install-' + value + '.mp4?playback=native-2';
+    $('openInstallVideo').href = video.src;
     video.poster = 'install-' + value + '.jpg';
     $('installFallbackPoster').src = video.poster;
     video.replaceChildren();
@@ -84,9 +86,10 @@
     });
   }
   function openGuide() {
+    // Safari must see a visible player before its media load is started.
+    dialog.showModal();
     showPlatform(platform);
     $('installFeedback').textContent = '';
-    dialog.showModal();
     dialog.scrollTop = 0;
     document.documentElement.classList.add('install-guide-open');
   }

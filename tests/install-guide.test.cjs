@@ -14,7 +14,9 @@ function setup({ installed = false, userAgent = 'iPhone Safari', dismissed = 0, 
         append(...children) { this.children.push(...children); }, replaceChildren() { this.children = []; },
         addEventListener: (type, fn) => listeners.set(type, fn),
         showModal() { this.open = true; }, close() { this.open = false; listeners.get('close')?.(); },
-        pause() { this.pauses++; }, play: () => Promise.resolve(), load() {}, querySelectorAll: () => [iphone, android] });
+        pause() { this.pauses++; }, play: () => Promise.resolve(),
+        load() { if (id === 'installVideo') assert.equal(element('installGuide').open, true, 'show the dialog before loading media'); },
+        querySelectorAll: () => [iphone, android] });
     }
     return elements.get(id);
   };
@@ -49,9 +51,10 @@ test('Banner dismisses for seven days but Settings still opens the guide', () =>
 test('Guide selects matching videos and steps, pauses on platform switch and close', () => {
   const s = setup(); s.element('openInstallGuide').onclick();
   const video = s.element('installVideo');
-  assert.equal(video.src, 'install-iphone.mp4');
+  assert.equal(video.src, 'install-iphone.mp4?playback=native-2');
   assert.equal(s.element('installSteps').children.length, 5);
-  s.android.onclick(); assert.equal(video.src, 'install-android.mp4');
+  assert.equal(s.element('openInstallVideo').href, video.src);
+  s.android.onclick(); assert.equal(video.src, 'install-android.mp4?playback=native-2');
   assert.match(s.element('installBrowserHint').textContent, /Chrome/);
   const pauses = video.pauses; s.element('closeInstallGuide').onclick();
   assert.equal(video.pauses, pauses + 1);
@@ -61,7 +64,7 @@ test('Guide selects matching videos and steps, pauses on platform switch and clo
 test('Android is detected and blocked preference storage does not break the guide', () => {
   const s = setup({ userAgent: 'Android Chrome', storageFails: true });
   s.element('openInstallGuide').onclick();
-  assert.equal(s.element('installVideo').src, 'install-android.mp4');
+  assert.equal(s.element('installVideo').src, 'install-android.mp4?playback=native-2');
 });
 
 test('An unsupported video shows a poster and retry, and switching platform clears the error', () => {

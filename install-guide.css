@@ -20,6 +20,7 @@
 .install-video { margin: 0; }
 .install-video video { display: block; width: 100%; aspect-ratio: 12 / 11; background: #1e241e; border: 1px solid var(--line); border-radius: 14px; }
 .install-video figcaption { margin-top: 8px; color: var(--muted); font-size: 11px; line-height: 1.5; }
+.install-video-link { display: inline-flex; align-items: center; min-height: 40px; font-size: 12px; font-weight: 550; color: var(--accent); text-underline-offset: 3px; }
 .install-video-fallback { padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: #1e241e; }
 .install-video-fallback img { display: block; width: 100%; border-radius: 8px; }
 .install-video-fallback p { color: var(--muted); font-size: 12px; margin: 12px 0; }
