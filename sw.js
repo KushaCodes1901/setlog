@@ -1,9 +1,9 @@
-const cacheName = 'setlog-offline-v64';
+const cacheName = 'setlog-offline-v65';
 const home = new URL('./', self.location.href).href;
-const assets = ['startup.css', 'startup.js', 'theme.js', 'themes.css', 'styles.css', 'install-guide.css?v=steps-only-1', 'install-guide.js?v=visit-banner-1', 'install-steps.svg?v=samsung-1', 'settings.js', 'duration-picker.js', 'exercise-catalog.js', 'history-calendar.js', 'personal-records.js', 'exercise-progress.js', 'app.js', 'backup.js', 'rest-timer.js?v=standalone', 'exercise-illustrations.svg',
-  'manifest.webmanifest', 'icon.png', 'icon-v2-192.png', 'icon-v2-512.png', 'apple-touch-icon-v2.png',
-  'launch-1290x2796.png', 'launch-1179x2556.png', 'launch-1170x2532.png', 'launch-1284x2778.png',
-  'launch-1125x2436.png', 'launch-1242x2688.png', 'launch-750x1334.png', 'launch-828x1792.png', 'launch-2796x1290.png']
+const assets = ['assets/css/startup.css', 'assets/js/startup.js', 'assets/js/theme.js', 'assets/css/themes.css', 'assets/css/styles.css', 'assets/css/install-guide.css?v=steps-only-1', 'assets/js/install-guide.js?v=visit-banner-1', 'assets/media/illustrations/install-steps.svg?v=samsung-1', 'assets/js/settings.js', 'assets/js/duration-picker.js', 'assets/js/exercise-catalog.js', 'assets/js/history-calendar.js', 'assets/js/personal-records.js', 'assets/js/exercise-progress.js', 'assets/js/app.js', 'assets/js/backup.js', 'assets/js/rest-timer.js?v=standalone', 'assets/media/illustrations/exercise-illustrations.svg',
+  'manifest.webmanifest', 'assets/media/icons/icon.png', 'assets/media/icons/icon-v2-192.png', 'assets/media/icons/icon-v2-512.png', 'assets/media/icons/apple-touch-icon-v2.png',
+  'assets/media/launch/launch-1290x2796.png', 'assets/media/launch/launch-1179x2556.png', 'assets/media/launch/launch-1170x2532.png', 'assets/media/launch/launch-1284x2778.png',
+  'assets/media/launch/launch-1125x2436.png', 'assets/media/launch/launch-1242x2688.png', 'assets/media/launch/launch-750x1334.png', 'assets/media/launch/launch-828x1792.png', 'assets/media/launch/launch-2796x1290.png']
   .map(path => new URL(path, home).href);
 
 self.addEventListener('install', event => {

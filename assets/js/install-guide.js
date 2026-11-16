@@ -61,7 +61,7 @@
       illustration.setAttribute('aria-hidden', 'true');
       illustration.setAttribute('focusable', 'false');
       const drawing = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-      drawing.setAttribute('href', 'install-steps.svg?v=samsung-1#' + value + '-' + (index + 1));
+      drawing.setAttribute('href', 'assets/media/illustrations/install-steps.svg?v=samsung-1#' + value + '-' + (index + 1));
       illustration.append(drawing);
       copy.append(heading, help); item.append(copy, illustration); list.append(item);
     });

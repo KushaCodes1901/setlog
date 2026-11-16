@@ -256,7 +256,7 @@ function renderExerciseChoices() {
       illustration.setAttribute('viewBox', '0 0 80 80');
       illustration.setAttribute('aria-hidden', 'true');
       illustration.setAttribute('focusable', 'false');
-      drawing.setAttribute('href', 'exercise-illustrations.svg#' + picture);
+      drawing.setAttribute('href', 'assets/media/illustrations/exercise-illustrations.svg#' + picture);
       illustration.append(drawing);
       text.className = 'exercise-choice-text';
       title.textContent = name;
