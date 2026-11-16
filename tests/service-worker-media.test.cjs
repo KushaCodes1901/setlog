@@ -54,8 +54,8 @@ test('Offline installation caches illustrated steps without video assets', async
 
 test('Ordinary assets still update online and fall back to cache offline', async () => {
   const online = setup();
-  assert.equal(await (await online.request('install-guide.js?v=steps-only-1')).text(), 'network asset');
-  assert.deepEqual(online.writes, [origin + 'install-guide.js?v=steps-only-1']);
+  assert.equal(await (await online.request('install-guide.js?v=visit-banner-1')).text(), 'network asset');
+  assert.deepEqual(online.writes, [origin + 'install-guide.js?v=visit-banner-1']);
   const offline = setup({ offline: true });
   assert.equal(await (await offline.request('install-steps.svg?v=samsung-1')).text(), 'offline guide');
 });

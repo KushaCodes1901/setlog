@@ -37,12 +37,14 @@ test('Installed app hides the banner and redundant Settings install link', () =>
   assert.equal(s.element('settingsInstallGuide').hidden, true);
 });
 
-test('Banner dismisses for seven days but Settings still opens the guide', () => {
+test('Banner dismisses for this visit, survives prompt updates, and returns on a fresh page', () => {
   const s = setup(); assert.equal(s.element('installBanner').hidden, false);
   s.element('dismissInstall').onclick(); assert.equal(s.element('installBanner').hidden, true);
-  assert.ok(Number(s.stored.get('setlog-install-dismissed-v1')) > 0);
+  s.events.get('beforeinstallprompt')({ preventDefault() {} });
+  assert.equal(s.element('installBanner').hidden, true);
   s.element('settingsInstallGuide').onclick(); assert.equal(s.element('installGuide').open, true);
-  assert.equal(setup({ dismissed: Date.now() }).element('installBanner').hidden, true);
+  assert.equal(setup({ dismissed: Date.now() }).element('installBanner').hidden, false);
+  assert.equal(setup().element('installBanner').hidden, false);
   assert.equal(setup({ dismissed: Date.now() - 8 * 86400000 }).element('installBanner').hidden, false);
 });
 

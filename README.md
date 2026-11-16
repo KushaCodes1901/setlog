@@ -18,7 +18,7 @@ Run the record and exercise-progress checks with `node --test tests/*.test.cjs`.
 
 ## Home Screen guide
 
-A dismissible Add Setlog banner opens an illustrated, step-by-step guide for iPhone/Safari and Android/Chrome. Android illustrations use a Samsung-style phone with a centered camera dot. The guide works offline after its first load. The banner hides in standalone mode; dismissing it hides it for seven days, and Settings can reopen the guide. Where supported, a native install prompt is offered only after a user tap. Installing can use separate device storage, so the guide reminds existing users to export a backup first.
+A dismissible Add Setlog banner opens an illustrated, step-by-step guide for iPhone/Safari and Android/Chrome. Android illustrations use a Samsung-style phone with a centered camera dot. The guide works offline after its first load. The banner hides in standalone mode; dismissing it hides it only for the current page visit; refreshing or reopening the page brings it back, and Settings can reopen the guide. Where supported, a native install prompt is offered only after a user tap. Installing can use separate device storage, so the guide reminds existing users to export a backup first.
 
 Instructions follow [Apple's Home Screen guide](https://support.apple.com/en-az/guide/iphone/iphea86e5236/26/ios/26) and [Chrome's web app guide](https://support.google.com/chrome/answer/9658361?co=GENIE.Platform%3DAndroid&hl=en). The original illustrations highlight each action; browser wording and layouts can vary. Videos have been removed from the guide.
 

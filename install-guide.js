@@ -4,7 +4,8 @@
   const dialog = $('installGuide');
   const nativeButton = $('installNative');
   const standalone = matchMedia('(display-mode: standalone)');
-  const dismissalKey = 'setlog-install-dismissed-v1';
+  // Dismiss only for this page visit; old seven-day dismissals no longer hide it.
+  let dismissed = false;
   let deferredPrompt = null;
   let platform = /Android/i.test(navigator.userAgent) ? 'android' : 'iphone';
   const guides = {
@@ -32,8 +33,6 @@
   };
   function isInstalled() { return standalone.matches || navigator.standalone === true; }
   function updateBanner() {
-    let dismissed = false;
-    try { dismissed = Date.now() - Number(localStorage.getItem(dismissalKey) || 0) < 7 * 86400000; } catch {}
     banner.hidden = isInstalled() || dismissed;
     $('settingsInstallGuide').hidden = isInstalled();
     nativeButton.hidden = !deferredPrompt || isInstalled();
@@ -87,7 +86,7 @@
     button.onclick = () => showPlatform(button.dataset.installPlatform);
   });
   $('dismissInstall').onclick = () => {
-    try { localStorage.setItem(dismissalKey, String(Date.now())); } catch {}
+    dismissed = true;
     banner.hidden = true;
   };
   window.addEventListener('beforeinstallprompt', event => {
