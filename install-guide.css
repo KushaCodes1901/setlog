@@ -4,7 +4,7 @@
 .install-banner-copy strong { font-size: 14px; font-weight: 650; }
 .install-banner-copy span { font-size: 11px; color: var(--muted); line-height: 1.4; }
 .install-dismiss { min-height: 34px; min-width: 24px; padding: 0; background: none; border: 0; color: var(--muted); font-size: 23px; font-weight: 400; }
-.install-add { padding: 7px 17px; min-height: 36px; background: var(--lime); border-color: var(--lime); color: #192014; border-radius: 18px; font-size: 13px; }
+.install-add { padding: 7px 17px; min-height: 36px; background: var(--lime); border-color: var(--accent); color: #192014; border-radius: 18px; font-size: 13px; }
 .install-settings-link { display: flex; align-items: center; justify-content: space-between; gap: 12px; width: 100%; margin: 0 0 24px; text-align: left; font-size: 14px; font-weight: 500; }
 .install-settings-link span { color: var(--muted); font-size: 23px; }
 .install-guide { width: min(500px, calc(100% - 24px)); max-height: calc(100dvh - 32px); padding: 22px; border: 1px solid var(--line); border-radius: 22px; background: var(--bg); color: var(--text); overflow-y: auto; overscroll-behavior: contain; }
@@ -16,7 +16,7 @@
 #installGuideIntro { color: var(--muted); font-size: 14px; line-height: 1.5; margin: 10px 0 20px; }
 .install-platforms { display: flex; padding: 4px; border: 1px solid var(--line); border-radius: 12px; gap: 4px; margin-bottom: 16px; }
 .install-platforms button { flex: 1; background: transparent; border: 0; padding: 9px; min-height: 38px; border-radius: 8px; color: var(--muted); font-size: 12px; }
-.install-platforms button[aria-pressed=true] { background: #303b26; color: var(--lime); }
+.install-platforms button[aria-pressed=true] { background: #303b26; color: var(--accent); }
 .install-video { margin: 0; }
 .install-video video { display: block; width: 100%; aspect-ratio: 12 / 11; background: #1e241e; border: 1px solid var(--line); border-radius: 14px; }
 .install-video figcaption { margin-top: 8px; color: var(--muted); font-size: 11px; line-height: 1.5; }
@@ -29,14 +29,14 @@
 .install-steps li { counter-increment: install-step; display: grid; grid-template-columns: minmax(0, 1fr) 40%; align-items: center; gap: 16px; min-height: 136px; padding: 16px 0; border-bottom: 1px solid var(--line); }
 .install-steps li:last-child { border-bottom: 0; }
 .install-step-copy { min-width: 0; }
-.install-step-copy::before { content: counter(install-step); display: grid; place-items: center; width: 28px; height: 28px; margin-bottom: 9px; border-radius: 50%; background: #2a3226; color: var(--lime); font-size: 12px; font-weight: 500; }
+.install-step-copy::before { content: counter(install-step); display: grid; place-items: center; width: 28px; height: 28px; margin-bottom: 9px; border-radius: 50%; background: #2a3226; color: var(--accent); font-size: 12px; font-weight: 500; }
 .install-step-title { color: var(--text); font-size: 13px; line-height: 1.4; }
 .install-step-title strong { font-weight: 650; }
 .install-step-help { display: block; font-size: 11px; margin-top: 4px; color: var(--muted); line-height: 1.4; }
 .install-step-picture { display: block; width: 100%; aspect-ratio: 40 / 27; border-radius: 15px; overflow: hidden; background: #f1f2f4; color: #151715; }
 .install-extra-help, .install-data-note { font-size: 12px; line-height: 1.6; color: var(--muted); margin-top: 17px; }
 .install-data-note { padding-top: 16px; border-top: 1px solid var(--line); }
-.install-feedback { color: var(--lime); font-size: 13px; margin-top: 12px; }
+.install-feedback { color: var(--accent); font-size: 13px; margin-top: 12px; }
 #installNative { margin-top: 20px; }
 html.install-guide-open { overflow: hidden; }
 @media (max-width: 380px) { .install-guide { padding: 18px; } .install-banner { gap: 8px; } .install-banner-copy span { font-size: 10px; } }

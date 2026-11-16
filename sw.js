@@ -1,6 +1,6 @@
-const cacheName = 'setlog-offline-v59';
+const cacheName = 'setlog-offline-v60';
 const home = new URL('./', self.location.href).href;
-const assets = ['startup.css', 'startup.js', 'styles.css', 'install-guide.css', 'install-guide.js', 'install-steps.svg', 'install-iphone.mp4', 'install-android.mp4', 'install-iphone.jpg', 'install-android.jpg', 'install-iphone.vtt', 'install-android.vtt', 'settings.js', 'duration-picker.js', 'exercise-catalog.js', 'history-calendar.js', 'personal-records.js', 'exercise-progress.js', 'app.js', 'backup.js', 'rest-timer.js?v=standalone', 'exercise-illustrations.svg',
+const assets = ['startup.css', 'startup.js', 'theme.js', 'themes.css', 'styles.css', 'install-guide.css', 'install-guide.js', 'install-steps.svg', 'install-iphone.mp4', 'install-android.mp4', 'install-iphone.jpg', 'install-android.jpg', 'install-iphone.vtt', 'install-android.vtt', 'settings.js', 'duration-picker.js', 'exercise-catalog.js', 'history-calendar.js', 'personal-records.js', 'exercise-progress.js', 'app.js', 'backup.js', 'rest-timer.js?v=standalone', 'exercise-illustrations.svg',
   'manifest.webmanifest', 'icon.png', 'icon-v2-192.png', 'icon-v2-512.png', 'apple-touch-icon-v2.png',
   'launch-1290x2796.png', 'launch-1179x2556.png', 'launch-1170x2532.png', 'launch-1284x2778.png',
   'launch-1125x2436.png', 'launch-1242x2688.png', 'launch-750x1334.png', 'launch-828x1792.png', 'launch-2796x1290.png']

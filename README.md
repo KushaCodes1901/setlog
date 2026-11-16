@@ -6,6 +6,8 @@ Setlog is a simple workout journal. Log your exercises, reps, and weights, then 
 
 Your workouts and drafts are stored on the device you use. Setlog works offline after its first successful online load.
 
+Settings → Appearance offers Dark and Light modes, with green accents in each. The choice saves on this device, applies immediately and is restored before the page paints. Existing users keep Dark until they choose another mode.
+
 Each newly added exercise starts with one blank set. While editing an exercise, Last time shows its most recent logged date and sets in your selected weight unit. Timed exercises show duration. New exercises have no reference yet; when editing a past workout, only sessions before that workout are used.
 
 Home shows personal records for the heaviest logged weight per exercise and highest weekly lifting volume (reps × weight, Monday–Sunday), plus workout counts and progress toward the next PR milestone. New records are highlighted after saving and flagged in History, with confetti when enabled. The first lift and first week establish starting marks. Timed, unweighted and assisted sets are excluded. Records are recalculated from history when entries change.

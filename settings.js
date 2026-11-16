@@ -8,6 +8,7 @@ const appSettings = (() => {
   const profileHeight = document.querySelector('#profileHeight');
   const profileHeightRemainder = document.querySelector('#profileHeightRemainder');
   const profileWeight = document.querySelector('#profileWeight');
+  const appearanceToggle = document.querySelector('#appearanceToggle');
   const weightFactors = { kg: 1, lbs: .45359237, st: 6.35029318, g: .001, oz: .028349523125 };
   const heightFactors = { mm: .1, cm: 1, m: 100, ft: 30.48, in: 2.54 };
   const heightNames = { mm: 'millimetres', cm: 'centimetres', m: 'metres and centimetres', ft: 'feet (decimal)', in: 'inches', 'ft-in': 'feet and inches' };
@@ -28,13 +29,14 @@ const appSettings = (() => {
       return {
         volume: Number.isFinite(saved?.volume) ? Math.max(0, Math.min(100, saved.volume)) : 100,
         confetti: saved?.confetti !== false,
+        appearance: appTheme.valid(saved?.appearance),
         weightUnit: Object.hasOwn(weightFactors, saved?.weightUnit) ? saved.weightUnit : 'kg',
         heightUnit: Object.hasOwn(heightNames, saved?.heightUnit) ? saved.heightUnit : 'cm',
         heightCm: Number.isFinite(saved?.heightCm) && saved.heightCm > 0 ? saved.heightCm : null,
         bodyWeightKg: Number.isFinite(saved?.bodyWeightKg) && saved.bodyWeightKg > 0 ? saved.bodyWeightKg : null
       };
     } catch {
-      return { volume: 100, confetti: true, weightUnit: 'kg', heightUnit: 'cm', heightCm: null, bodyWeightKg: null };
+      return { volume: 100, confetti: true, appearance: 'dark', weightUnit: 'kg', heightUnit: 'cm', heightCm: null, bodyWeightKg: null };
     }
   }
 
@@ -57,6 +59,9 @@ const appSettings = (() => {
   }
 
   function render() {
+    appTheme.apply(preferences.appearance);
+    appearanceToggle.checked = preferences.appearance === 'dark';
+    document.querySelector('#appearanceHelp').textContent = appearanceToggle.checked ? 'Dark background' : 'Light background';
     volume.value = preferences.volume;
     volumeValue.value = preferences.volume + '%';
     confetti.checked = preferences.confetti;
@@ -145,6 +150,7 @@ const appSettings = (() => {
   }
 
   volume.oninput = () => { volumeValue.value = volume.value + '%'; };
+  appearanceToggle.onchange = () => save({ appearance: appearanceToggle.checked ? 'dark' : 'light' });
   volume.onchange = () => save({ volume: Number(volume.value) });
   confetti.onchange = () => save({ confetti: confetti.checked });
   weightUnit.onchange = () => save({ weightUnit: weightUnit.value });
@@ -159,7 +165,7 @@ const appSettings = (() => {
     heightUnit: heightUnit.value
   }, true);
   window.addEventListener('storage', event => {
-    if (event.key === key) {
+    if (event.key === key || event.key === null) {
       const previousUnit = preferences.weightUnit;
       preferences = read(event.newValue);
       render();
