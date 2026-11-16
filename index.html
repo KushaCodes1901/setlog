@@ -23,7 +23,7 @@
 <link rel="preload" as="image" href="icon-v2-192.png">
 <link rel="stylesheet" href="startup.css">
 <link rel="stylesheet" href="styles.css">
-<link rel="stylesheet" href="install-guide.css">
+<link rel="stylesheet" href="install-guide.css?v=steps-only-1">
 <link rel="stylesheet" href="themes.css">
 </head>
 <body>
@@ -381,16 +381,6 @@
     <button type="button" data-install-platform="iphone" aria-pressed="true">iPhone / iPad</button>
     <button type="button" data-install-platform="android" aria-pressed="false">Android</button>
   </div>
-  <figure class="install-video">
-    <video id="installVideo" controls muted playsinline preload="metadata" aria-label="Animated Home Screen installation walkthrough" aria-describedby="installVideoCaption"></video>
-    <div id="installVideoFallback" class="install-video-fallback" hidden>
-      <img id="installFallbackPoster" alt="Installation tutorial preview">
-      <p>Video couldn’t load. You can still follow the illustrated steps below.</p>
-      <button id="retryInstallVideo" type="button">Retry video</button>
-    </div>
-    <figcaption id="installVideoCaption">A quick illustrated walkthrough. Buttons may look a little different on your phone.</figcaption>
-    <a id="openInstallVideo" class="install-video-link" target="_blank" rel="noopener noreferrer">Open video separately</a>
-  </figure>
   <p id="installBrowserHint" class="install-browser-hint"></p>
   <ol id="installSteps" class="install-steps"></ol>
   <p id="installExtraHelp" class="install-extra-help"></p>
@@ -399,7 +389,7 @@
   <p id="installFeedback" role="status" class="install-feedback"></p>
 </dialog>
 <script defer src="startup.js"></script>
-<script defer src="install-guide.js?v=native-video-2"></script>
+<script defer src="install-guide.js?v=steps-only-1"></script>
 <script defer src="settings.js"></script>
 <script defer src="duration-picker.js"></script>
 <script defer src="exercise-catalog.js"></script>

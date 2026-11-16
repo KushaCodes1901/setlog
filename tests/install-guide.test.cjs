@@ -9,13 +9,11 @@ function setup({ installed = false, userAgent = 'iPhone Safari', dismissed = 0, 
   const element = id => {
     if (!elements.has(id)) {
       const attributes = new Map(), listeners = new Map();
-      elements.set(id, { hidden: false, children: [], dataset: {}, textContent: '', pauses: 0,
+      elements.set(id, { hidden: false, children: [], dataset: {}, textContent: '',
         setAttribute: (key, value) => attributes.set(key, value), getAttribute: key => attributes.get(key),
         append(...children) { this.children.push(...children); }, replaceChildren() { this.children = []; },
         addEventListener: (type, fn) => listeners.set(type, fn),
         showModal() { this.open = true; }, close() { this.open = false; listeners.get('close')?.(); },
-        pause() { this.pauses++; }, play: () => Promise.resolve(),
-        load() { if (id === 'installVideo') assert.equal(element('installGuide').open, true, 'show the dialog before loading media'); },
         querySelectorAll: () => [iphone, android] });
     }
     return elements.get(id);
@@ -48,35 +46,27 @@ test('Banner dismisses for seven days but Settings still opens the guide', () =>
   assert.equal(setup({ dismissed: Date.now() - 8 * 86400000 }).element('installBanner').hidden, false);
 });
 
-test('Guide selects matching videos and steps, pauses on platform switch and close', () => {
+test('Guide switches illustrated steps between iPhone and Android without a video player', () => {
   const s = setup(); s.element('openInstallGuide').onclick();
-  const video = s.element('installVideo');
-  assert.equal(video.src, 'install-iphone.mp4?playback=native-2');
   assert.equal(s.element('installSteps').children.length, 5);
-  assert.equal(s.element('openInstallVideo').href, video.src);
-  s.android.onclick(); assert.equal(video.src, 'install-android.mp4?playback=native-2');
+  const picture = s.element('installSteps').children[0].children[1];
+  assert.equal(picture.children[0].getAttribute('href'), 'install-steps.svg?v=samsung-1#iphone-1');
+  s.android.onclick();
+  assert.equal(s.element('installSteps').children.length, 4);
   assert.match(s.element('installBrowserHint').textContent, /Chrome/);
-  const pauses = video.pauses; s.element('closeInstallGuide').onclick();
-  assert.equal(video.pauses, pauses + 1);
+  const androidPicture = s.element('installSteps').children[0].children[1];
+  assert.equal(androidPicture.children[0].getAttribute('href'), 'install-steps.svg?v=samsung-1#android-1');
+  s.element('closeInstallGuide').onclick();
   assert.equal(s.element('installGuide').open, false);
+  const html = fs.readFileSync(path.join(__dirname, '../index.html'), 'utf8');
+  assert.doesNotMatch(html, /<video|installVideo|openInstallVideo/);
 });
 
-test('Android is detected and blocked preference storage does not break the guide', () => {
+test('Android detection works with blocked preference storage', () => {
   const s = setup({ userAgent: 'Android Chrome', storageFails: true });
   s.element('openInstallGuide').onclick();
-  assert.equal(s.element('installVideo').src, 'install-android.mp4?playback=native-2');
-});
-
-test('An unsupported video shows a poster and retry, and switching platform clears the error', () => {
-  const s = setup(); s.element('openInstallGuide').onclick();
-  s.element('installVideo').onerror();
-  assert.equal(s.element('installVideo').hidden, true);
-  assert.equal(s.element('installVideoFallback').hidden, false);
-  assert.match(s.element('installFallbackPoster').src, /install-iphone.jpg$/);
-  s.element('retryInstallVideo').onclick();
-  assert.equal(s.element('installVideo').hidden, false);
-  s.element('installVideo').onerror(); s.android.onclick();
-  assert.equal(s.element('installVideoFallback').hidden, true);
+  assert.equal(s.element('installSteps').children.length, 4);
+  assert.match(s.element('installBrowserHint').textContent, /Android/);
 });
 
 test('Native prompt is never automatic, runs once per event, and appinstalled hides install controls', async () => {

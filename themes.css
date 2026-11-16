@@ -43,7 +43,6 @@
 :root[data-theme=light] .progress-header { background: rgb(245 246 240 / .95); }
 :root[data-theme=light] .duration-wheels::before { background: #e6efda; }
 :root[data-theme=light] .install-step-copy::before { background: #e7eedd; }
-:root[data-theme=light] .install-video-fallback { background: #eaf0e3; }
 :root[data-theme=light] .settings-saved-dialog { border-color: #aec295; }
 :root[data-theme=light] .settings-saved-dialog::backdrop,
 :root[data-theme=light] .duration-dialog::backdrop,

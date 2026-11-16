@@ -17,14 +17,6 @@
 .install-platforms { display: flex; padding: 4px; border: 1px solid var(--line); border-radius: 12px; gap: 4px; margin-bottom: 16px; }
 .install-platforms button { flex: 1; background: transparent; border: 0; padding: 9px; min-height: 38px; border-radius: 8px; color: var(--muted); font-size: 12px; }
 .install-platforms button[aria-pressed=true] { background: #303b26; color: var(--accent); }
-.install-video { margin: 0; }
-.install-video video { display: block; width: 100%; aspect-ratio: 12 / 11; background: #1e241e; border: 1px solid var(--line); border-radius: 14px; }
-.install-video figcaption { margin-top: 8px; color: var(--muted); font-size: 11px; line-height: 1.5; }
-.install-video-link { display: inline-flex; align-items: center; min-height: 40px; font-size: 12px; font-weight: 550; color: var(--accent); text-underline-offset: 3px; }
-.install-video-fallback { padding: 12px; border: 1px solid var(--line); border-radius: 14px; background: #1e241e; }
-.install-video-fallback img { display: block; width: 100%; border-radius: 8px; }
-.install-video-fallback p { color: var(--muted); font-size: 12px; margin: 12px 0; }
-.install-video-fallback button { width: 100%; font-size: 13px; }
 .install-browser-hint { margin-top: 20px; color: var(--text); font-weight: 550; font-size: 14px; }
 .install-steps { list-style: none; counter-reset: install-step; padding: 0; margin: 8px 0 0; }
 .install-steps li { counter-increment: install-step; display: grid; grid-template-columns: minmax(0, 1fr) 40%; align-items: center; gap: 16px; min-height: 136px; padding: 16px 0; border-bottom: 1px solid var(--line); }

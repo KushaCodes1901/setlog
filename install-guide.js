@@ -2,7 +2,6 @@
   const $ = id => document.getElementById(id);
   const banner = $('installBanner');
   const dialog = $('installGuide');
-  const video = $('installVideo');
   const nativeButton = $('installNative');
   const standalone = matchMedia('(display-mode: standalone)');
   const dismissalKey = 'setlog-install-dismissed-v1';
@@ -42,20 +41,6 @@
   function showPlatform(value) {
     platform = value;
     const guide = guides[value];
-    video.pause();
-    video.hidden = false;
-    $('installVideoFallback').hidden = true;
-    // A fresh URL also bypasses media caches in older installed service workers.
-    video.src = 'install-' + value + '.mp4?playback=native-2';
-    $('openInstallVideo').href = video.src;
-    video.poster = 'install-' + value + '.jpg';
-    $('installFallbackPoster').src = video.poster;
-    video.replaceChildren();
-    const track = document.createElement('track');
-    track.kind = 'captions'; track.srclang = 'en'; track.label = 'English';
-    track.src = 'install-' + value + '.vtt';
-    video.append(track);
-    video.load();
     $('installBrowserHint').textContent = guide.hint;
     $('installExtraHelp').textContent = guide.help;
     const list = $('installSteps');
@@ -77,7 +62,7 @@
       illustration.setAttribute('aria-hidden', 'true');
       illustration.setAttribute('focusable', 'false');
       const drawing = document.createElementNS('http://www.w3.org/2000/svg', 'use');
-      drawing.setAttribute('href', 'install-steps.svg#' + value + '-' + (index + 1));
+      drawing.setAttribute('href', 'install-steps.svg?v=samsung-1#' + value + '-' + (index + 1));
       illustration.append(drawing);
       copy.append(heading, help); item.append(copy, illustration); list.append(item);
     });
@@ -86,7 +71,6 @@
     });
   }
   function openGuide() {
-    // Safari must see a visible player before its media load is started.
     dialog.showModal();
     showPlatform(platform);
     $('installFeedback').textContent = '';
@@ -96,20 +80,7 @@
   $('openInstallGuide').onclick = openGuide;
   $('settingsInstallGuide').onclick = openGuide;
   $('closeInstallGuide').onclick = () => dialog.close();
-  video.onerror = () => {
-    video.hidden = true;
-    $('installVideoFallback').hidden = false;
-  };
-  $('retryInstallVideo').onclick = () => {
-    video.hidden = false;
-    $('installVideoFallback').hidden = true;
-    video.load();
-    // A direct tap can retry playback without an autoplay permission prompt.
-    const playback = video.play();
-    if (playback) playback.catch(() => { video.onerror(); });
-  };
   dialog.addEventListener('close', () => {
-    video.pause();
     document.documentElement.classList.remove('install-guide-open');
   });
   dialog.querySelectorAll('[data-install-platform]').forEach(button => {

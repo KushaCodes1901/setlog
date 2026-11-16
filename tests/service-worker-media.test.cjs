@@ -45,19 +45,19 @@ test('Opening the direct video cannot replace the cached app page', async () => 
   assert.deepEqual(s.writes, []);
 });
 
-test('Offline installation keeps illustrated steps and posters but never precaches MP4 files', async () => {
+test('Offline installation caches illustrated steps without video assets', async () => {
   const s = setup(); await s.install();
-  assert.ok(s.precached.includes(origin + 'install-steps.svg'));
-  assert.ok(s.precached.includes(origin + 'install-iphone.jpg'));
+  assert.ok(s.precached.includes(origin + 'install-steps.svg?v=samsung-1'));
+  assert.equal(s.precached.some(url => /install-(iphone|android)\.(jpg|vtt)/.test(url)), false);
   assert.equal(s.precached.some(url => new URL(url).pathname.endsWith('.mp4')), false);
 });
 
 test('Ordinary assets still update online and fall back to cache offline', async () => {
   const online = setup();
-  assert.equal(await (await online.request('install-guide.js?v=native-video-2')).text(), 'network asset');
-  assert.deepEqual(online.writes, [origin + 'install-guide.js?v=native-video-2']);
+  assert.equal(await (await online.request('install-guide.js?v=steps-only-1')).text(), 'network asset');
+  assert.deepEqual(online.writes, [origin + 'install-guide.js?v=steps-only-1']);
   const offline = setup({ offline: true });
-  assert.equal(await (await offline.request('install-steps.svg')).text(), 'offline guide');
+  assert.equal(await (await offline.request('install-steps.svg?v=samsung-1')).text(), 'offline guide');
 });
 
 test('Non-HTML navigations cannot poison the offline home page', async () => {
