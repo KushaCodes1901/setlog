@@ -1,4 +1,4 @@
-const cacheName = 'setlog-offline-v63';
+const cacheName = 'setlog-offline-v64';
 const home = new URL('./', self.location.href).href;
 const assets = ['startup.css', 'startup.js', 'theme.js', 'themes.css', 'styles.css', 'install-guide.css?v=steps-only-1', 'install-guide.js?v=visit-banner-1', 'install-steps.svg?v=samsung-1', 'settings.js', 'duration-picker.js', 'exercise-catalog.js', 'history-calendar.js', 'personal-records.js', 'exercise-progress.js', 'app.js', 'backup.js', 'rest-timer.js?v=standalone', 'exercise-illustrations.svg',
   'manifest.webmanifest', 'icon.png', 'icon-v2-192.png', 'icon-v2-512.png', 'apple-touch-icon-v2.png',

@@ -54,7 +54,9 @@
       }
       return { name: exercise.name, sets: exercise.sets.map(normalizeSet) };
     });
-    return { day: session.day, date: session.date, restDay, exercises };
+    const result = { day: session.day, date: session.date, restDay, exercises };
+    if (!restDay && session.calories != null) result.calories = numberValue(session.calories, 0, true);
+    return result;
   }
 
   function readBackup(text) {

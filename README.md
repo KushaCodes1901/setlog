@@ -22,6 +22,10 @@ A dismissible Add Setlog banner opens an illustrated, step-by-step guide for iPh
 
 Instructions follow [Apple's Home Screen guide](https://support.apple.com/en-az/guide/iphone/iphea86e5236/26/ios/26) and [Chrome's web app guide](https://support.google.com/chrome/answer/9658361?co=GENIE.Platform%3DAndroid&hl=en). The original illustrations highlight each action; browser wording and layouts can vary. Videos have been removed from the guide.
 
+## Calories
+
+When saving a workout, you can enter whole-number calories (kcal) from a watch or gym machine. Leave blank to omit calories; zero is saved if explicitly entered. Setlog never estimates calories. History labels them Manually entered, and History edits can change or clear the value. Drafts retain the input, and backups preserve it. Rest days do not record workout calories.
+
 ## Rest timer
 
 The rest timer plays one short chime (about one second) at completion when sound is enabled and its volume is above zero. Start and Resume do not create or activate audio. Keep Setlog open and the screen awake; this is not a reliable background or lock-screen alarm.

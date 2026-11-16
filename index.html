@@ -84,6 +84,11 @@
         <p id="exerciseHint" class="muted" hidden>Save the open exercise before adding another or saving the workout.</p>
       </section>
       </fieldset>
+      <section id="workoutCalories" class="workout-calories" aria-labelledby="caloriesTitle">
+        <label id="caloriesTitle" for="calories">Calories <span class="muted">(kcal)</span></label>
+        <p id="caloriesHelp" class="muted">From your watch or gym machine. Leave blank if you don’t know.</p>
+        <input id="calories" type="number" inputmode="numeric" min="0" step="1" placeholder="e.g. 250" aria-describedby="caloriesHelp">
+      </section>
       <button id="save" class="primary wide" disabled>Save workout</button>
       <button id="cancelEdit" class="wide" type="button" hidden>Cancel edit</button>
     </form>

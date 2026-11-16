@@ -375,3 +375,11 @@ html.rest-focus-open { overflow: hidden; }
 @media (prefers-reduced-motion: reduce) {
   .rest-focus { transition: none; }
 }
+
+.workout-calories label { font-weight: 600; }
+.workout-calories label .muted { font-weight: 400; }
+#caloriesHelp { font-size: 13px; line-height: 1.5; margin: 7px 0 12px; }
+#calories { max-width: 180px; }
+.history-calories { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 14px; margin: 0 0 18px; }
+.history-calories strong { font-size: 18px; }
+.history-calories span { font-size: 12px; }

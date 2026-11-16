@@ -12,6 +12,7 @@ const historyView = document.querySelector('#history');
 const saveButton = document.querySelector('#save');
 const cancelEdit = document.querySelector('#cancelEdit');
 const restDay = document.querySelector('#restDay');
+const caloriesInput = document.querySelector('#calories');
 const workoutExercises = document.querySelector('#workoutExercises');
 const storageKey = 'setlog-v1';
 const effortLevels = [
@@ -159,6 +160,8 @@ function updateWorkoutControls() {
   exerciseHint.hidden = !hasOpenExercise;
   exercisePicker.hidden = hasOpenExercise;
   if (hasOpenExercise) exercisePicker.open = false;
+  document.querySelector('#workoutCalories').hidden = restDay.checked;
+  caloriesInput.disabled = restDay.checked;
   workoutExercises.hidden = restDay.checked;
   workoutExercises.disabled = restDay.checked;
   document.querySelector('#restDayMessage').hidden = !restDay.checked;
@@ -283,7 +286,7 @@ function renderExerciseChoices() {
 function saveDraft() {
   hasDraft = true;
   updateWorkoutControls();
-  const draft = { day: day.value, name: nameInput.value, restDay: restDay.checked, exercises: getExercises() };
+  const draft = { day: day.value, name: nameInput.value, restDay: restDay.checked, calories: caloriesInput.value, exercises: getExercises() };
   if (editing) return writeStorage(data => ({ ...data, editDraft: { ...editing, draft } }));
   return writeStorage(data => ({ ...data, draft }));
 }
@@ -293,6 +296,7 @@ function loadDraft(draft) {
   exercises.replaceChildren();
   nameInput.value = draft?.name ?? '';
   restDay.checked = draft?.restDay === true;
+  caloriesInput.value = draft?.calories ?? '';
   refreshToday();
   if (draft) {
     day.value = draft.day;
@@ -313,6 +317,7 @@ function editWorkout(session, index) {
     day: session.day,
     name: '',
     restDay: session.restDay === true,
+    calories: session.calories ?? '',
     exercises: session.exercises.map(exercise => ({ ...exercise, saved: true }))
   };
   const target = { index, original: session };
@@ -795,6 +800,17 @@ function renderHistoryEntries(entries, target, records) {
       + ' · ' + setCount + (setCount === 1 ? ' set' : ' sets');
     header.append(heading);
     content.className = 'history-content';
+    if (!session.restDay && Number.isInteger(session.calories) && session.calories >= 0) {
+      const calories = document.createElement('p');
+      calories.className = 'history-calories';
+      const value = document.createElement('strong');
+      value.textContent = session.calories.toLocaleString() + ' kcal';
+      const source = document.createElement('span');
+      source.className = 'muted';
+      source.textContent = 'Manually entered';
+      calories.append(value, source);
+      content.append(calories);
+    }
     const milestones = records.bySession.get(index) ?? [];
     if (milestones.length) {
       const list = document.createElement('ul');
@@ -1029,6 +1045,10 @@ workout.onsubmit = event => {
     restDay: restDay.checked,
     exercises: entries.map(({ name, sets }) => ({ name, sets }))
   };
+  if (!restDay.checked && caloriesInput.value !== '') {
+    if (!caloriesInput.reportValidity()) return;
+    session.calories = Number(caloriesInput.value);
+  }
   let regularDraft = null;
   let previousSessions;
   const isEdit = Boolean(editing);
