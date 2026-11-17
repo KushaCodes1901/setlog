@@ -14,7 +14,6 @@
   const focusToggle = document.querySelector('#restFocusToggle');
   const expand = document.querySelector('#restExpand');
   const done = document.querySelector('#restFocusDone');
-  const retrySound = document.querySelector('#restRetrySound');
   const sound = document.querySelector('#restSound');
   const soundStatus = document.querySelector('#restSoundStatus');
   const soundKey = 'setlog-rest-sound-v1';
@@ -29,116 +28,38 @@
   let interval = null;
   const durationControl = durationPicker.attach(durationInput, { label: 'Custom rest time', maximum: 3600 });
 
-  async function prepareSound(unlock = false) {
+  async function prepareSound() {
     try {
-      if (unlock) {
-        // Explicit Test/Play-chime taps may unlock audio. Use a mixing session
-        // while priming to avoid claiming exclusive playback for a silent source.
-        try { if (navigator.audioSession) navigator.audioSession.type = 'ambient'; } catch {}
-      }
       const AudioContext = window.AudioContext || window.webkitAudioContext;
       if (!AudioContext) throw new Error('Audio is unavailable.');
       if (!audio || audio.state === 'closed') audio = new AudioContext();
-      if (unlock) {
-        // Start an actual (silent) source inside the Test/Play-chime tap, before any
-        // awaits. Merely constructing/resuming a context may not unlock iOS audio.
-        const source = audio.createBufferSource();
-        source.buffer = audio.createBuffer(1, 1, audio.sampleRate);
-        source.connect(audio.destination);
-        source.onended = () => source.disconnect();
-        source.start(0);
-      }
-      if (audio.state !== 'running') await bounded(audio.resume(), 1500);
-      const ready = audio.state === 'running';
-      // Release the unlocked context until the actual alert requests it.
-      if (unlock && ready) await bounded(audio.suspend(), 500);
-      return ready;
+      if (audio.state !== 'running') await audio.resume();
+      return audio.state === 'running';
     } catch {
       soundStatus.textContent = 'Sound is unavailable in this browser. The completion screen will still appear.';
       return false;
     }
   }
 
-  function bounded(promise, milliseconds) {
-    let timeout;
-    return Promise.race([promise, new Promise((_, reject) => {
-      timeout = setTimeout(() => reject(new Error('Audio did not respond.')), milliseconds);
-    })]).finally(() => clearTimeout(timeout));
-  }
-
   function playChime() {
     if (!audio || audio.state !== 'running') return false;
-    return new Promise(resolve => {
-      const began = audio.currentTime + .05;
-      const notes = [880, 1108.73, 1318.51].map((frequency, index) => ({ frequency, offset: index * .29 }));
-      const nodes = [];
-      let ended = 0;
-      let finished = false;
-      const finish = played => {
-        if (finished) return;
-        finished = true;
-        clearTimeout(timeout);
-        nodes.forEach(({ oscillator, gain }) => {
-          try { oscillator.stop(); } catch {}
-          oscillator.disconnect(); gain.disconnect();
-        });
-        resolve(played);
-      };
-      // Wall-clock time alone cannot prove the audio clock advanced on a phone.
-      const timeout = setTimeout(() => finish(false), 2500);
-      try {
-        notes.forEach(({ frequency, offset }) => {
-          const oscillator = audio.createOscillator();
-          const gain = audio.createGain();
-          nodes.push({ oscillator, gain });
-          const when = began + offset;
-          oscillator.type = 'triangle';
-          oscillator.frequency.value = frequency;
-          gain.gain.setValueAtTime(0, when);
-          gain.gain.linearRampToValueAtTime(.20 * appSettings.volume(), when + .02);
-          gain.gain.linearRampToValueAtTime(.13 * appSettings.volume(), when + .15);
-          gain.gain.linearRampToValueAtTime(0, when + .40);
-          oscillator.connect(gain);
-          gain.connect(audio.destination);
-          oscillator.onended = () => { if (++ended === notes.length) finish(true); };
-          oscillator.start(when);
-          oscillator.stop(when + .42);
-        });
-      } catch { finish(false); }
+    const began = audio.currentTime;
+    [880, 1108.73, 1318.51].forEach((frequency, index) => {
+      const oscillator = audio.createOscillator();
+      const gain = audio.createGain();
+      const when = began + index * .18;
+      oscillator.type = 'sine';
+      oscillator.frequency.value = frequency;
+      gain.gain.setValueAtTime(0, when);
+      gain.gain.linearRampToValueAtTime(.16 * appSettings.volume(), when + .015);
+      gain.gain.linearRampToValueAtTime(0, when + .24);
+      oscillator.connect(gain);
+      gain.connect(audio.destination);
+      oscillator.start(when);
+      oscillator.stop(when + .25);
+      oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
     });
-  }
-
-  async function alertRestComplete(preview = false) {
-    if ((!preview && !sound.checked) || appSettings.volume() <= 0 || document.hidden) return;
-    const chime = async () => {
-      if (document.hidden || (!preview && !sound.checked)) return;
-      let session, previousType;
-      try {
-        // Safari's default Web Audio session can be ambient (and silent with the
-        // ring/silent switch). Claim media playback only for the actual alert.
-        try {
-          session = navigator.audioSession;
-          if (session) { previousType = session.type; session.type = 'playback'; }
-        } catch {}
-        if (!await prepareSound() || !await playChime()) {
-          const message = 'Sound couldn’t play. Tap Play chime to try again.';
-          soundStatus.textContent = message;
-          if (!preview && state.endsAt === null && state.remaining === 0) {
-            document.querySelector('#restFocusAnnouncement').textContent = 'Break’s over! ' + message;
-            retrySound.hidden = false;
-          }
-        }
-      } finally {
-        // Release the phone's audio session after the chime.
-        try { if (audio?.state === 'running') await bounded(audio.suspend(), 500); } catch {}
-        try { if (session && previousType !== undefined) session.type = previousType; } catch {}
-      }
-    };
-    try {
-      await chime();
-    } catch {
-      soundStatus.textContent = 'Sound was interrupted. Tap Test sound before your next rest.';
-    }
+    return true;
   }
 
   sound.onchange = () => {
@@ -148,19 +69,13 @@
     } catch {
       soundStatus.textContent = 'Sound changed for this session. The preference could not be saved.';
     }
+    if (sound.checked) prepareSound();
   };
   document.querySelector('#testRestSound').onclick = async () => {
-    // Unlock audio directly from this explicit preview tap.
-    if (await prepareSound(true)) await alertRestComplete(true);
-  };
-  retrySound.onclick = async () => {
-    retrySound.disabled = true;
-    try {
-      if (await prepareSound(true)) {
-        retrySound.hidden = true;
-        await alertRestComplete();
-      }
-    } finally { retrySound.disabled = false; }
+    if (await prepareSound()) {
+      playChime();
+      soundStatus.textContent = 'Test chime played. Keep Setlog open and your screen awake for timer alerts.';
+    }
   };
 
   function openFocus() {
@@ -226,7 +141,6 @@
     focus.querySelector('.focus-dial').hidden = complete;
     focus.querySelector('.rest-focus-actions').hidden = complete;
     done.hidden = !complete;
-    if (!complete) retrySound.hidden = true;
     if (!complete) focus.querySelectorAll('.rest-confetti').forEach(piece => piece.remove());
     focusTime.textContent = dialTime.textContent;
     focusLabel.textContent = complete ? 'Rest complete' : dialLabel.textContent;
@@ -257,7 +171,9 @@
       openFocus();
       render();
       celebrateCompletion();
-      if (justFinished) void alertRestComplete();
+      if (sound.checked && !document.hidden && justFinished && !playChime()) {
+        soundStatus.textContent = 'Tap Test sound to enable audio before your next rest.';
+      }
       return;
     }
     render();
@@ -286,8 +202,7 @@
       status.textContent = state.remaining ? 'Timer paused.' : 'Rest complete. Ready for your next set?';
     } else {
       if (!durationInput.reportValidity()) return;
-      // No audio creation, resume, or silent source here: even a silent warmup
-      // can interrupt other audio on iOS. Request audio only when the break ends.
+      if (sound.checked) prepareSound();
       const duration = Number(durationInput.value);
       if (duration !== state.duration) {
         state.duration = duration;
