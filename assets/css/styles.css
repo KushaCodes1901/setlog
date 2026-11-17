@@ -178,7 +178,6 @@ button:disabled { opacity: .48; cursor: default; }
 .set-edit-label { color: var(--accent); font-size: 12px; font-weight: 650; flex-shrink: 0; }
 .set-number { min-width: 3em; padding-bottom: 13px; }
 .plank-timer { margin-top: 10px; }
-.plank-clock { margin-left: 12px; color: var(--accent); font-size: 24px; font-variant-numeric: tabular-nums; }
 .set-feedback { display: grid; gap: 10px; margin-top: 12px; }
 .effort { min-width: 0; padding: 0; margin: 0; border: 0; }
 .effort legend { padding: 0; color: var(--muted); font-size: 13px; font-weight: 650; }
@@ -383,3 +382,13 @@ html.rest-focus-open { overflow: hidden; }
 .history-calories { display: flex; align-items: baseline; flex-wrap: wrap; gap: 8px 14px; margin: 0 0 18px; }
 .history-calories strong { font-size: 18px; }
 .history-calories span { font-size: 12px; }
+
+.exercise-focus-set { color: var(--focus-muted); font-size: 14px; margin-bottom: 10px; }
+#exerciseFocusTitle { font-size: clamp(28px, 7vw, 40px); line-height: 1.15; letter-spacing: -.04em; }
+#exerciseFocusMessage { color: var(--focus-muted); font-size: 15px; line-height: 1.5; margin-top: 12px; }
+.exercise-focus .focus-dial { width: min(100%, 380px); }
+#exerciseFocusTime { color: var(--focus-text); font-size: clamp(64px, 22vw, 112px); font-weight: 400; line-height: 1.1; letter-spacing: -.05em; font-variant-numeric: tabular-nums; }
+.exercise-focus-label { color: var(--focus-muted); font-size: 14px; margin-top: 8px; }
+.exercise-focus.is-complete #exerciseFocusTitle { font-size: clamp(42px, 11vw, 64px); }
+.exercise-focus.is-complete #exerciseFocusMessage { max-width: 300px; margin: 20px auto 0; font-size: 18px; }
+html.exercise-focus-open { overflow: hidden; }

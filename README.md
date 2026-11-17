@@ -11,6 +11,7 @@ A workout journal for keeping track of your sets and seeing how your training ch
 - A Last time reference showing your previous session while you log an exercise.
 - Set difficulty ratings and reps left, if you want to record them.
 - Workout drafts that stay saved when you switch tabs or reopen the app.
+- A full-screen exercise countdown for timed sets, with a large display and the option to stop early and keep your elapsed time.
 - A rest timer with a full-screen countdown, completion message and sound controls.
 - A History calendar for workouts and rest days, with editing and deletion.
 - Personal records, weekly lifting volume and exercise progress charts.

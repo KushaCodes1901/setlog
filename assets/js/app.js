@@ -474,7 +474,6 @@ function setupSetTimer(row, values) {
   const panel = row.querySelector('.plank-timer');
   const input = row.querySelector('.reps');
   const start = row.querySelector('.plank-start');
-  const clock = row.querySelector('.plank-clock');
   const status = row.querySelector('.plank-status');
   let interval = null;
   const durationControl = durationPicker.attach(input, { label: 'Set duration' });
@@ -488,7 +487,7 @@ function setupSetTimer(row, values) {
     status.textContent = 'Previously logged as reps. Enter a hold time in seconds.';
   }
 
-  function finish(message) {
+  function finish(message, stopped = false) {
     clearInterval(interval);
     interval = null;
     delete row.dataset.holdEndsAt;
@@ -498,34 +497,45 @@ function setupSetTimer(row, values) {
     start.textContent = startLabel;
     status.textContent = message;
     saveDraft();
+    exerciseTimer.complete(row, stopped);
   }
 
   function tick() {
     if (!row.isConnected) {
       clearInterval(interval);
+      exerciseTimer.dismiss(row);
       return;
     }
     const remaining = Math.max(0, Math.ceil((Number(row.dataset.holdEndsAt) - Date.now()) / 1000));
-    clock.textContent = durationPicker.format(remaining) === 'Choose time' ? '0:00' : durationPicker.format(remaining);
+    exerciseTimer.update(row, Math.max(0, (Number(row.dataset.holdEndsAt) - Date.now()) / 1000));
     if (!remaining) finish('Timer complete. Your time is ready to save.');
   }
 
   function run() {
     input.disabled = true;
     durationControl.refresh();
-    start.textContent = 'Stop early';
+    start.textContent = 'Open full-screen timer';
     status.textContent = holding ? 'Holding…' : 'Timing…';
     interval = setInterval(tick, 250);
-    clock.textContent = durationPicker.format(Math.max(0, Math.ceil((Number(row.dataset.holdEndsAt) - Date.now()) / 1000)));
     updateWorkoutControls();
+  }
+
+  function stopEarly() {
+    if (!row.dataset.holdEndsAt) return;
+    const elapsed = Math.min(Number(input.value), Math.floor((Date.now() - Number(row.dataset.holdStartedAt)) / 1000));
+    input.value = Math.max(0, elapsed);
+    finish('Stopped. Review your time, then save the exercise.', true);
+  }
+
+  function openTimer() {
+    exerciseTimer.open(row, Number(input.value),
+      Math.max(0, (Number(row.dataset.holdEndsAt) - Date.now()) / 1000), stopEarly);
   }
 
   start.onclick = () => {
     if (row.dataset.holdEndsAt) {
-      const elapsed = Math.min(Number(input.value), Math.floor((Date.now() - Number(row.dataset.holdStartedAt)) / 1000));
-      input.value = Math.max(0, elapsed);
-      clock.textContent = Number(input.value) ? durationPicker.format(input.value) : '0:00';
-      finish('Stopped. Review your time, then save the exercise.');
+      tick();
+      if (row.dataset.holdEndsAt) openTimer();
       return;
     }
     if (!(Number(input.value) > 0)) {
@@ -536,9 +546,9 @@ function setupSetTimer(row, values) {
     row.dataset.holdEndsAt = Date.now() + Number(input.value) * 1000;
     run();
     saveDraft();
+    openTimer();
   };
   input.onchange = () => {
-    clock.textContent = '';
     status.textContent = 'Time selected. Ready when you are.';
   };
   if (Number.isFinite(values.holdEndsAt) && Number.isFinite(values.holdStartedAt)) {
