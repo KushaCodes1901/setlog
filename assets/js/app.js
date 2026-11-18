@@ -22,7 +22,7 @@ let storageReadable = true;
 let hasDraft = false;
 let editing = null;
 let activeView = 'log';
-const viewScroll = { home: 0, log: 0, rest: 0, history: 0, settings: 0 };
+const viewScroll = { home: 0, log: 0, rest: 0, history: 0, profile: 0, settings: 0 };
 // Retire the removed music prototype's local sign-in data.
 try {
   sessionStorage.removeItem('setlog-spotify-session-v1');
@@ -900,15 +900,17 @@ function selectView(view, { restoreScroll = false } = {}) {
   document.querySelector('#log').hidden = view !== 'log';
   document.querySelector('#restView').hidden = view !== 'rest';
   document.querySelector('#settingsView').hidden = view !== 'settings';
+  document.querySelector('#profileView').hidden = view !== 'profile';
   historyView.hidden = view !== 'history';
   document.querySelector('#backupPanel').hidden = view !== 'history';
   document.querySelector('#logTab').setAttribute('aria-pressed', view === 'log');
   document.querySelector('#restTab').setAttribute('aria-pressed', view === 'rest');
   document.querySelector('#historyTab').setAttribute('aria-pressed', view === 'history');
-  document.querySelector('#settingsTab').setAttribute('aria-pressed', view === 'settings');
+  document.querySelector('#profileTab').setAttribute('aria-pressed', view === 'profile' || view === 'settings');
   document.querySelector('#homeTab').setAttribute('aria-pressed', view === 'home');
   if (view === 'home') showHome();
   if (view === 'history') showHistory();
+  if (view === 'profile') appProfile.show();
   window.scrollTo({ top: restoreScroll ? viewScroll[view] : 0, behavior: 'auto' });
 }
 
@@ -1024,10 +1026,10 @@ document.querySelector('#restTab').onclick = () => {
 document.querySelector('#historyTab').onclick = () => {
   selectView('history', { restoreScroll: true });
 };
-document.querySelector('#settingsTab').onclick = () => {
-  selectView('settings', { restoreScroll: true });
-};
-document.querySelector('#headerSettings').onclick = () => selectView('settings');
+document.querySelector('#profileTab').onclick = () => selectView('profile', { restoreScroll: true });
+document.querySelector('#headerProfile').onclick = () => selectView('profile');
+document.querySelector('#profileSettings').onclick = () => selectView('settings');
+document.querySelector('#settingsBack').onclick = () => selectView('profile', { restoreScroll: true });
 day.onchange = saveDraft;
 restDay.onchange = saveDraft;
 workout.oninput = saveDraft;
@@ -1111,6 +1113,7 @@ selectView(editing ? 'log' : 'home');
 
 window.addEventListener('storage', event => {
   if (event.key === storageKey && activeView === 'home') showHome();
+  if (event.key === storageKey && activeView === 'profile') appProfile.show();
 });
 document.addEventListener('visibilitychange', () => {
   if (!document.hidden) refreshToday();

@@ -16,6 +16,7 @@ A workout journal for keeping track of your sets and seeing how your training ch
 - A History calendar for workouts and rest days, with editing and deletion.
 - A weekly activity summary, personal records, weekly lifting volume and exercise progress charts.
 - Manual calorie entry from a watch or gym machine.
+- A local profile photo, name and bio, with an experience score, levels, weekly activity and earned badges.
 - Light and dark appearance, height and weight units, and profile measurements.
 - Backup export and import, plus offline use after the app has loaded successfully online.
 
@@ -45,9 +46,19 @@ Calories are labelled **Manually entered**. Setlog does not measure or estimate 
 
 Open **Rest Timer**, choose a preset or a custom duration, and tap **Start**. The timer continues when you move between Setlog's tabs.
 
-In **Settings**, choose your appearance and units, enter profile measurements, and adjust the rest sound, alert volume and confetti. Tap **Save Settings** for confirmation.
+Open **Profile**, then tap its gear button to reach **Settings**. Choose your appearance and units, enter profile measurements, and adjust the rest sound, alert volume and confetti. Tap **Save Settings** for confirmation.
 
 Keep Setlog open and your screen awake for rest alerts. The browser cannot provide a reliable alarm when the phone is locked or the app is in the background.
+
+## Your profile
+
+Open **Profile** and tap **Edit Profile** or the photo circle to add a name, short bio and picture. Photos are cropped to a square and resized before being stored on the device. They are not uploaded to a server.
+
+Your score is calculated from History: **100 XP per training day**, plus **25 XP per personal record**. Logging several workouts on the same day earns the daily points once. Every 500 XP adds a level. Rest days do not remove points. Editing, deleting or importing workouts updates the score.
+
+The week strip opens the selected day in History. Your week streak counts consecutive weeks with a workout, so daily exercise is not required. Badges unlock as you reach training-day, record and active-week milestones. Tap a badge or your XP score for details.
+
+Profile photos and details are stored separately from workouts. Workout backup files currently cover saved sessions, not profile photos or preferences.
 
 ## Add Setlog to your phone
 

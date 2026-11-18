@@ -26,6 +26,7 @@
 <link rel="stylesheet" href="assets/css/install-guide.css?v=steps-only-1">
 <link rel="stylesheet" href="assets/css/themes.css">
 <link rel="stylesheet" href="assets/css/mobile.css">
+<link rel="stylesheet" href="assets/css/profile.css">
 <link rel="preload" href="assets/fonts/manrope-variable.ttf" as="font" type="font/ttf" crossorigin>
 </head>
 <body>
@@ -48,7 +49,7 @@
   </div>
   <header class="app-header">
     <div class="app-wordmark"><img src="assets/media/icons/icon-v2-192.png" alt="" width="32" height="32"><h1>Setlog</h1></div>
-    <button id="headerSettings" class="header-settings" type="button" aria-label="Open Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 3 1-1h4l1 3 3 1 3-1 2 4-2 2v3l2 2-2 4-3-1-3 1-1 3h-4l-1-3-3-1-3 1-2-4 2-2v-3L1 9l2-4 3 1 3-1Z" transform="translate(1 1) scale(.91)"/><circle cx="12" cy="12" r="3.2"/></svg></button>
+    <button id="headerProfile" class="header-settings header-profile" type="button" aria-label="Open Profile"><img id="headerProfilePhoto" alt="" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg></button>
   </header>
   <div id="log">
     <div class="view-heading"><p>YOUR TRAINING JOURNAL</p><h2>Log Workout</h2></div>
@@ -127,7 +128,27 @@
     </section>
   </div>
   <div id="homeView" hidden aria-label="Home"></div>
+  <div id="profileView" hidden aria-label="Profile">
+    <div class="profile-toolbar"><h2>Profile</h2><div><button id="profileScoreInfo" class="profile-score-pill" type="button" aria-label="How your score is earned"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 3 2.8 5.8 6.4.9-4.6 4.5 1.1 6.4L12 17.6l-5.7 3 1.1-6.4-4.6-4.5 6.4-.9Z"/></svg><span id="profileScore">0 XP</span></button><button id="profileSettings" class="header-settings" type="button" aria-label="Open Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 3 1-1h4l1 3 3 1 3-1 2 4-2 2v3l2 2-2 4-3-1-3 1-1 3h-4l-1-3-3-1-3 1-2-4 2-2v-3L1 9l2-4 3 1 3-1Z" transform="translate(1 1) scale(.91)"/><circle cx="12" cy="12" r="3.2"/></svg></button></div></div>
+    <div class="profile-identity">
+      <button id="editProfilePhoto" class="profile-avatar" type="button" aria-label="Add or change profile photo">
+        <svg class="profile-avatar-ring" viewBox="0 0 120 120" aria-hidden="true"><circle class="profile-ring-track" cx="60" cy="60" r="55"/><circle id="profileAvatarProgress" cx="60" cy="60" r="55" pathLength="100"/></svg>
+        <img id="profilePhoto" alt="" hidden><span id="profileInitial">S</span>
+        <span class="profile-camera"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m7 5 2-3h6l2 3h4v15H3V5Z"/><circle cx="12" cy="12" r="4"/></svg></span>
+      </button>
+      <h3 id="profileName">Your profile</h3><p id="profileBio">Your training story starts here.</p>
+      <button id="editProfile" class="profile-edit" type="button">Edit Profile</button>
+    </div>
+    <div class="profile-stats"><div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 12h10M4 7v10M7 5v14M20 7v10M17 5v14"/></svg><strong id="profileWorkoutCount">0</strong><span>Workouts</span></div><div><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m12 2 3 3 4 1 1 4 2 3-3 3-1 4-4 1-3 2-3-3-4-1-1-4-2-3 3-3 1-4 4-1Z" transform="translate(1 0) scale(.9)"/><path d="m8 11 3 3 5-6"/></svg><strong id="profilePRCount">0</strong><span>Personal records</span></div><div><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="3"/><path d="M7 2v6m10-6v6M3 11h18m-11 5h4"/></svg><strong id="profileWeekStreak">0</strong><span>Week streak</span></div></div>
+    <section class="profile-level-card" aria-labelledby="profileLevelTitle"><div class="profile-level-heading"><div><p>YOUR NEXT CHAPTER</p><h3 id="profileLevelTitle">Level 1</h3></div><span id="profileLevelName">Getting started</span></div><progress id="profileLevelProgress" max="500" value="0" aria-label="Experience points toward the next level"></progress><div class="profile-level-footer"><span id="profileLevelPoints">0 / 500 XP</span><strong id="profileLevelRemaining">500 XP to Level 2</strong></div></section>
+    <div class="profile-section-heading"><h3>Your week</h3><span id="profileWeekRange"></span></div><div id="profileWeek" class="profile-week" role="group" aria-label="This week's activity"></div>
+    <section class="profile-next-win"><div><p class="profile-win-kicker">NEXT UP</p><h3 id="profileNextTitle">Your first session</h3><p id="profileNextDescription">Log a workout to start your story.</p><span id="profileNextCount"></span></div><img src="assets/media/illustrations/profile-trophy.svg" alt="" width="144" height="160"></section>
+    <div class="profile-section-heading"><h3>Your collection</h3><span id="profileBadgeCount">0 / 6 earned</span></div><div id="profileBadges" class="profile-badges"></div>
+    <p class="profile-footnote">A little consistency goes a long way. Rest days count as taking care of yourself, too.</p>
+    <p id="profileStatus" class="profile-toast" role="status"></p>
+  </div>
   <div id="settingsView" hidden>
+    <button id="settingsBack" class="profile-back" type="button">‹ Profile</button>
     <div class="view-heading"><p>MAKE IT YOURS</p><h2 class="settings-title">Settings</h2></div>
     <button id="settingsInstallGuide" class="install-settings-link" type="button">Add Setlog to your Home Screen <span aria-hidden="true">›</span></button>
     <section class="settings-group" aria-labelledby="appearanceSettingsTitle">
@@ -251,13 +272,7 @@
       </svg>
       <span>History</span>
     </button>
-    <button id="settingsTab" type="button" aria-controls="settingsView" aria-pressed="false">
-      <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
-        <path d="m9 3 1-1h4l1 3 3 1 3-1 2 4-2 2v3l2 2-2 4-3-1-3 1-1 3h-4l-1-3-3-1-3 1-2-4 2-2v-3L1 9l2-4 3 1 3-1Z" transform="translate(1 1) scale(.91)"/>
-        <circle cx="12" cy="12" r="3.2"/>
-      </svg>
-      <span>Settings</span>
-    </button>
+    <button id="profileTab" type="button" aria-controls="profileView" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="7" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg><span>Profile</span></button>
   </div>
 </nav>
 <template id="exerciseTemplate">
@@ -308,6 +323,16 @@
     </div>
   </div>
 </template>
+<dialog id="profileEditor" class="profile-editor" aria-labelledby="profileEditorTitle" aria-describedby="profileEditorHelp">
+  <form id="profileForm"><div class="profile-dialog-heading"><h2 id="profileEditorTitle">Make it yours.</h2><button id="closeProfileEditor" type="button" aria-label="Close profile editor">×</button></div><p id="profileEditorHelp">Your photo and details stay on this device.</p>
+    <div class="profile-photo-editor"><div class="profile-editor-avatar"><img id="profileEditorPhoto" alt="Profile photo preview" hidden><span id="profileEditorInitial">S</span></div><div><button id="chooseProfilePhoto" type="button">Choose photo</button><button id="removeProfilePhoto" type="button" hidden>Remove photo</button></div></div>
+    <input id="profilePhotoFile" type="file" accept="image/*" hidden>
+    <label for="profileNameInput">Name</label><input id="profileNameInput" type="text" maxlength="60" placeholder="What should we call you?" autocomplete="nickname">
+    <label for="profileBioInput">A little about you</label><textarea id="profileBioInput" rows="3" maxlength="120" placeholder="Your goals, your motto, or just you."></textarea>
+    <p id="profileEditorStatus" class="profile-editor-status" role="status"></p><button id="saveProfile" class="primary wide" type="submit">Save Profile</button>
+  </form>
+</dialog>
+<dialog id="profileInfoDialog" class="profile-info-dialog" aria-labelledby="profileInfoTitle"><div class="profile-dialog-heading"><h2 id="profileInfoTitle">Your score</h2><button id="closeProfileInfo" type="button" aria-label="Close details">×</button></div><div id="profileInfoContent"></div><button id="profileInfoDone" class="primary wide" type="button">Got it</button></dialog>
 <dialog id="exerciseFocus" class="rest-focus exercise-focus" aria-labelledby="exerciseFocusTitle">
   <div class="rest-focus-header">
     <span class="eyebrow">Exercise timer</span>
@@ -430,6 +455,7 @@
 <script defer src="assets/js/exercise-progress.js"></script>
 <script defer src="assets/js/exercise-timer.js"></script>
 <script defer src="assets/js/home-dashboard.js"></script>
+<script defer src="assets/js/profile.js"></script>
 <script defer src="assets/js/app.js"></script>
 <script defer src="assets/js/backup.js"></script>
 <script defer src="assets/js/rest-timer.js?v=classic-chime"></script>
