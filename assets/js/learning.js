@@ -2,7 +2,7 @@ const appLearning = (() => {
   const root = document.querySelector('#learnView');
   const book = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-3-2-6-2-9-1v14c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1Zm0 0v14"/></svg>';
   let query = '', area = 'All', libraryScroll = 0, returnButton = null;
-  const photo = (guide, phase) => guide.illustration || `assets/media/learning/${guide.slug}-${phase}.jpg`;
+  const photo = guide => guide.illustration;
   const element = (tag, text, className) => {
     const node = document.createElement(tag);
     if (text) node.textContent = text;
@@ -97,16 +97,6 @@ const appLearning = (() => {
     const steps = element('ol'); guide.steps.forEach(step => steps.append(element('li', step))); how.append(steps);
     const mistake = element('aside', null, 'learn-mistake'); mistake.append(element('h3', 'Watch out for'), element('p', guide.mistake));
     root.append(how, mistake, element('p', 'Use a light load while learning. An exercise guide cannot check your form; ask a trainer if you are unsure.', 'learn-safety'));
-    if (!guide.illustration) {
-      const credits = element('details', null, 'learn-credits'); credits.append(element('summary', 'Photo credits & sources'));
-      const p = element('p', 'Photos: still frames extracted and resized from Goulart’s exercise demonstrations on wger. Adapted photos are licensed under ');
-      const license = element('a', 'CC BY-SA 4.0'); license.href = 'https://creativecommons.org/licenses/by-sa/4.0/';
-      p.append(license, '.');
-      const source = element('a', 'Original video, frame times & attribution'); source.href = 'assets/media/learning/credits.json';
-      source.target = '_blank'; source.rel = 'noopener';
-      credits.append(p, source);
-      root.append(credits);
-    }
     if (!fromLibrary) {
       const browse = element('button', 'Browse all guides', 'learn-browse'); browse.type = 'button'; browse.onclick = () => { library(); window.scrollTo(0, 0); }; root.append(browse);
     }

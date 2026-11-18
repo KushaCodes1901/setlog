@@ -7,7 +7,7 @@ A workout journal for keeping track of your sets and seeing how your training ch
 ## Features
 
 - 100 illustrated exercises, with search and filters by body area and equipment. You can also add your own exercises.
-- A Learn library with 10 real-photo guides, start and finish positions, simple instructions and common mistakes.
+- A Learn library with 10 illustrated guides, start and finish positions, simple instructions and common mistakes.
 - Reps and weights for lifting, reps for bodyweight exercises, and durations for timed exercises.
 - A Last time reference showing your previous session while you log an exercise.
 - Set difficulty ratings and reps left, if you want to record them.
@@ -35,13 +35,11 @@ For a rest day, turn on **Rest day** and save it without adding exercises.
 
 ## Learn an exercise
 
-Tap **Learn** beside the Log Workout heading. Search the starter library or filter by body area, then open a guide to see its start and finish photos. Each guide includes an original equipment-sticker-style character illustration with red muscle highlights and simple leader-line labels. These images were generated for Setlog and are simplified location guides, not measurements of muscle activation. The muscle panel has no explanatory text or extra controls. Anatomy was checked against the [University of Washington Muscle Atlas](https://rad.uw.edu/muscle-atlas/pectoralis-major).
+Tap **Learn** beside the Log Workout heading. Search the 10-guide starter library or filter by body area. Each guide has matching character illustrations for the start and finish positions, simple steps and a common mistake to watch for.
 
-Covered exercises also have a **Learn this exercise** shortcut. Returning to Log Workout keeps your draft and scroll position. Other exercises retain their recognition illustrations and do not yet have photo guides.
+A muscle illustration below the title shows the exercise's main working areas with red highlights and label lines. Anatomy was checked against the [University of Washington Muscle Atlas](https://rad.uw.edu/muscle-atlas/pectoralis-major).
 
-The Dumbbell Bench Press guide uses character illustrations for its start and finish positions. The other nine guides currently use demonstration photos.
-
-Guide photos are extracted and resized frames from Goulart's demonstrations published by [wger](https://wger.de), used under [CC BY-SA 4.0](https://creativecommons.org/licenses/by-sa/4.0/). The adapted photos retain that license. Original video URLs, author credits, frame times and changes are listed in [media credits](assets/media/learning/credits.json), also linked in each guide.
+Covered exercises also have a **Learn this exercise** shortcut. Returning to Log Workout keeps your draft and scroll position. The other exercises retain their recognition illustrations and do not yet have detailed guides.
 
 ## Review your training
 
