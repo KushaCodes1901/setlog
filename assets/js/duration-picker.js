@@ -40,15 +40,18 @@ const durationPicker = (() => {
 
   function fill(wheel, values) {
     wheel.replaceChildren();
-    for (const value of values) {
+    wheel.dataset.count = values.length;
+    // The middle copy leaves real values above zero and below the last number.
+    for (let index = 0; index < values.length * 3; index++) {
+      const value = values[index % values.length];
       const option = document.createElement('div');
-      option.id = wheel.id + '-' + value;
+      option.id = wheel.id + '-' + index;
       option.className = 'wheel-option';
       option.setAttribute('role', 'option');
       option.dataset.value = value;
       option.textContent = String(value).padStart(2, '0');
       option.onclick = () => {
-        wheel.scrollTo({ top: Array.from(wheel.children).indexOf(option) * rowHeight, behavior: 'auto' });
+        wheel.scrollTo({ top: (values.length + index % values.length) * rowHeight, behavior: 'instant' });
         update();
         wheel.focus({ preventScroll: true });
       };
@@ -57,7 +60,25 @@ const durationPicker = (() => {
   }
 
   for (const wheel of [minutes, seconds]) {
-    wheel.onscroll = update;
+    let settleTimeout;
+    function recenter() {
+      clearTimeout(settleTimeout);
+      if (!current || !dialog.open) return;
+      const count = Number(wheel.dataset.count);
+      const index = Math.round(wheel.scrollTop / rowHeight);
+      if (index < count || index >= count * 2) {
+        const middleIndex = count + ((index % count) + count) % count;
+        wheel.scrollTo({ top: middleIndex * rowHeight, behavior: 'instant' });
+      }
+      update();
+    }
+    wheel.onscroll = () => {
+      update();
+      clearTimeout(settleTimeout);
+      // Fallback for browsers without scrollend; wait until touch scrolling settles.
+      settleTimeout = setTimeout(recenter, 180);
+    };
+    wheel.addEventListener('scrollend', recenter);
     wheel.onkeydown = event => {
       if (event.key === 'Enter') {
         event.preventDefault();
@@ -65,13 +86,14 @@ const durationPicker = (() => {
         return;
       }
       const steps = { ArrowUp: -1, ArrowDown: 1, PageUp: -5, PageDown: 5 };
+      const count = Number(wheel.dataset.count);
       let index = Math.round(wheel.scrollTop / rowHeight);
       if (event.key in steps) index += steps[event.key];
-      else if (event.key === 'Home') index = 0;
-      else if (event.key === 'End') index = wheel.children.length - 1;
+      else if (event.key === 'Home') index = count;
+      else if (event.key === 'End') index = count * 2 - 1;
       else return;
       event.preventDefault();
-      wheel.scrollTop = Math.max(0, Math.min(wheel.children.length - 1, index)) * rowHeight;
+      wheel.scrollTo({ top: (count + ((index % count) + count) % count) * rowHeight, behavior: 'instant' });
       update();
     };
   }
@@ -115,8 +137,8 @@ const durationPicker = (() => {
       fill(minutes, minuteValues);
       fill(seconds, Array.from({ length: 60 }, (_, index) => index));
       dialog.showModal();
-      minutes.scrollTop = minuteValues.indexOf(selectedMinute) * rowHeight;
-      seconds.scrollTop = (total % 60) * rowHeight;
+      minutes.scrollTop = (minuteValues.length + minuteValues.indexOf(selectedMinute)) * rowHeight;
+      seconds.scrollTop = (60 + total % 60) * rowHeight;
       update();
       minutes.focus({ preventScroll: true });
     };
