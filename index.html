@@ -27,6 +27,7 @@
 <link rel="stylesheet" href="assets/css/themes.css">
 <link rel="stylesheet" href="assets/css/mobile.css">
 <link rel="stylesheet" href="assets/css/profile.css">
+<link rel="stylesheet" href="assets/css/learning.css">
 <link rel="preload" href="assets/fonts/manrope-variable.ttf" as="font" type="font/ttf" crossorigin>
 </head>
 <body>
@@ -52,7 +53,7 @@
     <button id="headerProfile" class="header-settings header-profile" type="button" aria-label="Open Profile"><img id="headerProfilePhoto" alt="" hidden><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="8" r="4"/><path d="M4 22v-3a8 8 0 0 1 16 0v3"/></svg></button>
   </header>
   <div id="log">
-    <div class="view-heading"><p>YOUR TRAINING JOURNAL</p><h2>Log Workout</h2></div>
+    <div class="log-heading"><div class="view-heading"><p>YOUR TRAINING JOURNAL</p><h2>Log Workout</h2></div><button id="openLearning" class="learn-launch" type="button"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-3-2-6-2-9-1v14c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1Zm0 0v14"/></svg>Learn</button></div>
     <section aria-labelledby="sessionTitle">
       <div class="row spread"><h2 id="sessionTitle">Session</h2><small id="today"></small></div>
       <label for="day" class="day-label">Day of the week</label>
@@ -97,6 +98,7 @@
       <button id="cancelEdit" class="wide" type="button" hidden>Cancel edit</button>
     </form>
   </div>
+  <div id="learnView" hidden aria-label="Exercise learning"></div>
   <div id="restView" hidden>
     <div class="view-heading"><p>TAKE A BREATHER</p><h2 class="rest-view-title">Rest Timer</h2></div>
     <section id="restTimer" class="rest-timer" aria-label="Rest timer controls">
@@ -282,6 +284,7 @@
       <button class="edit-exercise" type="button" hidden>Edit</button>
       <button class="remove remove-exercise" type="button">×</button>
     </div>
+    <button class="learn-exercise" type="button" hidden>Learn this exercise</button>
     <ul class="exercise-summary muted" aria-label="Saved sets" hidden></ul>
     <div class="exercise-editor">
       <aside class="exercise-last-time" hidden aria-label="Previous session">
@@ -456,6 +459,9 @@
 <script defer src="assets/js/exercise-timer.js"></script>
 <script defer src="assets/js/home-dashboard.js"></script>
 <script defer src="assets/js/profile.js"></script>
+<script defer src="assets/js/learning-guides.js"></script>
+<script defer src="assets/js/learning-muscles.js"></script>
+<script defer src="assets/js/learning.js"></script>
 <script defer src="assets/js/app.js"></script>
 <script defer src="assets/js/backup.js"></script>
 <script defer src="assets/js/rest-timer.js?v=classic-chime"></script>

@@ -1,0 +1,132 @@
+[
+  {
+    "exercise": "dumbbell-bench-press",
+    "author": "Goulart",
+    "source": "https://wger.de/media/exercise-video/75/080c799b-8afd-4130-8d72-9cef0cd79f54.MOV",
+    "metadata": "https://wger.de/api/v2/video/17/",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "changes": "Still frames extracted and resized; no crop.",
+    "timestamps": {
+      "start": 0.44,
+      "finish": 2.21
+    }
+  },
+  {
+    "exercise": "incline-dumbbell-press",
+    "author": "Goulart",
+    "source": "https://wger.de/media/exercise-video/537/b9c937e9-daeb-42a9-be8e-7a77e368478c.MOV",
+    "metadata": "https://wger.de/api/v2/video/24/",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "changes": "Still frames extracted and resized; no crop.",
+    "timestamps": {
+      "start": 4.3,
+      "finish": 0.86
+    }
+  },
+  {
+    "exercise": "shoulder-press",
+    "author": "Goulart",
+    "source": "https://wger.de/media/exercise-video/567/64f33c19-1d96-4b7c-af17-6c6a4941c614.MOV",
+    "metadata": "https://wger.de/api/v2/video/12/",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "changes": "Still frames extracted and resized; no crop.",
+    "timestamps": {
+      "start": 6.51,
+      "finish": 3.61
+    }
+  },
+  {
+    "exercise": "lateral-raise",
+    "author": "Goulart",
+    "source": "https://wger.de/media/exercise-video/348/de69928a-8a35-4096-821c-1f46de5e0e03.MOV",
+    "metadata": "https://wger.de/api/v2/video/6/",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "changes": "Still frames extracted and resized; no crop.",
+    "timestamps": {
+      "start": 7.42,
+      "finish": 2.85
+    }
+  },
+  {
+    "exercise": "seated-cable-row",
+    "author": "Goulart",
+    "source": "https://wger.de/media/exercise-video/512/fff4c294-93f0-4926-b3a2-bf59ad4afaa5.MOV",
+    "metadata": "https://wger.de/api/v2/video/1/",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "changes": "Still frames extracted and resized; no crop.",
+    "timestamps": {
+      "start": 0.33,
+      "finish": 1.64
+    }
+  },
+  {
+    "exercise": "bicep-curl",
+    "author": "Goulart",
+    "source": "https://wger.de/media/exercise-video/92/8bfb917c-3d0d-49b9-8073-5d7e01c1b894.MOV",
+    "metadata": "https://wger.de/api/v2/video/48/",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "changes": "Still frames extracted and resized; no crop.",
+    "timestamps": {
+      "start": 1.71,
+      "finish": 0.34
+    }
+  },
+  {
+    "exercise": "hammer-curl",
+    "author": "Goulart",
+    "source": "https://wger.de/media/exercise-video/272/df069052-2173-4f24-855f-a0eebe729f24.MOV",
+    "metadata": "https://wger.de/api/v2/video/51/",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "changes": "Still frames extracted and resized; no crop.",
+    "timestamps": {
+      "start": 0.32,
+      "finish": 1.62
+    }
+  },
+  {
+    "exercise": "skull-crusher",
+    "author": "Goulart",
+    "source": "https://wger.de/media/exercise-video/246/75eb8c88-922e-45c5-8be3-ac073f62b63f.MP4",
+    "metadata": "https://wger.de/api/v2/video/61/",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "changes": "Still frames extracted and resized; no crop.",
+    "timestamps": {
+      "start": 2.38,
+      "finish": 4.28
+    }
+  },
+  {
+    "exercise": "tricep-kickback",
+    "author": "Goulart",
+    "source": "https://wger.de/media/exercise-video/655/69e8c1e5-55b2-4da6-8166-092c24b16735.MOV",
+    "metadata": "https://wger.de/api/v2/video/75/",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "changes": "Still frames extracted and resized; no crop.",
+    "timestamps": {
+      "start": 1.9,
+      "finish": 8.0
+    }
+  },
+  {
+    "exercise": "overhead-tricep-extension",
+    "author": "Goulart",
+    "source": "https://wger.de/media/exercise-video/211/85f6eb25-a76c-409e-9af9-497794ac0dfb.MOV",
+    "metadata": "https://wger.de/api/v2/video/57/",
+    "license": "CC BY-SA 4.0",
+    "licenseUrl": "https://creativecommons.org/licenses/by-sa/4.0/",
+    "changes": "Still frames extracted and resized; no crop.",
+    "timestamps": {
+      "start": 1,
+      "finish": 5
+    }
+  }
+]

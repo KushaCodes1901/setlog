@@ -22,7 +22,7 @@ let storageReadable = true;
 let hasDraft = false;
 let editing = null;
 let activeView = 'log';
-const viewScroll = { home: 0, log: 0, rest: 0, history: 0, profile: 0, settings: 0 };
+const viewScroll = { home: 0, learn: 0, log: 0, rest: 0, history: 0, profile: 0, settings: 0 };
 // Retire the removed music prototype's local sign-in data.
 try {
   sessionStorage.removeItem('setlog-spotify-session-v1');
@@ -594,6 +594,7 @@ function updateLastTime(card) {
 function addExercise(exercise, focus = false) {
   const card = document.querySelector('#exerciseTemplate').content.firstElementChild.cloneNode(true);
   card.querySelector('h3').textContent = exercise.name;
+  appLearning.bindCard(card, exercise.name);
   updateLastTime(card);
   const list = card.querySelector('.sets');
   const editor = card.querySelector('.exercise-editor');
@@ -898,12 +899,13 @@ function selectView(view, { restoreScroll = false } = {}) {
   document.body.dataset.view = view;
   document.querySelector('#homeView').hidden = view !== 'home';
   document.querySelector('#log').hidden = view !== 'log';
+  document.querySelector('#learnView').hidden = view !== 'learn';
   document.querySelector('#restView').hidden = view !== 'rest';
   document.querySelector('#settingsView').hidden = view !== 'settings';
   document.querySelector('#profileView').hidden = view !== 'profile';
   historyView.hidden = view !== 'history';
   document.querySelector('#backupPanel').hidden = view !== 'history';
-  document.querySelector('#logTab').setAttribute('aria-pressed', view === 'log');
+  document.querySelector('#logTab').setAttribute('aria-pressed', view === 'log' || view === 'learn');
   document.querySelector('#restTab').setAttribute('aria-pressed', view === 'rest');
   document.querySelector('#historyTab').setAttribute('aria-pressed', view === 'history');
   document.querySelector('#profileTab').setAttribute('aria-pressed', view === 'profile' || view === 'settings');
