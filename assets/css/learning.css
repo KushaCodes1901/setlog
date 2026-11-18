@@ -29,7 +29,7 @@ body[data-view=learn] .app-header { display: none; }
 .learn-character-frame.finish img { transform: translateX(-50%); }
 .learn-character-thumbnail { width: 92px; height: 83px; display: grid; place-items: center; flex-shrink: 0; overflow: hidden; border-radius: 11px; background: #e9e9eb; }
 .learn-character-window { display: block; width: min(100%, 83px); aspect-ratio: 1; overflow: hidden; }
-.learn-guide-card .learn-character-window img { display: block; width: 200%; max-width: none; height: auto; border-radius: 0; transform: translateX(-50%); }
+.learn-guide-card .learn-character-window img { display: block; width: 100%; max-width: none; height: auto; border-radius: 0; }
 .learn-photo-pair figcaption { display: grid; gap: 4px; padding: 13px 16px; font-size: 13px; }
 .learn-photo-pair figcaption strong { color: var(--accent); font-size: 11px; text-transform: uppercase; letter-spacing: 1px; }
 .learn-photo-pair figcaption span { color: var(--muted); }

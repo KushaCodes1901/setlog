@@ -27,9 +27,13 @@ const appLearning = (() => {
       && terms.every(term => `${g.name} ${g.area} ${g.equipment}`.toLowerCase().includes(term)));
     count.textContent = `${matches.length} ${matches.length === 1 ? 'guide' : 'guides'}`;
     list.replaceChildren();
-    for (const guide of matches) {
+    for (const [index, guide] of matches.entries()) {
       const button = element('button', null, 'learn-guide-card'); button.type = 'button';
-      const img = new Image(); img.src = photo(guide, 'finish'); img.alt = ''; img.loading = 'lazy'; img.width = 140; img.height = 94;
+      const img = new Image();
+      img.loading = index < 4 ? 'eager' : 'lazy';
+      img.decoding = 'async';
+      img.src = `assets/media/learning/${guide.slug}-thumbnail.webp`;
+      img.alt = ''; img.width = 256; img.height = 256;
       let thumbnail = img;
       if (guide.illustration) {
         thumbnail = element('span', null, 'learn-character-thumbnail');
@@ -50,17 +54,18 @@ const appLearning = (() => {
     const h = heading('Learn the movement', 'Log Workout', close);
     root.append(element('p', 'A little confidence before your next set.', 'learn-intro'));
     const note = element('div', null, 'learn-library-note'); note.innerHTML = book;
-    note.append(element('span', '10 movement guides. Start position, finish position and the details that matter.'));
+    note.append(element('span', `${learningGuides.length} movement guides. Start position, finish position and the details that matter.`));
     const search = element('input'); search.type = 'search'; search.placeholder = 'Find an exercise'; search.value = query;
     search.setAttribute('aria-label', 'Search exercise guides');
     const filters = element('div', null, 'learn-filters'); filters.setAttribute('role', 'group'); filters.setAttribute('aria-label', 'Filter guides by body area');
     const count = element('p', '', 'learn-count'); count.setAttribute('role', 'status');
     const list = element('div', null, 'learn-guide-list');
-    for (const label of ['All', 'Chest', 'Back', 'Shoulders', 'Arms']) {
+    for (const label of ['All', ...new Set(learningGuides.map(guide => guide.area))]) {
       const button = element('button', label); button.type = 'button'; button.setAttribute('aria-pressed', String(area === label));
       button.onclick = () => {
         area = label;
         for (const child of filters.children) child.setAttribute('aria-pressed', String(child === button));
+        button.scrollIntoView({ block: 'nearest', inline: 'nearest', behavior: 'smooth' });
         results(list, count);
       };
       filters.append(button);
@@ -81,7 +86,7 @@ const appLearning = (() => {
     const pair = element('div', null, 'learn-photo-pair');
     for (const [i, phase] of ['start', 'finish'].entries()) {
       const figure = element('figure');
-      const image = new Image(); image.src = photo(guide, phase); image.alt = `${guide.name}: ${guide.positions[i]}`; image.width = 840; image.height = 473;
+      const image = new Image(); image.decoding = 'async'; image.src = photo(guide, phase); image.alt = `${guide.name}: ${guide.positions[i]}`; image.width = 1600; image.height = 800;
       const caption = element('figcaption');
       caption.append(element('strong', `${i + 1} · ${phase === 'start' ? 'Start' : 'Finish'}`), element('span', guide.positions[i]));
       if (guide.illustration) {
