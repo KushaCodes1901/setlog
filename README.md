@@ -14,7 +14,7 @@ A workout journal for keeping track of your sets and seeing how your training ch
 - A full-screen exercise countdown for timed sets, with a large display and the option to stop early and keep your elapsed time.
 - A rest timer with a full-screen countdown, completion message and sound controls.
 - A History calendar for workouts and rest days, with editing and deletion.
-- Personal records, weekly lifting volume and exercise progress charts.
+- A weekly activity summary, personal records, weekly lifting volume and exercise progress charts.
 - Manual calorie entry from a watch or gym machine.
 - Light and dark appearance, height and weight units, and profile measurements.
 - Backup export and import, plus offline use after the app has loaded successfully online.
@@ -82,6 +82,7 @@ sw.js                       Offline caching
 assets/
   js/                       App logic and feature scripts
   css/                      Layout and appearance
+  fonts/                    Bundled Manrope font and its license
   media/
     icons/                  App icons
     illustrations/          Exercise and installation illustrations
@@ -101,3 +102,5 @@ Before submitting:
 - Update file paths when adding or moving assets. Include files needed offline in the asset list in `sw.js`, and increase its cache version when changing cached files.
 - Keep `index.html`, `manifest.webmanifest` and `sw.js` at the root so installation addresses and offline scope stay consistent.
 - Keep backups working when adding fields to saved workouts; their handling lives in `assets/js/backup.js`.
+
+The interface uses [Manrope](https://fonts.google.com/specimen/Manrope), bundled locally under the SIL Open Font License. The license is included in `assets/fonts/OFL.txt`.

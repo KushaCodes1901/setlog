@@ -705,15 +705,22 @@ function recordDescription(record) {
 function renderRecordsReport(records, sessions) {
   const report = document.createElement('section');
   report.className = 'home-records';
-  report.innerHTML = '<div class="home-hero"><div><h2 class="home-headline">Overview</h2><p class="home-message"></p></div><button class="home-log-button" type="button"></button></div>'
-    + '<div class="home-stats"><div><strong class="home-workouts-count"></strong><span>Workouts logged</span></div>'
+  report.innerHTML = '<div class="home-welcome"><p class="home-message"></p><h2 class="home-headline">Let’s get to it.</h2></div>'
+    + '<div class="home-hero"><div class="home-hero-copy"><p class="home-hero-kicker">YOUR NEXT WORKOUT</p><h3>One set.<br>More progress.</h3><p>Make today a little stronger.</p></div>'
+    + '<img class="home-hero-art" src="assets/media/illustrations/training-hero.svg" alt="" width="220" height="196">'
+    + '<button class="home-log-button" type="button"><span></span><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 5 8 7-8 7V5Z"/></svg></button></div>'
+    + '<div class="home-quick-actions"><button type="button" data-home-action="rest"><svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="14" r="8"/><path d="M9 2h6M12 2v4M12 9v5l3 2"/></svg><span>Rest timer<small>Recover &amp; reset</small></span><b aria-hidden="true">›</b></button>'
+    + '<button type="button" data-home-action="history"><svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="4"/><path d="M7 3v4m10-4v4M3 11h18m-12 5h.01m4 0h.01"/></svg><span>History<small>Your training log</small></span><b aria-hidden="true">›</b></button></div>'
+    + '<div class="home-stats"><div><strong class="home-workouts-count"></strong><span>Workouts · all time</span></div>'
     + '<div><strong class="home-pr-count"></strong><span>Personal records</span></div></div>'
     + '<div class="home-milestone"><div><strong>Next milestone</strong><span class="home-milestone-label"></span></div>'
     + '<progress aria-label="Personal records toward your next milestone"></progress><p></p></div>'
     + '<div class="records-body"><h2>Personal records</h2></div>';
+  report.querySelectorAll('[data-home-action]').forEach(button => { button.onclick = () => selectView(button.dataset.homeAction); });
+  report.insertBefore(homeDashboard.render(sessions, () => { historyCalendar.select(new Date().toLocaleDateString('en-GB')); selectView('history'); }), report.querySelector('.home-quick-actions'));
   report.querySelector('.home-message').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
   const log = report.querySelector('.home-log-button');
-  log.textContent = hasDraft ? 'Resume workout' : 'Log workout';
+  log.querySelector('span').textContent = hasDraft ? 'Resume workout' : 'Log Workout';
   log.onclick = () => selectView('log', { restoreScroll: true });
   report.querySelector('.home-workouts-count').textContent = sessions.filter(session => !session.restDay).length;
   report.querySelector('.home-pr-count').textContent = records.milestoneCount;
@@ -888,6 +895,7 @@ function renderHistoryEntries(entries, target, records) {
 function selectView(view, { restoreScroll = false } = {}) {
   if (activeView !== view) viewScroll[activeView] = window.scrollY;
   activeView = view;
+  document.body.dataset.view = view;
   document.querySelector('#homeView').hidden = view !== 'home';
   document.querySelector('#log').hidden = view !== 'log';
   document.querySelector('#restView').hidden = view !== 'rest';
@@ -1019,6 +1027,7 @@ document.querySelector('#historyTab').onclick = () => {
 document.querySelector('#settingsTab').onclick = () => {
   selectView('settings', { restoreScroll: true });
 };
+document.querySelector('#headerSettings').onclick = () => selectView('settings');
 day.onchange = saveDraft;
 restDay.onchange = saveDraft;
 workout.oninput = saveDraft;

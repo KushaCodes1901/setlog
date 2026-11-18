@@ -7,7 +7,7 @@ const appTheme = (() => {
     document.documentElement.dataset.theme = theme;
     document.documentElement.style.colorScheme = theme;
     const color = document.querySelector('meta[name="theme-color"]');
-    if (color) color.setAttribute('content', theme === 'light' ? '#f5f6f0' : '#141615');
+    if (color) color.setAttribute('content', theme === 'light' ? '#f4f6f3' : '#0b0f10');
   }
   try { apply(JSON.parse(localStorage.getItem(key))?.appearance); } catch { apply('dark'); }
   window.addEventListener('storage', event => {

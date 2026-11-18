@@ -155,7 +155,10 @@ const historyCalendar = (() => {
       render(target, sessions, renderEntries);
       target.querySelector('[aria-current=date]').focus({ preventScroll: true });
     };
-    target.append(calendar, panel);
+    const heading = document.createElement('div');
+    heading.className = 'view-heading';
+    heading.innerHTML = '<p>THE WORK YOU PUT IN</p><h2>History</h2>';
+    target.append(heading, calendar, panel);
     showDay(selected);
   }
 

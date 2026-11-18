@@ -290,8 +290,9 @@ const exerciseProgress = (() => {
       card.querySelector('.home-chart-exercise-label').hidden = !data;
       select.hidden = !data;
       card.querySelector('.home-chart-open').hidden = !data;
+      card.classList.toggle('is-empty', !data);
       if (!data) {
-        card.querySelector('.home-chart-reading strong').textContent = 'A place for your progress';
+        card.querySelector('.home-chart-reading strong').textContent = 'Progress starts here.';
         card.querySelector('.home-chart-reading span').textContent = 'Your first workout sets the starting mark.';
         card.querySelector('.home-chart-caption').textContent = 'Log a session and your exercise history will appear here.';
         plot.hidden = true;
