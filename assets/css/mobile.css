@@ -18,16 +18,7 @@
   --soft-accent: #253020;
   --font: Manrope, -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
 }
-:root[data-theme=light] {
-  --bg: #f4f6f3;
-  --card: #fff;
-  --surface-raised: #edf1ec;
-  --line: #dde4df;
-  --text: #17201c;
-  --muted: #606e65;
-  --accent: #3f6518;
-  --soft-accent: #e7efda;
-}
+
 html { scrollbar-width: none; }
 html::-webkit-scrollbar { display: none; }
 .exercise-progress-dialog, .install-guide, .rest-focus { scrollbar-width: none; }

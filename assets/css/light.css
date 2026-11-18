@@ -1,0 +1,157 @@
+/* Light surfaces use neutral tones; the brand lime stays identical to dark mode. */
+:root[data-theme=light] {
+  color-scheme: light;
+  --bg: #e6e9e3;
+  --card: #f2f3ee;
+  --surface-raised: #dbe1d9;
+  --line: #b5c0b7;
+  --text: #1e2922;
+  --muted: #526158;
+  --accent: var(--lime);
+  --soft-accent: #dce2d8;
+}
+
+:root[data-theme=light] :focus-visible { outline-color: var(--text); }
+:root[data-theme=light] input::placeholder,
+:root[data-theme=light] textarea::placeholder { color: var(--muted); opacity: 1; }
+:root[data-theme=light] input,
+:root[data-theme=light] select,
+:root[data-theme=light] textarea { color: var(--text); }
+:root[data-theme=light] select option { background: var(--card); color: var(--text); }
+:root[data-theme=light] input[type=checkbox],
+:root[data-theme=light] input[type=range] { accent-color: var(--lime); }
+:root[data-theme=light] button:disabled { opacity: .6; }
+:root[data-theme=light] .bottom-nav { background: rgb(242 243 238 / .97); box-shadow: 0 8px 24px #25302920; }
+:root[data-theme=light] .bottom-nav .nav-items button:not([aria-pressed=true]) { background: var(--surface-raised); color: #526158; }
+
+/* Lime is a fill or a mark on a dark surface, never faint text on a light card. */
+:root[data-theme=light] .eyebrow,
+:root[data-theme=light] .view-heading > p,
+:root[data-theme=light] .record-lifts strong,
+:root[data-theme=light] .home-chart-open,
+:root[data-theme=light] #exercisePicker > summary,
+:root[data-theme=light] .exercise-choice .exercise-metadata,
+:root[data-theme=light] .last-time-heading > span,
+:root[data-theme=light] .set-edit-label,
+:root[data-theme=light] .workout-celebration h2,
+:root[data-theme=light] .duration-trigger,
+:root[data-theme=light] .progress-win-tag,
+:root[data-theme=light] .progress-selected strong,
+:root[data-theme=light] .record-badges li,
+:root[data-theme=light] .history-calories strong,
+:root[data-theme=light] .learn-guide-copy small,
+:root[data-theme=light] .learn-photo-pair figcaption strong,
+:root[data-theme=light] .learn-exercise,
+:root[data-theme=light] .learn-library-note,
+:root[data-theme=light] .install-feedback,
+:root[data-theme=light] .profile-badge.is-earned .profile-badge-state { color: var(--text); }
+:root[data-theme=light] .home-quick-actions svg,
+:root[data-theme=light] .setting-icon,
+:root[data-theme=light] .profile-stats svg { stroke: var(--text); }
+:root[data-theme=light] .profile-score-pill svg { fill: var(--text); }
+:root[data-theme=light] .learn-exercise { text-decoration: underline; text-underline-offset: 4px; }
+
+:root[data-theme=light] .learn-launch,
+:root[data-theme=light] .plank-start,
+:root[data-theme=light] .profile-level-heading > span,
+:root[data-theme=light] #chooseProfilePhoto,
+:root[data-theme=light] .learn-instructions li::before,
+:root[data-theme=light] #exercisePicker > summary::after { background: var(--lime); color: #17200b; }
+:root[data-theme=light] .effort-options button[aria-pressed=true],
+:root[data-theme=light] .timer-presets button[aria-pressed=true],
+:root[data-theme=light] .progress-metrics button[aria-pressed=true],
+:root[data-theme=light] .install-platforms button[aria-pressed=true] { color: #17200b; background: var(--lime); border-color: #7e8d6b; }
+:root[data-theme=light] .effort-options button[aria-pressed=true] .effort-number { color: #17200b; }
+:root[data-theme=light] .settings-action:hover,
+:root[data-theme=light] .record-lifts button:hover { background: var(--surface-raised); }
+:root[data-theme=light] #settingsView .settings-switch:not(:checked) { background: #aeb9af; border-color: #8a998d; }
+:root[data-theme=light] .settings-switch:not(:checked)::after { background: #f2f3ee; }
+:root[data-theme=light] #settingsView .unit-select,
+:root[data-theme=light] .profile-measurement input,
+:root[data-theme=light] .install-settings-link > span { color: var(--text); }
+:root[data-theme=light] .settings-saved-check.settings-info-icon { color: var(--text); background: var(--lime); border-color: var(--lime); }
+:root[data-theme=light] .install-step-copy::before { background: var(--lime); color: #17200b; }
+:root[data-theme=light] #status:not(:empty):not(.error) { color: var(--text); border-left: 3px solid var(--lime); padding-left: 12px; }
+
+/* Large areas stay calm; vivid lime remains on the controls and actual data. */
+:root[data-theme=light] .home-hero,
+:root[data-theme=light] .profile-next-win { background: #202c25; border-color: #35453a; }
+:root[data-theme=light] .home-hero-kicker,
+:root[data-theme=light] .home-hero-copy > p:last-child,
+:root[data-theme=light] .profile-win-kicker,
+:root[data-theme=light] #profileNextDescription { color: #c4cec6; }
+:root[data-theme=light] #profileNextCount { color: #17200b; background: var(--lime); }
+:root[data-theme=light] .weekly-summary { background: var(--card); color: var(--text); border: 1px solid var(--line); }
+:root[data-theme=light] .weekly-bar-track { background: #35433a; border-radius: 5px; }
+:root[data-theme=light] .weekly-bar-track i { background: transparent; }
+:root[data-theme=light] .weekly-bar-track i.has-workouts { background: var(--lime); }
+:root[data-theme=light] .weekly-heading > span { opacity: 1; color: var(--muted); }
+:root[data-theme=light] .weekly-details { border-color: var(--line); }
+:root[data-theme=light] .weekly-history { color: var(--text); }
+
+:root[data-theme=light] .home-chart-plot,
+:root[data-theme=light] .progress-chart { background: #202c25; border-radius: 14px; }
+:root[data-theme=light] .home-chart-grid,
+:root[data-theme=light] .progress-grid { stroke: #56655c; }
+:root[data-theme=light] .home-chart-date,
+:root[data-theme=light] .progress-axis { fill: #c4cec6; }
+:root[data-theme=light] .home-chart-line,
+:root[data-theme=light] .progress-line { stroke: var(--lime); }
+:root[data-theme=light] .home-chart-dot,
+:root[data-theme=light] .progress-dot { fill: var(--lime); }
+:root[data-theme=light] .home-chart-area,
+:root[data-theme=light] .progress-area { fill: none; }
+:root[data-theme=light] .home-chart-halo,
+:root[data-theme=light] .progress-point[aria-pressed=true] { fill: none; stroke: var(--lime); }
+:root[data-theme=light] .home-milestone progress,
+:root[data-theme=light] #profileLevelProgress,
+:root[data-theme=light] .home-milestone progress::-webkit-progress-bar,
+:root[data-theme=light] #profileLevelProgress::-webkit-progress-bar { background: #35433a; }
+
+:root[data-theme=light] .timer-dial { border-radius: 50%; background: #202c25; }
+:root[data-theme=light] .timer-track { stroke: #56655c; }
+:root[data-theme=light] .timer-progress { stroke: var(--lime); }
+:root[data-theme=light] #restDialTime,
+:root[data-theme=light] #restFocusTime,
+:root[data-theme=light] #exerciseFocusTime { color: #f2f3ee; }
+:root[data-theme=light] #restDialLabel,
+:root[data-theme=light] #restFocusLabel,
+:root[data-theme=light] .exercise-focus-label { color: #c4cec6; }
+:root[data-theme=light] .rest-focus:not(.is-complete) { --focus-text: var(--text); --focus-accent: var(--lime); --focus-muted: var(--muted); background: rgb(230 233 227 / .94); }
+:root[data-theme=light] .rest-focus:not(.is-complete) .rest-focus-header button,
+:root[data-theme=light] .rest-focus:not(.is-complete) .rest-focus-actions button { background: var(--card); border-color: var(--line); color: var(--text); }
+:root[data-theme=light] .rest-focus:not(.is-complete) .rest-focus-actions .primary { background: var(--lime); color: #17200b; border-color: var(--lime); }
+:root[data-theme=light] .rest-focus.is-complete .timer-dial { background: transparent; }
+:root[data-theme=light] .rest-focus.is-complete .timer-dial-center > * { color: #17200b; }
+:root[data-theme=light] .duration-wheels::before { background: var(--lime); }
+:root[data-theme=light] .wheel-option[aria-selected=true] { color: #17200b; }
+
+:root[data-theme=light] .calendar-day.day-rest { background: #bac5bc; color: #25332a; }
+:root[data-theme=light] .calendar-day.day-missed { background: #e7c7b5; color: #6c341c; border-color: #caa287; }
+:root[data-theme=light] .calendar-day[aria-pressed=true] { outline-color: var(--text); }
+:root[data-theme=light] .calendar-day.day-logged { background: var(--lime); color: #17200b; }
+:root[data-theme=light] #profileInitial,
+:root[data-theme=light] .profile-editor-avatar { background: var(--lime); color: #17200b; }
+:root[data-theme=light] .profile-week-day.is-today { background: var(--lime); border-color: #7e8d6b; }
+:root[data-theme=light] .profile-week-day.is-today > span,
+:root[data-theme=light] .profile-week-day.is-today strong { color: #17200b; }
+:root[data-theme=light] .profile-week-day.is-trained i { box-shadow: 0 0 0 2px #35433a; }
+:root[data-theme=light] .profile-week-day.is-today.is-trained i { background: #35433a; box-shadow: none; }
+:root[data-theme=light] .profile-badge.is-earned { border-color: var(--line); }
+:root[data-theme=light] .profile-badge.is-earned .profile-badge-icon { color: #17200b; background: var(--lime); }
+:root[data-theme=light] .profile-week-day.is-rested i { background: #67766b; }
+:root[data-theme=light] .profile-ring-track { stroke: #35433a; stroke-width: 4.5; stroke-dasharray: none; }
+:root[data-theme=light] .profile-week-day:not(.is-trained):not(.is-rested) i { opacity: .6; }
+
+:root[data-theme=light] .delete-workout,
+:root[data-theme=light] #status.error { color: #9e3027; }
+:root[data-theme=light] #settingsStatus[data-state=error] { color: #9e3027; background: #edd6cb; border-color: #c99687; }
+:root[data-theme=light] .settings-saved-dialog,
+:root[data-theme=light] .duration-dialog,
+:root[data-theme=light] .profile-editor,
+:root[data-theme=light] .profile-info-dialog { box-shadow: 0 18px 60px #1e292238; }
+:root[data-theme=light] .settings-saved-dialog::backdrop,
+:root[data-theme=light] .duration-dialog::backdrop,
+:root[data-theme=light] .install-guide::backdrop,
+:root[data-theme=light] .profile-editor::backdrop,
+:root[data-theme=light] .profile-info-dialog::backdrop { background: #1e292270; }
