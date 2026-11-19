@@ -1,0 +1,18 @@
+.swipe-navigation-hint {
+  position: fixed;
+  top: 45%;
+  z-index: 40;
+  width: 42px;
+  height: 58px;
+  display: grid;
+  place-items: center;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--lime);
+  color: #17200b;
+  box-shadow: 0 4px 20px #0002;
+  font: 400 38px/1 system-ui, sans-serif;
+  pointer-events: none;
+}
+.swipe-navigation-hint[data-direction=back] { left: max(10px, env(safe-area-inset-left)); }
+.swipe-navigation-hint[data-direction=forward] { right: max(10px, env(safe-area-inset-right)); }

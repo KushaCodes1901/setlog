@@ -894,6 +894,7 @@ function renderHistoryEntries(entries, target, records) {
 }
 
 function selectView(view, { restoreScroll = false } = {}) {
+  appNavigation.remember();
   if (activeView !== view) viewScroll[activeView] = window.scrollY;
   activeView = view;
   document.body.dataset.view = view;
@@ -914,6 +915,7 @@ function selectView(view, { restoreScroll = false } = {}) {
   if (view === 'history') showHistory();
   if (view === 'profile') appProfile.show();
   window.scrollTo({ top: restoreScroll ? viewScroll[view] : 0, behavior: 'auto' });
+  appNavigation.record(view);
 }
 
 function workoutHighlight(session, previousSessions) {

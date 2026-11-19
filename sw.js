@@ -1,6 +1,8 @@
-const cacheName = 'setlog-offline-v83';
+const cacheName = 'setlog-offline-v84';
 const home = new URL('./', self.location.href).href;
 const assets = [
+  'assets/js/navigation.js',
+  'assets/css/navigation.css',
   'assets/css/light.css',
   'assets/media/learning/bench-press-character.webp',
   'assets/media/learning/bench-press-thumbnail.webp',
@@ -56,7 +58,7 @@ const assets = [
   'assets/js/learning-muscles.js?v=cable-chest-1',
   'assets/css/learning.css',
   'assets/js/learning-guides.js?v=cable-chest-1',
-  'assets/js/learning.js',
+  'assets/js/learning.js?v=swipe-1',
   'assets/css/profile.css',
   'assets/js/profile.js',
   'assets/media/illustrations/profile-trophy.svg',
@@ -79,7 +81,7 @@ const assets = [
   'assets/js/personal-records.js',
   'assets/js/exercise-progress.js',
   'assets/js/exercise-timer.js',
-  'assets/js/app.js',
+  'assets/js/app.js?v=swipe-1',
   'assets/js/backup.js',
   'assets/js/rest-timer.js?v=classic-chime',
   'assets/media/illustrations/exercise-illustrations.svg',

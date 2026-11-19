@@ -2,6 +2,7 @@ const appLearning = (() => {
   const root = document.querySelector('#learnView');
   const book = '<svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 6c-3-2-6-2-9-1v14c3-1 6-1 9 1 3-2 6-2 9-1V5c-3-1-6-1-9 1Zm0 0v14"/></svg>';
   let query = '', area = 'All', libraryScroll = 0, returnButton = null;
+  let page = 'library', activeGuide = null, detailFromLibrary = false;
   const photo = guide => guide.illustration;
   const element = (tag, text, className) => {
     const node = document.createElement(tag);
@@ -18,7 +19,7 @@ const appLearning = (() => {
     return h;
   }
   function close() {
-    selectView('log', { restoreScroll: true });
+    if (!appNavigation.backTo('log')) selectView('log', { restoreScroll: true });
     (returnButton?.isConnected ? returnButton : document.querySelector('#openLearning')).focus({ preventScroll: true });
   }
   function results(list, count) {
@@ -51,6 +52,8 @@ const appLearning = (() => {
     if (!matches.length) list.append(element('p', 'No guide here yet. Try another name or body area.', 'learn-empty'));
   }
   function library({ focus = true } = {}) {
+    appNavigation.remember();
+    page = 'library'; activeGuide = null;
     const h = heading('Learn the movement', 'Log Workout', close);
     root.append(element('p', 'A little confidence before your next set.', 'learn-intro'));
     const note = element('div', null, 'learn-library-note'); note.innerHTML = book;
@@ -74,8 +77,11 @@ const appLearning = (() => {
     root.append(note, search, filters, count, list, element('p', 'Start light and move with control. Stop if a movement causes pain. Ask a trainer if you are unsure about your setup.', 'learn-safety'));
     results(list, count);
     if (focus) h.focus({ preventScroll: true });
+    if (document.body.dataset.view === 'learn') appNavigation.record('learn');
   }
   function detail(guide, fromLibrary) {
+    appNavigation.remember();
+    page = 'detail'; activeGuide = guide; detailFromLibrary = fromLibrary;
     const h = heading(guide.name, fromLibrary ? 'All guides' : 'Log Workout', () => {
       if (!fromLibrary) return close();
       library(); window.scrollTo({ top: libraryScroll, behavior: 'auto' });
@@ -105,19 +111,28 @@ const appLearning = (() => {
     if (!fromLibrary) {
       const browse = element('button', 'Browse all guides', 'learn-browse'); browse.type = 'button'; browse.onclick = () => { library(); window.scrollTo(0, 0); }; root.append(browse);
     }
-    window.scrollTo(0, 0); h.focus({ preventScroll: true });
+    if (document.body.dataset.view === 'learn') window.scrollTo(0, 0);
+    h.focus({ preventScroll: true });
+    if (document.body.dataset.view === 'learn') appNavigation.record('learn');
   }
   document.querySelector('#openLearning').onclick = event => {
     returnButton = event.currentTarget; libraryScroll = 0; library({ focus: false }); selectView('learn'); root.querySelector('h1').focus({ preventScroll: true });
   };
   return {
+    capture() { return { page, slug: activeGuide?.slug, fromLibrary: detailFromLibrary, query, area, libraryScroll }; },
+    restore(state) {
+      query = state.query; area = state.area; libraryScroll = state.libraryScroll;
+      const guide = learningGuides.find(item => item.slug === state.slug);
+      if (state.page === 'detail' && guide) detail(guide, state.fromLibrary);
+      else library({ focus: false });
+    },
     bindCard(card, name) {
       const canonical = exerciseDefinition(name)?.name || name;
       const guide = learningGuides.find(g => g.name.toLowerCase() === canonical.toLowerCase());
       const button = card.querySelector('.learn-exercise');
       if (!guide) return;
       button.hidden = false; button.setAttribute('aria-label', 'Learn ' + guide.name);
-      button.onclick = () => { returnButton = button; selectView('learn'); detail(guide, false); };
+      button.onclick = () => { returnButton = button; detail(guide, false); selectView('learn'); root.querySelector('h1').focus({ preventScroll: true }); };
     }
   };
 })();
