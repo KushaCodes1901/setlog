@@ -1,4 +1,4 @@
-const cacheName = 'setlog-offline-v88';
+const cacheName = 'setlog-offline-v89';
 const home = new URL('./', self.location.href).href;
 const assets = [
   'assets/js/navigation.js?v=back-only-1',
@@ -83,6 +83,7 @@ const assets = [
   'assets/js/app.js?v=desktop-1',
   'assets/js/desktop.js',
   'assets/css/desktop.css',
+  'assets/css/tablet.css',
   'assets/js/backup.js',
   'assets/js/rest-timer.js?v=classic-chime',
   'assets/media/illustrations/exercise-illustrations.svg',

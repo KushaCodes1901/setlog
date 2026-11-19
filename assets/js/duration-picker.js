@@ -5,7 +5,7 @@ const durationPicker = (() => {
   const seconds = document.querySelector('#secondsWheel');
   const done = document.querySelector('#durationDone');
   const help = document.querySelector('#durationHelp');
-  const wide = matchMedia('(min-width: 1100px)');
+  const wide = matchMedia('(min-width: 1100px) and (pointer: fine), (min-width: 1600px)');
   const inputs = document.querySelector('#durationInputs');
   const minuteInput = document.querySelector('#durationMinutes');
   const secondInput = document.querySelector('#durationSeconds');

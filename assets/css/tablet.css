@@ -1,0 +1,152 @@
+/* Tablets keep touch controls and a wider canvas in either orientation. */
+@media (min-width: 700px) and (max-width: 1099px), (min-width: 700px) and (max-width: 1599px) and (pointer: coarse) {
+  main { width: 100%; max-width: 1180px; margin: 0 auto; padding: calc(28px + env(safe-area-inset-top)) 32px calc(128px + env(safe-area-inset-bottom)); }
+  body { font-size: 16px; }
+  main > .app-header { margin-bottom: 30px; }
+  .app-wordmark h1 { font-size: 28px; }
+  .view-heading h2, .view-heading .settings-title, .view-heading .rest-view-title, .profile-toolbar h2 { font-size: 34px; }
+  .home-headline { font-size: 34px; }
+  .foot, .picker-help, #caloriesHelp { font-size: 12px; }
+
+  .bottom-nav, :root[data-theme=light] .bottom-nav { inset: auto 20px calc(16px + env(safe-area-inset-bottom)); width: calc(100% - 40px); max-width: 680px; margin-inline: auto; padding: 8px; border: 1px solid var(--line); border-radius: 36px; background: color-mix(in srgb, var(--card) 94%, transparent); display: block; }
+  .bottom-nav > .desktop-only { display: none; }
+  .bottom-nav .nav-items { flex-direction: row; gap: 6px; }
+  .bottom-nav .nav-items button, :root[data-theme=light] .bottom-nav .nav-items button:not([aria-pressed=true]),
+  .bottom-nav .nav-items button[aria-pressed=true], :root[data-theme=light] .bottom-nav .nav-items button[aria-pressed=true] { flex: 1 1 0; width: auto; min-height: 56px; padding: 10px 6px; gap: 7px; font-size: 12px; justify-content: center; }
+  .bottom-nav .nav-items button span { max-width: 110px; opacity: 1; transform: none; }
+  .bottom-nav svg { width: 22px; height: 22px; }
+
+  .home-records { display: grid; grid-template-columns: minmax(0, 1.35fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+  .home-records > * { min-width: 0; margin: 0; }
+  .home-welcome { grid-column: 1 / -1; }
+  .home-hero { grid-column: 1; grid-row: 2; min-height: 276px; padding: 24px; align-self: stretch; }
+  .home-hero-copy { width: 85%; }
+  .home-hero-copy h3 { font-size: 34px; }
+  .home-hero-art { width: 48%; max-width: 260px; top: 12px; right: -12px; }
+  .home-log-button { max-width: 300px; margin-top: 24px; }
+  .weekly-summary, :root[data-theme=light] .weekly-summary { grid-column: 2; grid-row: 2; padding: 24px; border: 1px solid var(--line); background: var(--card); color: var(--text); align-self: stretch; }
+  .weekly-heading h3 { font-size: 18px; }
+  .weekly-heading > span, .weekly-number > span, .weekly-day > span { color: var(--muted); opacity: 1; }
+  .weekly-number > span { font-size: 12px; }
+  .weekly-main { margin-top: 24px; }
+  .weekly-bar-track { background: var(--line); border-radius: 5px; }
+  .weekly-bar-track i { background: transparent; }
+  .weekly-bar-track i.has-workouts { background: var(--lime); }
+  .weekly-details { border-color: var(--line); font-size: 12px; flex-wrap: wrap; }
+  .weekly-history { color: var(--text); min-height: 44px; }
+  .home-quick-actions { grid-column: 1 / -1; grid-row: 3; gap: 16px; }
+  .home-quick-actions button { min-height: 72px; }
+  .home-quick-actions button span { font-size: 14px; }
+  .home-quick-actions button small { font-size: 12px; }
+  .home-progress-chart, :root[data-theme=light] .home-progress-chart { grid-column: 1 / -1; grid-row: 4; margin: 0; padding: 26px; display: grid; grid-template-columns: minmax(180px, .8fr) minmax(0, 1.5fr); gap: 0 24px; }
+  .home-chart-heading { grid-column: 1 / -1; }
+  .home-chart-heading h3 { font-size: 21px; }
+  .home-chart-exercise-label, #homeChartExercise, .home-chart-reading { grid-column: 1; }
+  #homeChartExercise { align-self: start; }
+  .home-chart-plot { grid-column: 2; grid-row: 2 / span 3; align-self: center; margin: 0; }
+  .home-chart-caption, .home-chart-open { grid-column: 1 / -1; }
+  .home-chart-reading span, .home-chart-caption, .home-chart-period { font-size: 12px; }
+  .home-progress-chart.is-empty, :root[data-theme=light] .home-progress-chart.is-empty { display: block; min-height: 210px; }
+  .home-progress-chart.is-empty .home-chart-plot { display: none; }
+  .home-stats { grid-column: 1; grid-row: 5; align-self: stretch; }
+  .home-stats span { font-size: 12px; }
+  .home-milestone { grid-column: 2; grid-row: 5; align-self: stretch; }
+  .records-body { grid-column: 1 / -1; grid-row: 6; }
+  .records-body h2 { font-size: 26px; }
+  .record-lifts small, .records-help { font-size: 12px; }
+
+  #log label, .effort legend { font-size: 13px; }
+  #exercises article { padding: 24px; }
+  #exercises h3 { font-size: 21px; }
+  .effort-options button { min-height: 94px; }
+  .effort-label, .effort-number { font-size: 12px; }
+  .exercise-choice { font-size: 15px; }
+  .exercise-choice small, .exercise-choice .exercise-metadata, .last-time-heading, .last-time-sets li { font-size: 12px; }
+  .exercise-actions .primary, .learn-exercise { font-size: 14px; }
+  #restView { max-width: 900px; margin-inline: auto; }
+  .timer-content { padding: 32px; }
+  .timer-dial { width: min(100%, 340px); }
+  #restDialTime { font-size: 78px; }
+  .timer-presets button, .timer-content .duration-trigger { min-height: 50px; font-size: 14px; }
+  .rest-focus-content { width: min(100%, 520px); }
+  .rest-focus .timer-dial { width: min(100%, 340px); }
+  #restFocusTime, #exerciseFocusTime { font-size: 96px; }
+  .rest-focus.is-complete #restFocusMessage { max-width: 420px; }
+
+  .calendar-header h2 { font-size: 24px; }
+  .calendar-controls button { min-width: 44px; min-height: 44px; }
+  .calendar-day { min-height: 56px; font-size: 15px; }
+  .calendar-weekdays, .calendar-legend, .calendar-note { font-size: 12px; }
+  .history-content { padding: 0 24px 24px; }
+  .history-card summary { padding: 22px; }
+  .history-title { font-size: 17px; }
+  .history-exercise h3 { font-size: 18px; }
+  #backupPanel p, #backupPanel button { font-size: 13px; }
+  #settingsView, #profileView { max-width: 880px; margin-inline: auto; }
+  #settingsView .setting-item { padding: 20px 24px; }
+  .setting-copy > label, #settingsView .setting-copy > span:first-child { font-size: 15px; }
+  .setting-copy > p, .setting-description { font-size: 13px; }
+  .profile-measurement { flex-basis: 142px; }
+  .profile-measurement input { width: 110px; min-height: 48px; }
+  .profile-measurement span { font-size: 12px; }
+  .profile-height-measurements { flex: 0 0 auto; flex-direction: row; gap: 12px; }
+  .profile-height-measurements .profile-measurement input { width: 88px; }
+  .profile-identity { margin: 24px 0; }
+  #profileBio, .profile-badge strong { font-size: 14px; }
+  .profile-stats span, .profile-level-footer, .profile-section-heading > span, .profile-week-day > span, .profile-badge small, .profile-badge-state, .profile-footnote { font-size: 12px; }
+  .profile-badges { gap: 16px; }
+  .profile-badge { min-height: 170px; }
+  .profile-week-day { min-height: 100px; }
+
+  .learn-guide-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .learn-guide-card { min-height: 108px; padding: 12px; }
+  .learn-guide-copy strong { font-size: 15px; }
+  .learn-guide-copy > span { font-size: 12px; }
+  .learn-filters { flex-wrap: wrap; }
+  #learnView h1 { font-size: 34px; }
+  .learn-photo-pair { grid-template-columns: 1fr 1fr; gap: 20px; }
+  .learn-photo-pair figcaption { min-height: 105px; }
+  #learnView .learn-muscles { max-width: 500px; margin-inline: auto; }
+  .exercise-progress-dialog { inset: 24px; width: min(960px, calc(100% - 48px)); height: calc(100dvh - 48px); margin: auto; border: 1px solid var(--line); border-radius: 24px; }
+  .exercise-progress-page { width: 100%; max-width: 760px; padding: 0 28px 32px; }
+  .progress-header { padding-top: 18px; }
+}
+
+@media (min-width: 900px) and (max-width: 1099px), (min-width: 900px) and (max-width: 1599px) and (pointer: coarse) {
+  #log { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 24px; align-items: start; }
+  .log-heading { grid-column: 1 / -1; }
+  #log > section { grid-column: 1; position: sticky; top: 28px; margin-top: 0; }
+  #workout { grid-column: 2; min-width: 0; }
+  #exercises article:first-child, #exercises:empty + .exercise-entry { margin-top: 0; }
+  #history { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); gap: 24px; align-items: start; }
+  #history > .view-heading { grid-column: 1 / -1; grid-row: 1; margin: 0; }
+  .history-calendar { grid-column: 1; grid-row: 2; margin: 0; padding: 24px; position: sticky; top: 28px; }
+  .calendar-entries { grid-column: 2; grid-row: 2; margin: 0; }
+  #history > .workout-celebration { grid-column: 1 / -1; grid-row: 2; margin: 0; }
+  #history:has(> .workout-celebration) .history-calendar, #history:has(> .workout-celebration) .calendar-entries { grid-row: 3; }
+  .timer-content { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; align-items: center; }
+  .timer-content > .timer-dial { grid-column: 1; grid-row: 1 / span 3; margin: 0; width: 100%; max-width: 340px; }
+  .timer-presets { display: grid; grid-template-columns: 1fr 1fr; }
+  .timer-content > .fields, .timer-presets, #restStatus { grid-column: 2; }
+  #restDurationControl { flex-basis: 100%; }
+  #restDurationControl .duration-trigger { width: 100%; }
+  #restStart, #restReset { flex: 1; }
+  #restExpand { grid-column: 1 / -1; }
+  #learnView:has(.learn-photo-pair) { display: grid; grid-template-columns: minmax(260px, .8fr) minmax(0, 1.4fr); gap: 20px 24px; }
+  #learnView:has(.learn-photo-pair) > .learn-back { grid-column: 1 / -1; justify-self: start; }
+  #learnView:has(.learn-photo-pair) > h1 { grid-column: 1 / -1; margin: 0; }
+  #learnView:has(.learn-photo-pair) > .learn-intro { grid-column: 1 / -1; margin: -8px 0 4px; }
+  #learnView .learn-muscles { grid-column: 1; grid-row: 4 / span 4; max-width: none; margin: 0; align-self: start; position: sticky; top: 28px; }
+  .learn-photo-pair { grid-column: 2; grid-row: 4; }
+  #learnView .learn-instructions { grid-column: 2; grid-row: 5; margin: 0; }
+  .learn-mistake { grid-column: 2; grid-row: 6; }
+  #learnView:has(.learn-photo-pair) > .learn-safety { grid-column: 2; grid-row: 7; margin: 0; }
+  .learn-browse { grid-column: 2; grid-row: 8; }
+  .exercise-progress-page { max-width: none; }
+  .progress-content { display: grid; grid-template-columns: minmax(0, 1.3fr) minmax(0, 1fr); gap: 20px; align-items: start; }
+  .progress-win { grid-column: 1; grid-row: 1; }
+  .progress-stats { grid-column: 2; grid-row: 1; margin: 0; }
+  .progress-chart-card { grid-column: 1; grid-row: 2; margin: 0; }
+  .progress-history { display: block; grid-column: 2; grid-row: 2; }
+  .progress-history-title { margin: 0 0 14px; }
+}

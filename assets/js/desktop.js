@@ -1,5 +1,5 @@
 const desktopLayout = (() => {
-  const wide = matchMedia('(min-width: 1100px)');
+  const wide = matchMedia('(min-width: 1100px) and (pointer: fine), (min-width: 1600px)');
   const calendar = '<svg viewBox="0 0 24 24" aria-hidden="true"><rect x="3" y="5" width="18" height="16" rx="4"/><path d="M7 3v4m10-4v4M3 11h18m-12 5h.01m4 0h.01"/></svg>';
   let timerPreview = null;
 
