@@ -1,6 +1,6 @@
 /* Tablets keep touch controls and a wider canvas in either orientation. */
-@media (min-width: 700px) and (max-width: 1099px), (min-width: 700px) and (max-width: 1599px) and (pointer: coarse) {
-  main { width: 100%; max-width: 1180px; margin: 0 auto; padding: calc(28px + env(safe-area-inset-top)) 32px calc(128px + env(safe-area-inset-bottom)); }
+@media (600px <= width < 1100px), (600px <= width < 1600px) and (pointer: coarse), (600px <= width < 1600px) and (pointer: none) {
+  main { width: 100%; max-width: 1180px; margin: 0 auto; padding: calc(28px + env(safe-area-inset-top)) clamp(20px, 3.1vw, 32px) calc(128px + env(safe-area-inset-bottom)); }
   body { font-size: 16px; }
   main > .app-header { margin-bottom: 30px; }
   .app-wordmark h1 { font-size: 28px; }
@@ -69,8 +69,8 @@
   #restDialTime { font-size: 78px; }
   .timer-presets button, .timer-content .duration-trigger { min-height: 50px; font-size: 14px; }
   .rest-focus-content { width: min(100%, 520px); }
-  .rest-focus .timer-dial { width: min(100%, 340px); }
-  #restFocusTime, #exerciseFocusTime { font-size: 96px; }
+  .rest-focus .timer-dial { width: min(100%, clamp(180px, calc(100dvh - 330px), 340px)); }
+  #restFocusTime, #exerciseFocusTime { font-size: clamp(52px, 12dvh, 96px); }
   .rest-focus.is-complete #restFocusMessage { max-width: 420px; }
 
   .calendar-header h2 { font-size: 24px; }
@@ -112,7 +112,7 @@
   .progress-header { padding-top: 18px; }
 }
 
-@media (min-width: 900px) and (max-width: 1099px), (min-width: 900px) and (max-width: 1599px) and (pointer: coarse) {
+@media (900px <= width < 1100px), (900px <= width < 1600px) and (pointer: coarse), (900px <= width < 1600px) and (pointer: none) {
   #log { display: grid; grid-template-columns: 240px minmax(0, 1fr); gap: 24px; align-items: start; }
   .log-heading { grid-column: 1 / -1; }
   #log > section { grid-column: 1; position: sticky; top: 28px; margin-top: 0; }
@@ -149,4 +149,26 @@
   .progress-chart-card { grid-column: 1; grid-row: 2; margin: 0; }
   .progress-history { display: block; grid-column: 2; grid-row: 2; }
   .progress-history-title { margin: 0 0 14px; }
+}
+
+/* Compact tablets can report fewer CSS pixels than their screen resolution. */
+@media (600px <= width < 700px) {
+  .home-records { gap: 16px; }
+  .home-hero, .weekly-summary, :root[data-theme=light] .weekly-summary { padding: 20px; }
+  .home-hero-copy { width: 100%; }
+  .home-hero-copy h3 { font-size: 28px; }
+  .home-hero-art { width: 48%; top: 70px; right: -14px; }
+  .weekly-heading { flex-wrap: wrap; gap: 6px; }
+  .weekly-main { gap: 10px; grid-template-columns: 1fr 1.2fr; }
+  .weekly-number strong { font-size: 44px; }
+  .weekly-bars { gap: 4px; }
+  .weekly-details { gap: 6px; }
+  .bottom-nav .nav-items button, :root[data-theme=light] .bottom-nav .nav-items button:not([aria-pressed=true]),
+  .bottom-nav .nav-items button[aria-pressed=true], :root[data-theme=light] .bottom-nav .nav-items button[aria-pressed=true] { flex-direction: column; min-height: 62px; gap: 4px; }
+  .profile-height-measurements { gap: 6px; }
+  .profile-height-measurements .profile-measurement input { width: 72px; }
+  #settingsView .setting-item { padding-inline: 18px; }
+  .learn-guide-card { gap: 10px; }
+  .learn-character-thumbnail, .learn-guide-card > img { width: 72px; height: 76px; }
+  .learn-guide-copy strong { font-size: 14px; }
 }
