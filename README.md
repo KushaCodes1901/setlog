@@ -7,7 +7,7 @@ A workout journal for keeping track of your sets and seeing how your training ch
 ## Features
 
 - 100 illustrated exercises, with search and filters by body area and equipment. You can also add your own exercises.
-- A Learn library with 20 illustrated guides, start and finish positions, simple instructions and common mistakes.
+- A Learn library with 41 illustrated guides, including every chest, shoulder and arm exercise in the built-in list, start and finish positions, simple instructions and common mistakes.
 - Reps and weights for lifting, reps for bodyweight exercises, and durations for timed exercises.
 - A Last time reference showing your previous session while you log an exercise.
 - Set difficulty ratings and reps left, if you want to record them.
@@ -35,13 +35,13 @@ For a rest day, turn on **Rest day** and save it without adding exercises.
 
 ## Learn an exercise
 
-Tap **Learn** beside the Log Workout heading. Search the 20-guide library or filter by body area. Each guide has matching character illustrations for the start and finish positions, simple steps and a common mistake to watch for.
+Tap **Learn** beside the Log Workout heading. Search the 41-guide library or filter by body area. Each guide has a labeled muscle illustration, matching character illustrations for the start and finish positions, simple steps and a common mistake to watch for.
 
-The library covers chest, back, shoulders, arms and legs, including bodyweight and machine exercises. Search by exercise name or equipment, or filter by body area.
+The library covers every built-in chest (11), shoulder (9) and arm (14) exercise, plus seven back and leg guides. Search by exercise name or equipment, or filter by body area.
 
 A muscle illustration below the title shows the exercise's main working areas with red highlights and label lines. Anatomy was checked against the [University of Washington Muscle Atlas](https://rad.uw.edu/muscle-atlas/pectoralis-major).
 
-Exercise setup references include the [NASM exercise library](https://www.nasm.org/workout-exercise-guidance). The guide always names the equipment variation shown in its illustrations.
+Exercise setup references include the [NASM exercise library](https://www.nasm.org/resource-center/exercise-library) and [ACE's wrist-curl guide](https://www.acefitness.org/resources/everyone/exercise-library/30/wrist-curl-flexion/). The guide always names the equipment variation shown in its illustrations.
 
 Guide artwork uses compressed WebP files and separate small thumbnails for the library. Once saved offline, artwork loads directly from the current app cache. Keep thumbnails and the offline asset list updated when adding a guide.
 
