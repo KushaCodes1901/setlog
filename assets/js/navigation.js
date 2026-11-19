@@ -1,13 +1,8 @@
 const appNavigation = (() => {
   const entries = [];
-  let position = -1, restoring = false, gesture = null;
+  let restoring = false, gesture = null;
   const blocked = 'input, textarea, select, button, a, summary, label, [contenteditable], [role=listbox], .bottom-nav, .learn-filters, .duration-wheel, .timer-presets, .profile-week, .progress-chart, .home-chart-plot, [data-swipe-ignore]';
   const views = { home: 'homeView', log: 'log', learn: 'learnView', rest: 'restView', history: 'history', profile: 'profileView', settings: 'settingsView' };
-  const indicator = document.createElement('div');
-  indicator.className = 'swipe-navigation-hint';
-  indicator.setAttribute('aria-hidden', 'true');
-  indicator.hidden = true;
-  document.body.append(indicator);
 
   function key(entry) {
     const learning = entry.learning;
@@ -15,8 +10,8 @@ const appNavigation = (() => {
   }
 
   function remember() {
-    if (restoring || position < 0) return;
-    const entry = entries[position];
+    if (restoring || !entries.length) return;
+    const entry = entries.at(-1);
     entry.scroll = window.scrollY;
     if (entry.view === 'learn' && document.body.dataset.view === 'learn') entry.learning = appLearning.capture();
   }
@@ -24,43 +19,40 @@ const appNavigation = (() => {
   function record(view = document.body.dataset.view) {
     if (restoring) return;
     const entry = { view, scroll: window.scrollY, learning: view === 'learn' ? appLearning.capture() : null };
-    if (position >= 0 && key(entries[position]) === key(entry)) {
-      entries[position] = entry;
+    if (entries.length && key(entries.at(-1)) === key(entry)) {
+      entries[entries.length - 1] = entry;
       return;
     }
-    // Explicit Back buttons use the same trail, leaving the next screen available.
-    if (position > 0 && key(entries[position - 1]) === key(entry)) {
-      entries[--position] = entry;
-    } else if (position + 1 < entries.length && key(entries[position + 1]) === key(entry)) {
-      entries[++position] = entry;
+    // Explicit Back buttons and gestures share a single return trail.
+    if (entries.length > 1 && key(entries.at(-2)) === key(entry)) {
+      entries.pop();
+      entries[entries.length - 1] = entry;
     } else {
-      entries.splice(position + 1);
       entries.push(entry);
-      position = entries.length - 1;
-      if (entries.length > 40) { entries.shift(); position--; }
+      if (entries.length > 40) entries.shift();
     }
   }
 
-  function canGo(direction) {
-    return position + direction >= 0 && position + direction < entries.length;
+  function canGo(index = entries.length - 2) {
+    return index >= 0 && index < entries.length - 1;
   }
 
-  function go(direction) {
-    if (!canGo(direction) || document.querySelector('dialog[open]')) return false;
+  function go(index = entries.length - 2) {
+    if (!canGo(index) || document.querySelector('dialog[open]')) return false;
     remember();
-    const entry = entries[position + direction];
+    const entry = entries[index];
     restoring = true;
     try {
       if (entry.view === 'learn') appLearning.restore(entry.learning);
       selectView(entry.view);
-      position += direction;
+      entries.splice(index + 1);
       window.scrollTo({ top: entry.scroll, behavior: 'instant' });
       const screen = document.getElementById(views[entry.view]);
       const title = screen?.querySelector('h1, h2');
       if (title) { title.setAttribute('tabindex', '-1'); title.focus({ preventScroll: true }); }
       if (screen?.animate && !matchMedia('(prefers-reduced-motion: reduce)').matches) {
         screen.animate([
-          { transform: `translateX(${direction < 0 ? -24 : 24}px)`, opacity: .55 },
+          { transform: 'translateX(-24px)', opacity: .55 },
           { transform: 'translateX(0)', opacity: 1 }
         ], { duration: 190, easing: 'cubic-bezier(.2,.7,.2,1)' });
       }
@@ -77,7 +69,7 @@ const appNavigation = (() => {
     return false;
   }
 
-  function reset() { gesture = null; indicator.hidden = true; }
+  function reset() { gesture = null; }
 
   document.addEventListener('touchstart', event => {
     reset();
@@ -100,14 +92,11 @@ const appNavigation = (() => {
     if (!gesture.horizontal) {
       if (y > 12 && y >= x) return reset();
       if (x < 16 || x < y * 1.5) return;
-      if (!canGo(gesture.dx > 0 ? -1 : 1)) return reset();
+      if (gesture.dx <= 0 || !canGo()) return reset();
       gesture.horizontal = true;
     }
+    if (gesture.dx <= 0) return reset();
     if (event.cancelable) event.preventDefault();
-    if (!canGo(gesture.dx > 0 ? -1 : 1)) { indicator.hidden = true; return; }
-    indicator.dataset.direction = gesture.dx > 0 ? 'back' : 'forward';
-    indicator.textContent = gesture.dx > 0 ? '‹' : '›';
-    indicator.hidden = false;
   }, { passive: false });
 
   document.addEventListener('touchend', event => {
@@ -118,20 +107,19 @@ const appNavigation = (() => {
     if (!touch || event.touches.length || !completed.horizontal) return;
     const dx = touch.clientX - completed.x, dy = touch.clientY - completed.y;
     const threshold = Math.max(76, Math.min(120, window.innerWidth * .24));
-    if (Math.abs(dx) >= threshold && Math.abs(dx) > Math.abs(dy) * 2 && performance.now() - completed.start < 1400) go(dx > 0 ? -1 : 1);
+    if (dx >= threshold && dx > Math.abs(dy) * 2 && performance.now() - completed.start < 1400) go();
   }, { passive: true });
   document.addEventListener('touchcancel', reset, { passive: true });
   window.addEventListener('blur', reset);
   document.addEventListener('visibilitychange', reset);
   document.addEventListener('keydown', event => {
     if (event.defaultPrevented || !event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
-    if (event.key === 'ArrowLeft' && go(-1)) event.preventDefault();
-    if (event.key === 'ArrowRight' && go(1)) event.preventDefault();
+    if (event.key === 'ArrowLeft' && go()) event.preventDefault();
   });
 
   function backTo(view) {
-    for (let index = position - 1; index >= 0; index--) {
-      if (entries[index].view === view) return go(index - position);
+    for (let index = entries.length - 2; index >= 0; index--) {
+      if (entries[index].view === view) return go(index);
     }
     return false;
   }

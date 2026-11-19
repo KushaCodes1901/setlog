@@ -1,8 +1,7 @@
-const cacheName = 'setlog-offline-v84';
+const cacheName = 'setlog-offline-v85';
 const home = new URL('./', self.location.href).href;
 const assets = [
-  'assets/js/navigation.js',
-  'assets/css/navigation.css',
+  'assets/js/navigation.js?v=back-only-1',
   'assets/css/light.css',
   'assets/media/learning/bench-press-character.webp',
   'assets/media/learning/bench-press-thumbnail.webp',
