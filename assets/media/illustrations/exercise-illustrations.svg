@@ -445,4 +445,20 @@
       <path d="m28 48 20-20M18 38l24 24M38 18l24 24M12 44l24 24M44 12l24 24"/>
     </g>
   </symbol>
+  <symbol id="cable-chest-press" viewBox="0 0 80 80">
+    <path d="M10 68V12h12M10 34l51 2M10 40l45 2" fill="none" stroke="#697568" stroke-width="3" stroke-linecap="round"/>
+    <g fill="none" stroke="#c4f34a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="35" cy="21" r="5"/><path d="M35 31v20M35 34l26 2M35 39l20 3M35 51 24 68M35 51l17 17"/></g>
+  </symbol>
+  <symbol id="low-to-high-cable-fly" viewBox="0 0 80 80">
+    <path d="M8 68V12h64v56M8 64l28-26M72 64 44 38" fill="none" stroke="#697568" stroke-width="3" stroke-linecap="round"/>
+    <g fill="none" stroke="#c4f34a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="21" r="5"/><path d="M40 31v20M34 34l2 4M46 34l-2 4M40 51 29 68M40 51l11 17"/></g>
+  </symbol>
+  <symbol id="mid-height-cable-fly" viewBox="0 0 80 80">
+    <path d="M8 68V12h64v56M8 36h28M72 36H44" fill="none" stroke="#697568" stroke-width="3" stroke-linecap="round"/>
+    <g fill="none" stroke="#c4f34a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="40" cy="21" r="5"/><path d="M40 31v20M34 33l-8 4 11 1M46 33l8 4-11 1M40 51 29 68M40 51l11 17"/></g>
+  </symbol>
+  <symbol id="single-arm-cable-fly" viewBox="0 0 80 80">
+    <path d="M9 68V12h12M9 36h34M7 68h16" fill="none" stroke="#697568" stroke-width="3" stroke-linecap="round"/>
+    <g fill="none" stroke="#c4f34a" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"><circle cx="43" cy="21" r="5"/><path d="M43 31v20M37 33l-9 4h16M49 34l7 10-9 3M43 51 32 68M43 51l12 17"/></g>
+  </symbol>
 </svg>

@@ -6,8 +6,8 @@ A workout journal for keeping track of your sets and seeing how your training ch
 
 ## Features
 
-- 100 illustrated exercises, with search and filters by body area and equipment. You can also add your own exercises.
-- A Learn library with 41 illustrated guides, including every chest, shoulder and arm exercise in the built-in list, start and finish positions, simple instructions and common mistakes.
+- 104 illustrated exercises, with search and filters by body area and equipment. You can also add your own exercises.
+- A Learn library with 45 illustrated guides, including every chest, shoulder and arm exercise in the built-in list, start and finish positions, simple instructions and common mistakes.
 - Reps and weights for lifting, reps for bodyweight exercises, and durations for timed exercises.
 - A Last time reference showing your previous session while you log an exercise.
 - Set difficulty ratings and reps left, if you want to record them.
@@ -35,9 +35,9 @@ For a rest day, turn on **Rest day** and save it without adding exercises.
 
 ## Learn an exercise
 
-Tap **Learn** beside the Log Workout heading. Search the 41-guide library or filter by body area. Each guide has a labeled muscle illustration, matching character illustrations for the start and finish positions, simple steps and a common mistake to watch for.
+Tap **Learn** beside the Log Workout heading. Search the 45-guide library or filter by body area. Each guide has a labeled muscle illustration, matching character illustrations for the start and finish positions, simple steps and a common mistake to watch for.
 
-The library covers every built-in chest (11), shoulder (9) and arm (14) exercise, plus seven back and leg guides. Search by exercise name or equipment, or filter by body area.
+The library covers every built-in chest (15), shoulder (9) and arm (14) exercise, plus seven back and leg guides. Chest cable options include the high-to-low crossover, low-to-high fly, mid-height fly, single-arm fly and standing cable chest press. Search by exercise name or equipment, or filter by body area.
 
 A muscle illustration below the title shows the exercise's main working areas with red highlights and label lines. Anatomy was checked against the [University of Washington Muscle Atlas](https://rad.uw.edu/muscle-atlas/pectoralis-major).
 

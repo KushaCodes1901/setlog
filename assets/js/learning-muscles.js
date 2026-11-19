@@ -41,7 +41,11 @@ const learningMuscles = (() => {
     'wrist-curl': ['forearm-flexors', 'Wrist flexor group on the palm side of the forearm.'],
     'tricep-pushdown': ['triceps', 'Triceps brachii on the back of the upper arm.'],
     'dip': ['dip', 'Triceps brachii and pectoralis major at the back of the upper arms and the chest.'],
-    'bench-dip': ['triceps', 'Triceps brachii on the back of the upper arm.']
+    'bench-dip': ['triceps', 'Triceps brachii on the back of the upper arm.'],
+    'cable-chest-press': ['chest', 'Pectoralis major across the chest and anterior deltoid at the front shoulder.'],
+    'low-to-high-cable-fly': ['upper-chest', 'Clavicular fibers of the pectoralis major in the upper chest and anterior deltoid.'],
+    'mid-height-cable-fly': ['chest', 'Pectoralis major across the chest and anterior deltoid at the front shoulder.'],
+    'single-arm-cable-fly': ['chest', 'Pectoralis major across the chest and anterior deltoid at the front shoulder.']
   };
   function render(slug) {
     const illustration = illustrations[slug];

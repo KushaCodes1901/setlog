@@ -1,4 +1,4 @@
-const cacheName = 'setlog-offline-v82';
+const cacheName = 'setlog-offline-v83';
 const home = new URL('./', self.location.href).href;
 const assets = [
   'assets/css/light.css',
@@ -53,9 +53,9 @@ const assets = [
   'assets/media/learning/skull-crusher-thumbnail.webp',
   'assets/media/learning/tricep-kickback-character.webp',
   'assets/media/learning/tricep-kickback-thumbnail.webp',
-  'assets/js/learning-muscles.js?v=upper-body-1',
+  'assets/js/learning-muscles.js?v=cable-chest-1',
   'assets/css/learning.css',
-  'assets/js/learning-guides.js?v=upper-body-1',
+  'assets/js/learning-guides.js?v=cable-chest-1',
   'assets/js/learning.js',
   'assets/css/profile.css',
   'assets/js/profile.js',
@@ -74,7 +74,7 @@ const assets = [
   'assets/media/illustrations/install-steps.svg?v=samsung-1',
   'assets/js/settings.js',
   'assets/js/duration-picker.js?v=wrap-1',
-  'assets/js/exercise-catalog.js',
+  'assets/js/exercise-catalog.js?v=cable-chest-1',
   'assets/js/history-calendar.js',
   'assets/js/personal-records.js',
   'assets/js/exercise-progress.js',
@@ -145,7 +145,15 @@ const assets = [
   'assets/media/learning/muscles-upper-trapezius.webp',
   'assets/media/learning/muscles-reverse-curl.webp',
   'assets/media/learning/muscles-forearm-flexors.webp',
-  'assets/media/learning/muscles-dip.webp'
+  'assets/media/learning/muscles-dip.webp',
+  'assets/media/learning/cable-chest-press-character.webp',
+  'assets/media/learning/cable-chest-press-thumbnail.webp',
+  'assets/media/learning/low-to-high-cable-fly-character.webp',
+  'assets/media/learning/low-to-high-cable-fly-thumbnail.webp',
+  'assets/media/learning/mid-height-cable-fly-character.webp',
+  'assets/media/learning/mid-height-cable-fly-thumbnail.webp',
+  'assets/media/learning/single-arm-cable-fly-character.webp',
+  'assets/media/learning/single-arm-cable-fly-thumbnail.webp'
 ]
   .map(path => new URL(path, home).href);
 
