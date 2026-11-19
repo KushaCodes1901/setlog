@@ -6,6 +6,7 @@ A workout journal for keeping track of your sets and seeing how your training ch
 
 ## Features
 
+- A desktop workspace with sidebar navigation, wider charts, recent workouts and quick access to the rest timer and Learn guides. The compact phone layout stays the same.
 - 104 illustrated exercises, with search and filters by body area and equipment. You can also add your own exercises.
 - A Learn library with 45 illustrated guides, including every chest, shoulder and arm exercise in the built-in list, start and finish positions, simple instructions and common mistakes.
 - Reps and weights for lifting, reps for bodyweight exercises, and durations for timed exercises.

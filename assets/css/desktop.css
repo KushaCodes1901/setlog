@@ -1,0 +1,261 @@
+/* New desktop elements stay out of the existing phone layout. */
+.desktop-only { display: none; }
+.progress-history { display: contents; }
+@media (max-width: 1099px) {
+  .bottom-nav > .desktop-only { display: none; }
+}
+
+@media (min-width: 1100px) {
+  :root { --sidebar-width: 224px; }
+  body { font-size: 16px; }
+  main { width: auto; max-width: 1770px; margin: 0 0 0 var(--sidebar-width); padding: 32px clamp(24px, 2.5vw, 48px) 32px; }
+  main > .app-header { display: none; }
+  .view-heading h2, .view-heading .settings-title, .view-heading .rest-view-title { font-size: 36px; }
+  .view-heading > p { font-size: 11px; }
+  .foot { font-size: 11px; margin-top: 32px; }
+  #installBanner { display: none; }
+  #status:not(:empty) { max-width: 800px; }
+
+  /* The same five navigation buttons become the sidebar. */
+  .bottom-nav, :root[data-theme=light] .bottom-nav {
+    inset: 0 auto 0 0; width: var(--sidebar-width); max-width: none; margin: 0;
+    padding: 28px 16px 20px; border: 0; border-right: 1px solid var(--line); border-radius: 0;
+    background: var(--bg); box-shadow: none; backdrop-filter: none;
+    display: flex; flex-direction: column; overflow-y: auto;
+  }
+  .bottom-nav .desktop-brand { flex: none; flex-direction: row; justify-content: flex-start; display: flex; align-items: center; gap: 12px; width: 100%; min-height: 60px; padding: 0 6px; margin: 0 0 34px; background: transparent; border: 0; text-align: left; }
+  .desktop-brand img { width: 44px; height: 44px; border-radius: 12px; }
+  .desktop-brand > span { color: var(--text); font-size: 25px; font-weight: 800; letter-spacing: -.04em; }
+  .desktop-brand small { display: block; margin-top: 2px; font-size: 11px; font-weight: 500; letter-spacing: 0; color: var(--muted); }
+  .bottom-nav .nav-items { display: flex; flex-direction: column; align-items: stretch; gap: 8px; }
+  .bottom-nav .nav-items button, :root[data-theme=light] .bottom-nav .nav-items button:not([aria-pressed=true]) {
+    flex: none; justify-content: flex-start; width: 100%; min-height: 52px; padding: 12px 15px; gap: 14px;
+    border: 0; border-radius: 14px; background: transparent; color: var(--muted); font-size: 14px; font-weight: 650;
+    transition: background-color 150ms, color 150ms;
+  }
+  .bottom-nav .nav-items button:not([aria-pressed=true]):hover { background: var(--card); color: var(--text); }
+  .bottom-nav .nav-items button[aria-pressed=true], :root[data-theme=light] .bottom-nav .nav-items button[aria-pressed=true] {
+    flex: none; padding: 12px 15px; gap: 14px; background: var(--lime); color: #17200b;
+  }
+  .bottom-nav .nav-items button span, .bottom-nav .nav-items button[aria-pressed=true] span { max-width: none; opacity: 1; transform: none; overflow: visible; }
+  .bottom-nav svg { width: 23px; height: 23px; }
+  .desktop-sidebar-footer { display: flex; align-items: center; gap: 4px; margin-top: auto; padding: 22px 0 0; border-top: 1px solid var(--line); }
+  .bottom-nav .desktop-profile { flex-direction: row; justify-content: flex-start; display: flex; align-items: center; gap: 10px; min-width: 0; padding: 6px 0; flex: 1; border: 0; background: transparent; text-align: left; }
+  .desktop-profile-avatar { flex: 0 0 36px; width: 36px; height: 36px; display: grid; place-items: center; border: 2px solid var(--line); border-radius: 50%; color: var(--text); background: var(--card); overflow: hidden; }
+  .desktop-profile-avatar img { width: 100%; height: 100%; object-fit: cover; }
+  .desktop-profile-copy { min-width: 0; }
+  .desktop-profile-copy strong { display: block; max-width: 112px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; color: var(--text); font-size: 12px; }
+  .desktop-profile-copy small { display: block; color: var(--muted); font-size: 11px; font-weight: 500; margin-top: 3px; }
+  .bottom-nav .desktop-settings { flex: none; display: grid; place-items: center; min-width: 32px; min-height: 38px; padding: 5px; background: transparent; border: 0; color: var(--muted); }
+  .desktop-settings svg { width: 20px; height: 20px; }
+
+  /* Home: large working area and a compact column of useful shortcuts. */
+  .home-records { display: grid; grid-template-columns: minmax(0, 1fr) 290px; gap: 20px; align-items: start; }
+  .home-records > * { min-width: 0; margin: 0; }
+  .home-welcome { grid-column: 1 / -1; }
+  .home-welcome .home-message { font-size: 13px; margin-bottom: 8px; }
+  .home-headline { font-size: 36px; }
+  .home-hero { grid-column: 1; grid-row: 2; min-height: 255px; padding: 28px; border-radius: 22px; }
+  .home-hero-copy { width: 72%; }
+  .home-hero-kicker { font-size: 10px; }
+  .home-hero-copy h3 { font-size: clamp(34px, 3vw, 46px); margin-top: 16px; }
+  .home-hero-copy > p:last-child { font-size: 13px; }
+  .home-hero-art { width: 44%; max-width: 340px; top: 4px; right: 0; }
+  .home-log-button { max-width: 300px; min-height: 48px; margin-top: 24px; border-radius: 12px; font-size: 14px; }
+  .weekly-summary, :root[data-theme=light] .weekly-summary { grid-column: 2; grid-row: 2; min-height: 255px; padding: 22px; background: var(--card); color: var(--text); border: 1px solid var(--line); border-radius: 22px; }
+  .weekly-summary { align-self: stretch; }
+  .weekly-heading h3 { font-size: 19px; }
+  .weekly-heading > span { color: var(--muted); font-size: 9px; opacity: 1; }
+  .weekly-main { gap: 12px; margin-top: 22px; grid-template-columns: .8fr 1.3fr; }
+  .weekly-number strong { font-size: 50px; }
+  .weekly-number > span { color: var(--muted); font-size: 12px; }
+  .weekly-bar-track, :root[data-theme=light] .weekly-bar-track { height: 58px; background: var(--line); border-radius: 5px; }
+  .weekly-bar-track i { background: transparent; }
+  .weekly-bar-track i.has-workouts { background: var(--lime); }
+  .weekly-day > span { color: var(--muted); opacity: 1; font-size: 10px; }
+  .weekly-details { flex-wrap: wrap; border-color: var(--line); font-size: 12px; margin-top: 18px; padding-top: 12px; }
+  .weekly-history { color: var(--text); }
+  .home-quick-actions { display: none; }
+  .home-progress-chart, :root[data-theme=light] .home-progress-chart { grid-column: 1; grid-row: 3; padding: 24px; margin: 0; min-height: 326px; display: grid; grid-template-columns: minmax(135px, .8fr) minmax(0, 1.7fr); gap: 0 24px; }
+  .home-chart-heading { grid-column: 1 / -1; margin-bottom: 16px; }
+  .home-chart-heading h3 { font-size: 21px; }
+  .home-chart-period { font-size: 11px; }
+  .home-chart-exercise-label { grid-column: 1; align-self: end; }
+  #homeChartExercise { grid-column: 1; margin: 0; }
+  .home-chart-reading { grid-column: 1; margin: 16px 0; align-self: start; }
+  .home-chart-reading strong { font-size: clamp(28px, 2.7vw, 42px); }
+  .home-chart-reading span { font-size: 12px; line-height: 1.65; }
+  .home-chart-plot { grid-column: 2; grid-row: 2 / span 3; align-self: center; width: 100%; margin: 0; }
+  .home-chart-caption { grid-column: 1 / -1; margin-top: 8px; font-size: 12px; }
+  .home-chart-open { grid-column: 1 / -1; margin-top: 12px; }
+  .home-progress-chart.is-empty, :root[data-theme=light] .home-progress-chart.is-empty { display: flex; flex-direction: column; justify-content: center; align-self: stretch; }
+  .home-progress-chart.is-empty .home-chart-plot { display: none; }
+  .desktop-rest-card { display: flex; flex-direction: column; justify-content: space-between; align-self: stretch; grid-column: 2; grid-row: 3; padding: 22px; border-radius: 22px; }
+  .desktop-card-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; }
+  .desktop-card-heading h3, .desktop-learn-card > h3 { font-size: 19px; }
+  .desktop-card-heading > button { padding: 4px 0; min-height: 32px; border: 0; background: transparent; color: var(--muted); font-size: 11px; }
+  .desktop-card-heading > button:hover { color: var(--text); }
+  .desktop-rest-dial { position: relative; width: 172px; height: 172px; margin: 12px auto 14px; border-radius: 50%; background: #202c25; color: #f2f3ee; }
+  .desktop-rest-dial > svg { width: 100%; height: 100%; transform: rotate(-90deg); fill: none; stroke-width: 5; }
+  .desktop-rest-track { stroke: #46524b; }
+  .desktop-rest-progress { stroke-dasharray: 100; stroke: var(--lime); stroke-linecap: round; }
+  .desktop-rest-dial > div { position: absolute; inset: 0; display: flex; flex-direction: column; justify-content: center; align-items: center; gap: 5px; }
+  .desktop-rest-time { font-size: 37px; line-height: 1.1; font-weight: 750; font-variant-numeric: tabular-nums; letter-spacing: -.05em; }
+  .desktop-rest-label { font-size: 12px; color: #c4cec6; }
+  .desktop-rest-start { width: 100%; min-height: 44px; border-radius: 12px; font-size: 13px; }
+  .desktop-recent { display: block; grid-column: 1; grid-row: 4; padding: 22px 24px 12px; }
+  .desktop-recent .desktop-card-heading { margin-bottom: 10px; }
+  .desktop-recent-row { display: flex; align-items: center; width: 100%; gap: 14px; min-height: 72px; padding: 14px 0; border: 0; border-top: 1px solid var(--line); border-radius: 0; background: transparent; text-align: left; }
+  .desktop-recent-row > span:nth-child(2) { min-width: 0; }
+  .desktop-recent-row strong { display: block; font-size: 14px; color: var(--text); }
+  .desktop-recent-row small { display: block; margin-top: 3px; font-size: 12px; font-weight: 500; }
+  .desktop-recent-icon { display: grid; place-items: center; flex: 0 0 36px; height: 36px; border-radius: 10px; background: var(--surface-raised); color: var(--text); }
+  .desktop-recent-icon svg { width: 20px; height: 20px; fill: none; stroke: currentColor; stroke-width: 1.6; stroke-linecap: round; stroke-linejoin: round; }
+  .desktop-recent-arrow { color: var(--muted); margin-left: auto; font-size: 23px; font-weight: 500; }
+  .desktop-recent-empty { color: var(--muted); padding: 26px 0; line-height: 1.8; font-size: 14px; }
+  .desktop-learn-card { display: block; grid-column: 2; grid-row: 4; padding: 22px; }
+  .desktop-learn-content { display: flex; gap: 14px; margin-top: 18px; align-items: center; }
+  .desktop-learn-content img { width: 76px; height: 90px; object-fit: cover; border-radius: 12px; background: #e9e9eb; }
+  .desktop-learn-content strong { font-size: 14px; }
+  .desktop-learn-content p { color: var(--muted); font-size: 12px; margin-top: 6px; }
+  .desktop-learn-content button { min-height: 36px; margin-top: 8px; padding: 6px 0; border: 0; background: transparent; color: var(--accent); font-size: 12px; }
+  :root[data-theme=light] .desktop-learn-content button { color: var(--text); text-decoration: underline; text-underline-offset: 4px; }
+  .home-stats { grid-column: 2; grid-row: 5; align-self: start; display: grid; grid-template-columns: 1fr 1fr; margin: 0; }
+  .home-stats > div, .home-stats > div:first-child { padding: 16px 12px; }
+  .home-stats strong { font-size: 30px; }
+  .home-milestone { grid-column: 2; grid-row: 6; margin: 0; }
+  .records-body { grid-column: 1; grid-row: 5 / span 2; padding: 24px; border: 1px solid var(--line); border-radius: 22px; background: var(--card); }
+  .records-body h2 { font-size: 23px; }
+  .records-help, .record-week-explanation, .record-lifts small, .home-stats span { font-size: 12px; }
+  .record-week { margin-top: 20px; background: var(--bg); }
+  .record-lifts-title { margin-top: 24px; }
+
+  /* Give the existing forms and calendars room without changing their behavior. */
+  #log { display: grid; grid-template-columns: 270px minmax(0, 1fr); gap: 24px; align-items: start; max-width: 1250px; margin-inline: auto; }
+  .log-heading { grid-column: 1 / -1; }
+  #log > section { grid-column: 1; position: sticky; top: 28px; margin-top: 0; padding: 22px; }
+  #workout { grid-column: 2; min-width: 0; }
+  #exercises article:first-child { margin-top: 0; }
+  #exercises article { padding: 26px; }
+  #exercises h3 { font-size: 22px; }
+  .effort-label { font-size: 12px; }
+  .effort-number { font-size: 11px; }
+  .effort-options button { min-height: 96px; }
+  #exercises:empty + .exercise-entry { margin-top: 0; }
+  #log label, .effort legend { font-size: 13px; }
+  .set-number { font-size: 12px; }
+  .last-time-heading, .last-time-sets li, .exercise-summary, .set-summary-values { font-size: 13px; }
+  .exercise-actions .primary, .learn-exercise { font-size: 14px; }
+  #caloriesHelp, #log .picker-help { font-size: 13px; }
+  .picker-filters label, .picker-group h3 { font-size: 12px; }
+  .exercise-choice { min-height: 82px; font-size: 15px; }
+  .exercise-choice small, .exercise-choice .exercise-metadata { font-size: 12px; }
+  #restView { max-width: 1000px; margin-inline: auto; }
+  .timer-content { display: grid; grid-template-columns: 1fr 1fr; gap: 24px 40px; padding: 40px; align-items: center; }
+  .timer-content > .timer-dial { grid-column: 1; grid-row: 1 / span 3; width: min(100%, 330px); margin: 0 auto; }
+  .timer-content > .timer-presets { grid-column: 2; grid-row: 1; display: grid; grid-template-columns: 1fr 1fr; gap: 10px; align-self: end; }
+  .timer-content > .fields { grid-column: 2; grid-row: 2; flex-wrap: wrap; gap: 12px; }
+  #restDurationControl { flex: 1 1 100%; }
+  #restDurationControl .duration-trigger { width: 100%; }
+  #restStart, #restReset { flex: 1; }
+  #restStatus { grid-column: 2; grid-row: 3; margin: 0; align-self: start; font-size: 12px; }
+  #restExpand { grid-column: 1 / -1; }
+  .rest-focus-content { width: min(100%, 520px); }
+  .rest-focus .timer-dial { width: min(100%, 320px); }
+  #restFocusTime, #exerciseFocusTime { font-size: 96px; }
+  #restFocusMessage, #exerciseFocusMessage { font-size: 16px; }
+  .rest-focus.is-complete #restFocusMessage { max-width: 440px; }
+  .duration-dialog p { font-size: 13px; }
+  .duration-inputs { display: grid; grid-template-columns: minmax(0, 1fr) auto minmax(0, 1fr); align-items: end; gap: 12px; margin: 28px 0 18px; }
+  .duration-inputs label { font-size: 13px; }
+  .duration-inputs input { appearance: textfield; margin-top: 8px; padding: 12px; min-height: 76px; color: var(--text); font-size: 32px; font-weight: 700; text-align: center; font-variant-numeric: tabular-nums; }
+  .duration-inputs input::-webkit-inner-spin-button, .duration-inputs input::-webkit-outer-spin-button { appearance: none; margin: 0; }
+  .duration-input-divider { padding-bottom: 18px; color: var(--muted); font-size: 28px; }
+  #history { display: grid; grid-template-columns: minmax(300px, .9fr) minmax(0, 1.1fr); gap: 24px; align-items: start; }
+  #history > .view-heading { grid-row: 1; grid-column: 1 / -1; margin-bottom: 0; }
+  .history-calendar { grid-column: 1; grid-row: 2; position: sticky; top: 28px; padding: 24px; }
+  .calendar-entries { grid-column: 2; grid-row: 2; margin: 0; min-width: 0; }
+  #history > .workout-celebration { grid-column: 1 / -1; grid-row: 2; margin: 0; }
+  #history:has(> .workout-celebration) .history-calendar,
+  #history:has(> .workout-celebration) .calendar-entries { grid-row: 3; }
+  .calendar-header h2 { font-size: 21px; }
+  .calendar-day { min-height: 46px; font-size: 14px; }
+  .calendar-note, .calendar-weekdays, .calendar-legend { font-size: 12px; }
+  .history-title { font-size: 16px; }
+  .history-content { padding: 0 24px 24px; }
+  .history-exercise h3 { font-size: 17px; }
+  .history-sets li { font-size: 14px; }
+  .history-sets .set-notes { font-size: 12px; }
+  .record-badges li, .history-calories > span { font-size: 12px; }
+  #backupPanel p, #backupPanel button { font-size: 13px; }
+  #backupPanel { margin-top: 28px; }
+  #settingsView { max-width: 900px; margin-inline: auto; }
+  .settings-group h3 { font-size: 12px; }
+  #settingsView .setting-item { padding: 20px 24px; gap: 16px; }
+  #settingsView .setting-copy > label, #settingsView .setting-copy > span:first-child { font-size: 15px; }
+  #settingsView .setting-copy > p, #settingsView .setting-description { font-size: 13px; }
+  #settingsView .settings-volume { font-size: 14px; }
+  .setting-volume-item { padding: 20px 24px 8px; }
+  .profile-measurement { flex-basis: 160px; justify-content: flex-end; }
+  .profile-measurement input { width: 124px; min-height: 46px; padding: 10px; }
+  .profile-measurement span { font-size: 12px; min-width: 22px; }
+  .profile-height-measurements { flex: 0 0 auto; flex-direction: row; gap: 14px; }
+  .profile-height-measurements .profile-measurement input { width: 100px; }
+  #settingsView .unit-select { width: 110px; padding-inline: 12px; }
+  .install-settings-link { font-size: 14px; }
+  #profileView { max-width: 920px; margin-inline: auto; }
+  .profile-toolbar h2 { font-size: 36px; }
+  .profile-identity { padding: 28px; margin: 0; border: 1px solid var(--line); border-radius: 22px; background: var(--card); }
+  .profile-stats { max-width: 700px; margin: 24px auto; }
+  .profile-level-card { padding: 26px; }
+  .profile-badges { grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 16px; }
+  .profile-badge { min-height: 170px; }
+  .profile-week-day { min-height: 94px; }
+  .profile-stats span, .profile-level-footer, .profile-section-heading > span, .profile-week-day > span,
+  .profile-badge small, .profile-badge-state, .profile-footnote { font-size: 12px; }
+  .profile-badge strong, #profileBio, #profileNextDescription { font-size: 14px; }
+  .profile-edit { min-height: 40px; font-size: 13px; }
+  .profile-level-heading > span, #profileNextCount { font-size: 12px; }
+  #profileEditorHelp, #profileForm > label, #chooseProfilePhoto, #removeProfilePhoto { font-size: 13px; }
+  #profileInfoContent p { font-size: 14px; }
+  .profile-editor, .profile-info-dialog { width: min(480px, calc(100% - 48px)); }
+  .profile-toast { left: calc(var(--sidebar-width) + 24px); right: 24px; bottom: 24px; }
+
+  /* Library and movement sheets use the wider canvas as well. */
+  .learn-guide-list { grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; }
+  .learn-guide-card { min-height: 108px; padding: 12px; }
+  .learn-guide-copy strong { font-size: 15px; }
+  .learn-guide-copy > span { font-size: 12px; }
+  .learn-filters { flex-wrap: wrap; overflow: visible; }
+  #learnView > input { max-width: 620px; }
+  #learnView h1 { font-size: 36px; }
+  #learnView:has(.learn-photo-pair) { display: grid; grid-template-columns: minmax(260px, .8fr) minmax(0, 1.4fr); gap: 20px 28px; }
+  #learnView:has(.learn-photo-pair) > .learn-back { grid-column: 1 / -1; justify-self: start; }
+  #learnView:has(.learn-photo-pair) > h1 { grid-column: 1 / -1; margin: 0; }
+  #learnView:has(.learn-photo-pair) > .learn-intro { grid-column: 1 / -1; margin: -8px 0 4px; }
+  #learnView .learn-muscles { grid-column: 1; grid-row: 4 / span 4; position: sticky; top: 28px; align-self: start; margin: 0; }
+  .learn-photo-pair { grid-column: 2; grid-row: 4; grid-template-columns: 1fr 1fr; gap: 16px; }
+  .learn-photo-pair figcaption { min-height: 95px; font-size: 13px; }
+  #learnView .learn-instructions { grid-column: 2; grid-row: 5; margin: 6px 0; }
+  .learn-mistake { grid-column: 2; grid-row: 6; }
+  #learnView:has(.learn-photo-pair) > .learn-safety { grid-column: 2; grid-row: 7; margin: 0; }
+  .learn-browse { grid-column: 2; grid-row: 8; width: auto; justify-self: start; }
+  .exercise-progress-dialog { inset: 28px; width: min(1120px, calc(100% - 56px)); height: calc(100dvh - 56px); margin: auto; border: 1px solid var(--line); border-radius: 24px; }
+  .exercise-progress-dialog::backdrop { background: #0009; backdrop-filter: blur(8px); }
+  .exercise-progress-page { width: 100%; max-width: none; padding: 0 32px 32px; }
+  .progress-header { padding-top: 18px; }
+  .progress-content { display: grid; grid-template-columns: minmax(0, 1.4fr) minmax(260px, 1fr); gap: 22px; }
+  .progress-win { grid-column: 1; grid-row: 1; }
+  .progress-stats { grid-column: 2; grid-row: 1; margin: 0; }
+  .progress-chart-card { grid-column: 1; grid-row: 2; margin-top: 0; align-self: start; }
+  .progress-history { display: block; grid-column: 2; grid-row: 2; align-self: start; }
+  .progress-history-title { margin: 0 0 14px; }
+  .progress-session-list { margin: 0; }
+  #progressMore { margin-top: 18px; }
+}
+
+@media (min-width: 1440px) {
+  :root { --sidebar-width: 240px; }
+  .home-records { grid-template-columns: minmax(0, 1fr) 320px; gap: 24px; }
+  .learn-guide-list { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}

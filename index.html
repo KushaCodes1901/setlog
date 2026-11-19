@@ -29,6 +29,7 @@
 <link rel="stylesheet" href="assets/css/profile.css">
 <link rel="stylesheet" href="assets/css/learning.css">
 <link rel="stylesheet" href="assets/css/light.css">
+<link rel="stylesheet" href="assets/css/desktop.css">
 <link rel="preload" href="assets/fonts/manrope-variable.ttf" as="font" type="font/ttf" crossorigin>
 </head>
 <body>
@@ -249,6 +250,7 @@
   <p class="muted foot">Stored on this device · Weights in <span id="weightUnitText">kg</span></p>
 </main>
 <nav class="bottom-nav" aria-label="Workout views">
+  <button id="desktopBrand" class="desktop-only desktop-brand" type="button" aria-label="Setlog Home"><img src="assets/media/icons/icon-v2-192.png" alt="" width="44" height="44"><span>Setlog<small>Workout journal</small></span></button>
   <div class="nav-items">
     <button id="homeTab" type="button" aria-label="Home" aria-controls="homeView" aria-pressed="false">
       <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><path d="m3 10 9-7 9 7v10a1 1 0 0 1-1 1h-5v-7H9v7H4a1 1 0 0 1-1-1V10Z"/></svg>
@@ -277,6 +279,7 @@
     </button>
     <button id="profileTab" type="button" aria-label="Profile" aria-controls="profileView" aria-pressed="false"><svg viewBox="0 0 24 24" aria-hidden="true" focusable="false"><circle cx="12" cy="7.5" r="3.25"/><path d="M6.5 20v-1.75A4.75 4.75 0 0 1 11.25 13.5h1.5a4.75 4.75 0 0 1 4.75 4.75V20"/></svg><span aria-hidden="true">Profile</span></button>
   </div>
+  <div class="desktop-only desktop-sidebar-footer"><button id="desktopProfile" class="desktop-profile" type="button" aria-label="Open Profile"><span class="desktop-profile-avatar"><img id="desktopProfilePhoto" alt="" hidden><span id="desktopProfileInitial">S</span></span><span class="desktop-profile-copy"><strong id="desktopProfileName">Your profile</strong><small id="desktopProfileLevel">Level 1</small></span></button><button id="desktopSettings" class="desktop-settings" type="button" aria-label="Open Settings"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="m9 3 1-1h4l1 3 3 1 3-1 2 4-2 2v3l2 2-2 4-3-1-3 1-1 3h-4l-1-3-3-1-3 1-2-4 2-2v-3L1 9l2-4 3 1 3-1Z" transform="translate(1 1) scale(.91)"/><circle cx="12" cy="12" r="3.2"/></svg></button></div>
 </nav>
 <template id="exerciseTemplate">
   <article>
@@ -406,9 +409,11 @@
         <svg class="progress-chart" viewBox="0 0 360 200" role="group" aria-label="Session chart. Select a point to see its details."></svg>
         <p class="progress-chart-note muted"></p>
       </section>
-      <div class="progress-history-title"><h3>Session history</h3><p class="muted">Newest first</p></div>
-      <ol class="progress-session-list"></ol>
-      <button id="progressMore" class="wide" type="button">Show older sessions</button>
+      <div class="progress-history">
+        <div class="progress-history-title"><h3>Session history</h3><p class="muted">Newest first</p></div>
+        <ol class="progress-session-list"></ol>
+        <button id="progressMore" class="wide" type="button">Show older sessions</button>
+      </div>
     </div>
   </div>
 </dialog>
@@ -422,14 +427,19 @@
 <dialog id="durationDialog" class="duration-dialog" aria-labelledby="durationTitle">
   <form method="dialog" id="durationForm">
     <h2 id="durationTitle">Choose duration</h2>
-    <p class="muted picker-help">Scroll to set minutes and seconds.</p>
+    <p id="durationInstructions" class="muted picker-help">Scroll to set minutes and seconds.</p>
+    <div id="durationInputs" class="duration-inputs" hidden>
+      <label for="durationMinutes">Minutes<input id="durationMinutes" type="number" inputmode="numeric" min="0" step="1" disabled aria-describedby="durationHelp"></label>
+      <span class="duration-input-divider" aria-hidden="true">:</span>
+      <label for="durationSeconds">Seconds<input id="durationSeconds" type="number" inputmode="numeric" min="0" max="59" step="1" disabled aria-describedby="durationHelp"></label>
+    </div>
     <div class="duration-wheels">
       <div class="wheel-column"><div id="minutesWheel" class="duration-wheel" role="listbox" tabindex="0" aria-label="Minutes"></div><span class="wheel-unit" aria-hidden="true">min</span></div>
       <div class="wheel-column"><div id="secondsWheel" class="duration-wheel" role="listbox" tabindex="0" aria-label="Seconds"></div><span class="wheel-unit" aria-hidden="true">sec</span></div>
     </div>
     <p id="durationHelp" class="muted picker-help" role="status"></p>
     <div class="row duration-actions">
-      <button value="cancel">Cancel</button>
+      <button value="cancel" formnovalidate>Cancel</button>
       <button id="durationDone" class="primary" value="save">Set time</button>
     </div>
   </form>
@@ -452,19 +462,20 @@
 <script defer src="assets/js/startup.js"></script>
 <script defer src="assets/js/install-guide.js?v=visit-banner-1"></script>
 <script defer src="assets/js/settings.js"></script>
-<script defer src="assets/js/duration-picker.js?v=wrap-1"></script>
+<script defer src="assets/js/duration-picker.js?v=desktop-input-1"></script>
 <script defer src="assets/js/exercise-catalog.js?v=cable-chest-1"></script>
 <script defer src="assets/js/history-calendar.js"></script>
 <script defer src="assets/js/personal-records.js"></script>
 <script defer src="assets/js/exercise-progress.js"></script>
 <script defer src="assets/js/exercise-timer.js"></script>
 <script defer src="assets/js/home-dashboard.js"></script>
+<script defer src="assets/js/desktop.js"></script>
 <script defer src="assets/js/profile.js"></script>
 <script defer src="assets/js/learning-guides.js?v=cable-chest-1"></script>
 <script defer src="assets/js/learning-muscles.js?v=cable-chest-1"></script>
 <script defer src="assets/js/navigation.js?v=back-only-1"></script>
 <script defer src="assets/js/learning.js?v=swipe-1"></script>
-<script defer src="assets/js/app.js?v=swipe-1"></script>
+<script defer src="assets/js/app.js?v=desktop-1"></script>
 <script defer src="assets/js/backup.js"></script>
 <script defer src="assets/js/rest-timer.js?v=classic-chime"></script>
 </body>

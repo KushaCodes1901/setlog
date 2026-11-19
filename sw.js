@@ -1,4 +1,4 @@
-const cacheName = 'setlog-offline-v86';
+const cacheName = 'setlog-offline-v87';
 const home = new URL('./', self.location.href).href;
 const assets = [
   'assets/js/navigation.js?v=back-only-1',
@@ -74,13 +74,15 @@ const assets = [
   'assets/js/install-guide.js?v=visit-banner-1',
   'assets/media/illustrations/install-steps.svg?v=samsung-1',
   'assets/js/settings.js',
-  'assets/js/duration-picker.js?v=wrap-1',
+  'assets/js/duration-picker.js?v=desktop-input-1',
   'assets/js/exercise-catalog.js?v=cable-chest-1',
   'assets/js/history-calendar.js',
   'assets/js/personal-records.js',
   'assets/js/exercise-progress.js',
   'assets/js/exercise-timer.js',
-  'assets/js/app.js?v=swipe-1',
+  'assets/js/app.js?v=desktop-1',
+  'assets/js/desktop.js',
+  'assets/css/desktop.css',
   'assets/js/backup.js',
   'assets/js/rest-timer.js?v=classic-chime',
   'assets/media/illustrations/exercise-illustrations.svg',

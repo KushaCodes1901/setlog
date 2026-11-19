@@ -5,6 +5,12 @@ const durationPicker = (() => {
   const seconds = document.querySelector('#secondsWheel');
   const done = document.querySelector('#durationDone');
   const help = document.querySelector('#durationHelp');
+  const wide = matchMedia('(min-width: 1100px)');
+  const inputs = document.querySelector('#durationInputs');
+  const minuteInput = document.querySelector('#durationMinutes');
+  const secondInput = document.querySelector('#durationSeconds');
+  const wheels = dialog.querySelector('.duration-wheels');
+  const instructions = document.querySelector('#durationInstructions');
   const rowHeight = 44;
   let current = null;
 
@@ -21,19 +27,26 @@ const durationPicker = (() => {
   }
 
   function totalSeconds() {
+    if (current.typed) return Number(minuteInput.value) * 60 + Number(secondInput.value);
     return Number(selected(minutes).dataset.value) * 60 + Number(selected(seconds).dataset.value);
   }
 
   function update() {
     if (!current) return;
-    for (const wheel of [minutes, seconds]) {
+    if (current.typed && [minuteInput, secondInput].some(input => input.value === '' || !input.validity.valid)) {
+      done.disabled = true;
+      help.textContent = 'Enter whole minutes and seconds (0–59).';
+      return;
+    }
+    for (const wheel of current.typed ? [] : [minutes, seconds]) {
       const active = selected(wheel);
       for (const item of wheel.children) item.setAttribute('aria-selected', item === active);
       wheel.setAttribute('aria-activedescendant', active.id);
     }
     const total = totalSeconds();
-    done.disabled = total === 0 || total > current.maximum;
-    help.textContent = total === 0 ? 'Choose at least 1 second.'
+    done.disabled = !Number.isSafeInteger(total) || total === 0 || total > current.maximum;
+    help.textContent = !Number.isSafeInteger(total) ? 'Enter a valid duration.'
+      : total === 0 ? 'Choose at least 1 second.'
       : total > current.maximum ? 'Choose up to ' + format(current.maximum) + '.'
       : format(total);
   }
@@ -58,6 +71,46 @@ const durationPicker = (() => {
       wheel.append(option);
     }
   }
+
+  function configure(total) {
+    current.typed = wide.matches;
+    inputs.hidden = !current.typed;
+    wheels.hidden = current.typed;
+    minuteInput.disabled = secondInput.disabled = !current.typed;
+    instructions.textContent = current.typed ? 'Enter minutes and seconds.' : 'Scroll to set minutes and seconds.';
+    if (current.typed) {
+      minuteInput.value = Math.floor(total / 60);
+      secondInput.value = total % 60;
+    } else {
+      const selectedMinute = Math.floor(total / 60);
+      const maximumMinute = Number.isFinite(current.maximum) ? Math.floor(current.maximum / 60) : Math.max(180, Math.min(1440, selectedMinute));
+      const minuteValues = Array.from({ length: maximumMinute + 1 }, (_, index) => index);
+      // Keep longer existing durations selectable without rendering huge lists.
+      if (selectedMinute > maximumMinute) minuteValues.push(selectedMinute);
+      fill(minutes, minuteValues);
+      fill(seconds, Array.from({ length: 60 }, (_, index) => index));
+      minutes.scrollTop = (minuteValues.length + minuteValues.indexOf(selectedMinute)) * rowHeight;
+      seconds.scrollTop = (60 + total % 60) * rowHeight;
+    }
+    update();
+    const focus = current.typed ? minuteInput : minutes;
+    focus.focus({ preventScroll: true });
+    if (current.typed) focus.select();
+  }
+
+  for (const input of [minuteInput, secondInput]) {
+    input.oninput = update;
+    input.onkeydown = event => {
+      if (event.key !== 'Enter') return;
+      event.preventDefault();
+      if (!done.disabled) done.click();
+    };
+  }
+  wide.addEventListener('change', () => {
+    if (!current || !dialog.open) return;
+    const total = totalSeconds();
+    configure(Number.isSafeInteger(total) && total >= 0 ? total : Number(current.input.value) || 0);
+  });
 
   for (const wheel of [minutes, seconds]) {
     let settleTimeout;
@@ -129,18 +182,8 @@ const durationPicker = (() => {
       current = { input, control, maximum };
       document.querySelector('#durationTitle').textContent = label;
       const total = Number(input.value) || 0;
-      const selectedMinute = Math.floor(total / 60);
-      const maximumMinute = Number.isFinite(maximum) ? Math.floor(maximum / 60) : Math.max(180, Math.min(1440, selectedMinute));
-      const minuteValues = Array.from({ length: maximumMinute + 1 }, (_, index) => index);
-      // Keep longer existing durations selectable without rendering huge lists.
-      if (selectedMinute > maximumMinute) minuteValues.push(selectedMinute);
-      fill(minutes, minuteValues);
-      fill(seconds, Array.from({ length: 60 }, (_, index) => index));
       dialog.showModal();
-      minutes.scrollTop = (minuteValues.length + minuteValues.indexOf(selectedMinute)) * rowHeight;
-      seconds.scrollTop = (60 + total % 60) * rowHeight;
-      update();
-      minutes.focus({ preventScroll: true });
+      configure(total);
     };
     control.refresh();
     return control;

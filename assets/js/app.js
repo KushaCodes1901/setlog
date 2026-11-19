@@ -792,6 +792,7 @@ function renderRecordsReport(records, sessions) {
     ? 'Best lifts are tracked per exercise. Weekly totals exclude timed, unweighted and assisted sets.'
     : 'Log a weighted workout to set your starting marks. Timed, unweighted and assisted sets don’t count toward lifting records.';
   body.append(note);
+  desktopLayout.enhance(report, sessions);
   return report;
 }
 
