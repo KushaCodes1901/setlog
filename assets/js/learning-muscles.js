@@ -45,7 +45,18 @@ const learningMuscles = (() => {
     'cable-chest-press': ['chest', 'Pectoralis major across the chest and anterior deltoid at the front shoulder.'],
     'low-to-high-cable-fly': ['upper-chest', 'Clavicular fibers of the pectoralis major in the upper chest and anterior deltoid.'],
     'mid-height-cable-fly': ['chest', 'Pectoralis major across the chest and anterior deltoid at the front shoulder.'],
-    'single-arm-cable-fly': ['chest', 'Pectoralis major across the chest and anterior deltoid at the front shoulder.']
+    'single-arm-cable-fly': ['chest', 'Pectoralis major across the chest and anterior deltoid at the front shoulder.'],
+    'barbell-row': ['row', 'Latissimus dorsi, middle trapezius and posterior deltoid, shown from the back.'],
+    't-bar-row': ['row', 'Latissimus dorsi, middle trapezius and posterior deltoid, shown from the back.'],
+    'chest-supported-row': ['row', 'Latissimus dorsi, middle trapezius and posterior deltoid, shown from the back.'],
+    'straight-arm-pulldown': ['lat-pulldown', 'Latissimus dorsi and teres major, shown from the back.'],
+    'pull-up': ['lat-pulldown', 'Latissimus dorsi and teres major, shown from the back.'],
+    'chin-up': ['lat-pulldown', 'Latissimus dorsi and teres major, shown from the back.'],
+    'assisted-pull-up': ['lat-pulldown', 'Latissimus dorsi and teres major, shown from the back.'],
+    'dead-hang': ['dead-hang', 'Finger flexors on the palm side of the forearm that maintain the grip during a hang.'],
+    'back-extension': ['back-extension', 'Erector spinae beside the spine, gluteus maximus at the hips and hamstrings behind the thighs.'],
+    'deadlift': ['deadlift', 'Erector spinae, gluteus maximus, hamstrings and quadriceps, shown in rear and front views.'],
+    'dumbbell-pullover': ['pullover', 'Pectoralis major on the chest and latissimus dorsi on the back, shown in front and rear views.']
   };
   function render(slug) {
     const illustration = illustrations[slug];

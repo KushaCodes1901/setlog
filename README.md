@@ -8,7 +8,7 @@ A workout journal for keeping track of your sets and seeing how your training ch
 
 - A desktop workspace with sidebar navigation, wider charts, recent workouts and quick access to the rest timer and Learn guides. Tablets use a wider layout in portrait and landscape with touch controls and bottom navigation. Phones keep their compact layout.
 - 104 illustrated exercises, with search and filters by body area and equipment. You can also add your own exercises.
-- A Learn library with 45 illustrated guides, including every chest, shoulder and arm exercise in the built-in list, start and finish positions, simple instructions and common mistakes.
+- A Learn library with 56 illustrated guides, including every chest, shoulder, arm and back exercise in the built-in list, start and finish positions, simple instructions and common mistakes.
 - Reps and weights for lifting, reps for bodyweight exercises, and durations for timed exercises.
 - A Last time reference showing your previous session while you log an exercise.
 - Set difficulty ratings and reps left, if you want to record them.
@@ -37,13 +37,13 @@ For a rest day, turn on **Rest day** and save it without adding exercises.
 
 ## Learn an exercise
 
-Tap **Learn** beside the Log Workout heading. Search the 45-guide library or filter by body area. Each guide has a labeled muscle illustration, matching character illustrations for the start and finish positions, simple steps and a common mistake to watch for.
+Tap **Learn** beside the Log Workout heading. Search the 56-guide library or filter by body area. Each guide has a labeled muscle illustration, matching character illustrations for the start and finish positions, simple steps and a common mistake to watch for.
 
-The library covers every built-in chest (15), shoulder (9) and arm (14) exercise, plus seven back and leg guides. Chest cable options include the high-to-low crossover, low-to-high fly, mid-height fly, single-arm fly and standing cable chest press. Search by exercise name or equipment, or filter by body area.
+The library covers every built-in chest (15), shoulder (9), arm (14) and back (14) exercise, plus four leg guides. Chest cable options include the high-to-low crossover, low-to-high fly, mid-height fly, single-arm fly and standing cable chest press. Search by exercise name or equipment, or filter by body area.
 
 A muscle illustration below the title shows the exercise's main working areas with red highlights and label lines. Anatomy was checked against the [University of Washington Muscle Atlas](https://rad.uw.edu/muscle-atlas/pectoralis-major).
 
-Exercise setup references include the [NASM exercise library](https://www.nasm.org/resource-center/exercise-library) and [ACE's wrist-curl guide](https://www.acefitness.org/resources/everyone/exercise-library/30/wrist-curl-flexion/). The guide always names the equipment variation shown in its illustrations.
+Exercise setup references include the [NASM exercise library](https://www.nasm.org/resource-center/exercise-library) and [ACE's wrist-curl guide](https://www.acefitness.org/resources/everyone/exercise-library/30/wrist-curl-flexion/). Back setup references also include [ACE's back-training guide](https://www.acefitness.org/resources/pros/expert-articles/8944/a-back-to-school-program-an-evidence-based-approach-to-training-the-back/), [La Trobe University's dead-hang guidance](https://www.latrobe.edu.au/news/articles/2023/opinion/what-are-dead-hangs-and-how-do-i-do-them-safely2) and [NSCA's pulls-and-rows progressions](https://www.nsca.com/contentassets/1cf6f81b246549cfa07473dbd8516ff1/ptq-9.4.3-resistance-training-progressions-for-the-older-adult-pulls-and-rows.pdf). The guide always names the equipment variation shown in its illustrations.
 
 Guide artwork uses compressed WebP files and separate small thumbnails for the library. Once saved offline, artwork loads directly from the current app cache. Keep thumbnails and the offline asset list updated when adding a guide.
 
