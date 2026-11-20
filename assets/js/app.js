@@ -1,4 +1,6 @@
 const day = document.querySelector('#day');
+const workoutDate = document.querySelector('#workoutDate');
+const workoutDateField = document.querySelector('#workoutDateField');
 const workout = document.querySelector('#workout');
 const nameInput = document.querySelector('#name');
 const addExerciseButton = document.querySelector('#addExercise');
@@ -287,6 +289,7 @@ function saveDraft() {
   hasDraft = true;
   updateWorkoutControls();
   const draft = { day: day.value, name: nameInput.value, restDay: restDay.checked, calories: caloriesInput.value, exercises: getExercises() };
+  if (editing) draft.date = workoutDate.value;
   if (editing) return writeStorage(data => ({ ...data, editDraft: { ...editing, draft } }));
   return writeStorage(data => ({ ...data, draft }));
 }
@@ -297,11 +300,15 @@ function loadDraft(draft) {
   nameInput.value = draft?.name ?? '';
   restDay.checked = draft?.restDay === true;
   caloriesInput.value = draft?.calories ?? '';
-  refreshToday();
+  workoutDateField.hidden = !editing;
+  workoutDate.disabled = !editing;
+  day.disabled = Boolean(editing);
+  workoutDate.value = editing ? draft?.date ?? inputDate(editing.original.date) : '';
   if (draft) {
     day.value = draft.day;
     draft.exercises.forEach(exercise => addExercise(exercise));
   }
+  refreshToday();
   document.querySelector('#sessionTitle').textContent = editing ? 'Editing workout' : 'Session';
   saveButton.textContent = editing ? 'Save changes' : 'Save workout';
   cancelEdit.hidden = !editing;
@@ -326,7 +333,7 @@ function editWorkout(session, index) {
   loadDraft(draft);
   tell('');
   selectView('log');
-  day.focus();
+  workoutDate.focus();
 }
 
 function deleteWorkout(session, index) {
@@ -984,11 +991,26 @@ function celebrateWorkout(highlight, records = []) {
   }
 }
 
+function inputDate(value) {
+  const [date, month, year] = value.split('/');
+  return year + '-' + month.padStart(2, '0') + '-' + date.padStart(2, '0');
+}
+
+function selectedWorkoutDate() {
+  if (!workoutDate.value) return null;
+  const [year, month, date] = workoutDate.value.split('-').map(Number);
+  // Use local noon so changing the date never shifts it across time zones.
+  return new Date(year, month - 1, date, 12);
+}
+
 function refreshToday() {
   const now = new Date();
-  document.querySelector('#today').textContent = editing?.original.date
+  workoutDate.max = inputDate(now.toLocaleDateString('en-GB'));
+  const selected = editing ? selectedWorkoutDate() : null;
+  document.querySelector('#today').textContent = selected?.toLocaleDateString('en-GB') ?? editing?.original.date
     ?? now.toLocaleDateString('en-GB', { day: 'numeric', month: 'short' });
-  if (!hasDraft) day.value = now.toLocaleDateString('en-GB', { weekday: 'long' });
+  if (selected) day.value = selected.toLocaleDateString('en-GB', { weekday: 'long' });
+  else if (!hasDraft) day.value = now.toLocaleDateString('en-GB', { weekday: 'long' });
 }
 
 addExerciseButton.onclick = addNamedExercise;
@@ -1036,6 +1058,11 @@ document.querySelector('#headerProfile').onclick = () => selectView('profile');
 document.querySelector('#profileSettings').onclick = () => selectView('settings');
 document.querySelector('#settingsBack').onclick = () => selectView('profile', { restoreScroll: true });
 day.onchange = saveDraft;
+workoutDate.oninput = () => {
+  refreshToday();
+  saveDraft();
+};
+workoutDate.onchange = workoutDate.oninput;
 restDay.onchange = saveDraft;
 workout.oninput = saveDraft;
 cancelEdit.onclick = () => {
@@ -1065,9 +1092,11 @@ workout.onsubmit = event => {
   }
   const entries = restDay.checked ? [] : getExercises();
   if (!restDay.checked && !entries.length) return;
+  if (editing && !workoutDate.reportValidity()) return;
+  const sessionDate = editing ? selectedWorkoutDate() : new Date();
   const session = {
-    day: day.value,
-    date: editing?.original.date ?? new Date().toLocaleDateString('en-GB'),
+    day: editing ? sessionDate.toLocaleDateString('en-GB', { weekday: 'long' }) : day.value,
+    date: sessionDate.toLocaleDateString('en-GB'),
     restDay: restDay.checked,
     exercises: entries.map(({ name, sets }) => ({ name, sets }))
   };

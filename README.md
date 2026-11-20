@@ -53,7 +53,7 @@ Covered exercises also have a **Learn this exercise** shortcut. Returning to Log
 
 **Home** shows your exercise progress and personal records. Select an exercise to explore its sessions and charts.
 
-**History** shows a calendar. Choose a logged day to see its exercises and sets. Use **Edit** to correct a workout, including its calories, or **Delete** to remove it.
+**History** shows a calendar. Choose a logged day to see its exercises and sets. Use **Edit** to correct a workout, including its date and calories, or **Delete** to remove it. To move a workout to a past date, change **Workout date** and tap **Save changes**. The weekday updates automatically, and the session moves to the selected date without replacing other workouts there.
 
 Weekly lifting volume means reps multiplied by weight, added across the week. For example, 10 reps at 20 kg adds 200 kg to the total. It is not the heaviest weight you lifted. Timed, unweighted and assisted sets do not count toward lifting records.
 
