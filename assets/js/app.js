@@ -333,7 +333,7 @@ function editWorkout(session, index) {
   loadDraft(draft);
   tell('');
   selectView('log');
-  workoutDate.focus();
+  document.querySelector('#sessionTitle').focus({ preventScroll: true });
 }
 
 function deleteWorkout(session, index) {

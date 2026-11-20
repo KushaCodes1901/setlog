@@ -127,8 +127,10 @@ body[data-view=settings] .header-settings { visibility: hidden; }
 #log > section { padding: 18px; background: var(--card); }
 #sessionTitle { font-size: 17px; font-weight: 750; }
 #today { font-size: 11px; }
-.session-date-editor { margin: 16px 0; }
-.session-date-editor input { display: block; width: 100%; min-width: 0; max-width: 100%; min-height: 50px; color: var(--text); }
+.session-date-editor { margin: 16px 0; width: 100%; min-width: 0; }
+.session-date-editor input { -webkit-appearance: none; appearance: none; box-sizing: border-box; display: block; width: 100%; min-width: 0; max-width: 100%; min-height: 50px; color: var(--text); text-align: left; }
+.session-date-editor input::-webkit-date-and-time-value { min-width: 0; text-align: left; }
+.session-date-editor input::-webkit-datetime-edit { min-width: 0; padding: 0; }
 .rest-day-choice { font-size: 13px; font-weight: 600; }
 .rest-day-choice input { width: 20px; height: 20px; border-radius: 6px; }
 .exercise-entry { background: var(--card); margin-top: 16px; padding: 8px 18px; }
