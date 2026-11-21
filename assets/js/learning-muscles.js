@@ -91,7 +91,14 @@ const learningMuscles = (() => {
     'mountain-climber': ['core-stability', 'Rectus abdominis, external obliques and stabilizing erector spinae, shown from the front and back.'],
     'sit-up': ['abs-hip-flexors', 'Rectus abdominis on the front abdomen and iliopsoas hip flexors in an anatomical cutaway of the pelvis.'],
     'hanging-knee-raise': ['abs-hip-flexors', 'Rectus abdominis on the front abdomen and iliopsoas hip flexors in an anatomical cutaway of the pelvis.'],
-    'hanging-leg-raise': ['abs-hip-flexors', 'Rectus abdominis on the front abdomen and iliopsoas hip flexors in an anatomical cutaway of the pelvis.']
+    'hanging-leg-raise': ['abs-hip-flexors', 'Rectus abdominis on the front abdomen and iliopsoas hip flexors in an anatomical cutaway of the pelvis.'],
+    'kettlebell-swing': ['back-extension', 'Gluteus maximus and hamstrings, with stabilizing erector spinae, shown from the back.'],
+    'burpee': ['burpee', 'Quadriceps, gluteus maximus and rectus abdominis for the floor-to-jump burpee variation.'],
+    'thruster': ['thruster', 'Quadriceps, gluteus maximus, deltoids and triceps brachii, shown in front and rear views.'],
+    'farmer-carry': ['carry', 'Forearm flexors for grip, external obliques and upper trapezius for loaded-carry support.'],
+    'battle-ropes': ['ropes', 'Deltoids, forearm flexors and rectus abdominis for alternating rope waves.'],
+    'sled-push': ['legs-compound', 'Quadriceps on the front thighs and gluteus maximus at the hips.'],
+    'jumping-jack': ['jumping-jack', 'Deltoids, gluteus medius, hip adductors and calves in front and rear views.']
   };
   function render(slug) {
     const illustration = illustrations[slug];
