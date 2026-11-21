@@ -77,7 +77,21 @@ const learningMuscles = (() => {
     'hip-adduction': ['hip-adductors', 'Hip adductor group along the inner thighs.'],
     'calf-raise': ['calves', 'Gastrocnemius in the upper calf and soleus along the lower calf, shown from the back.'],
     'seated-calf-raise': ['calves', 'Gastrocnemius in the upper calf and soleus along the lower calf, shown from the back.'],
-    'standing-calf-machine': ['calves', 'Gastrocnemius in the upper calf and soleus along the lower calf, shown from the back.']
+    'standing-calf-machine': ['calves', 'Gastrocnemius in the upper calf and soleus along the lower calf, shown from the back.'],
+    'crunch': ['abdominals', 'Rectus abdominis along the front abdominal wall.'],
+    'reverse-crunch': ['abdominals', 'Rectus abdominis along the front abdominal wall.'],
+    'cable-crunch': ['abdominals', 'Rectus abdominis along the front abdominal wall.'],
+    'side-plank': ['obliques', 'External obliques along the sides of the abdominal wall.'],
+    'bicycle-crunch': ['obliques', 'External obliques along the sides of the abdominal wall.'],
+    'russian-twist': ['obliques', 'External obliques along the sides of the abdominal wall.'],
+    'plank': ['core-stability', 'Rectus abdominis, external obliques and stabilizing erector spinae, shown from the front and back.'],
+    'ab-wheel-rollout': ['core-stability', 'Rectus abdominis, external obliques and stabilizing erector spinae, shown from the front and back.'],
+    'dead-bug': ['core-stability', 'Rectus abdominis, external obliques and stabilizing erector spinae, shown from the front and back.'],
+    'bird-dog': ['core-stability', 'Rectus abdominis, external obliques and stabilizing erector spinae, shown from the front and back.'],
+    'mountain-climber': ['core-stability', 'Rectus abdominis, external obliques and stabilizing erector spinae, shown from the front and back.'],
+    'sit-up': ['abs-hip-flexors', 'Rectus abdominis on the front abdomen and iliopsoas hip flexors in an anatomical cutaway of the pelvis.'],
+    'hanging-knee-raise': ['abs-hip-flexors', 'Rectus abdominis on the front abdomen and iliopsoas hip flexors in an anatomical cutaway of the pelvis.'],
+    'hanging-leg-raise': ['abs-hip-flexors', 'Rectus abdominis on the front abdomen and iliopsoas hip flexors in an anatomical cutaway of the pelvis.']
   };
   function render(slug) {
     const illustration = illustrations[slug];

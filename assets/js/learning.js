@@ -104,7 +104,7 @@ const appLearning = (() => {
       pair.append(figure);
     }
     root.append(pair);
-    const how = element('section', null, 'learn-instructions'); how.append(element('h2', guide.slug === 'dead-hang' ? 'Make the hold count' : 'Make each rep count'));
+    const how = element('section', null, 'learn-instructions'); how.append(element('h2', exerciseDefinition(guide.name)?.tracking === 'seconds' ? 'Make the hold count' : 'Make each rep count'));
     const steps = element('ol'); guide.steps.forEach(step => steps.append(element('li', step))); how.append(steps);
     const mistake = element('aside', null, 'learn-mistake'); mistake.append(element('h3', 'Watch out for'), element('p', guide.mistake));
     root.append(how, mistake, element('p', 'Use a light load while learning. An exercise guide cannot check your form; ask a trainer if you are unsure.', 'learn-safety'));
