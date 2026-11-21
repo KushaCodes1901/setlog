@@ -1143,7 +1143,9 @@ try {
   storageReadable = false;
   tell('Stored workouts are unavailable. Reload to try again.', true);
 }
-selectView(editing ? 'log' : 'home');
+const previousNavigation = appNavigation.resume();
+if (previousNavigation?.view === 'learn') appLearning.restore(previousNavigation.learning);
+selectView(previousNavigation?.view ?? (editing ? 'log' : 'home'));
 
 window.addEventListener('storage', event => {
   if (event.key === storageKey && activeView === 'home') showHome();

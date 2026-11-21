@@ -3,6 +3,35 @@ const appNavigation = (() => {
   let restoring = false, gesture = null;
   const blocked = 'input, textarea, select, button, a, summary, label, [contenteditable], [role=listbox], .bottom-nav, .learn-filters, .duration-wheel, .timer-presets, .profile-week, .progress-chart, .home-chart-plot, [data-swipe-ignore]';
   const views = { home: 'homeView', log: 'log', learn: 'learnView', rest: 'restView', history: 'history', profile: 'profileView', settings: 'settingsView' };
+  const sessionKey = 'setlog-navigation-v1';
+
+  function snapshot(view = document.body.dataset.view) {
+    return { view, scroll: window.scrollY, learning: view === 'learn' ? appLearning.capture() : null };
+  }
+
+  function persist(entry) {
+    try {
+      // Keep refresh state separate for each browser tab and from workout data.
+      sessionStorage.setItem(sessionKey, JSON.stringify({ view: entry.view, learning: entry.learning }));
+    } catch {}
+  }
+
+  function resume() {
+    try {
+      const entry = JSON.parse(sessionStorage.getItem(sessionKey));
+      if (!entry || !Object.hasOwn(views, entry.view)) return null;
+      if (entry.view !== 'learn') return { view: entry.view };
+      const state = entry.learning ?? {};
+      return { view: 'learn', learning: {
+        page: state.page === 'detail' ? 'detail' : 'library',
+        slug: typeof state.slug === 'string' ? state.slug : null,
+        fromLibrary: state.fromLibrary === true,
+        query: typeof state.query === 'string' ? state.query : '',
+        area: learningGuides.some(guide => guide.area === state.area) ? state.area : 'All',
+        libraryScroll: Number.isFinite(state.libraryScroll) && state.libraryScroll >= 0 ? state.libraryScroll : 0
+      } };
+    } catch { return null; }
+  }
 
   function key(entry) {
     const learning = entry.learning;
@@ -18,7 +47,8 @@ const appNavigation = (() => {
 
   function record(view = document.body.dataset.view) {
     if (restoring) return;
-    const entry = { view, scroll: window.scrollY, learning: view === 'learn' ? appLearning.capture() : null };
+    const entry = snapshot(view);
+    persist(entry);
     if (entries.length && key(entries.at(-1)) === key(entry)) {
       entries[entries.length - 1] = entry;
       return;
@@ -46,6 +76,7 @@ const appNavigation = (() => {
       if (entry.view === 'learn') appLearning.restore(entry.learning);
       selectView(entry.view);
       entries.splice(index + 1);
+      persist(entry);
       window.scrollTo({ top: entry.scroll, behavior: 'instant' });
       const screen = document.getElementById(views[entry.view]);
       const title = screen?.querySelector('h1, h2');
@@ -111,6 +142,7 @@ const appNavigation = (() => {
   }, { passive: true });
   document.addEventListener('touchcancel', reset, { passive: true });
   window.addEventListener('blur', reset);
+  window.addEventListener('pagehide', () => persist(snapshot()));
   document.addEventListener('visibilitychange', reset);
   document.addEventListener('keydown', event => {
     if (event.defaultPrevented || !event.altKey || event.ctrlKey || event.metaKey || event.shiftKey) return;
@@ -124,5 +156,5 @@ const appNavigation = (() => {
     return false;
   }
 
-  return { remember, record, backTo };
+  return { remember, record, backTo, resume };
 })();
