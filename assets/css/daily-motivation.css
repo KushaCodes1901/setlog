@@ -1,0 +1,62 @@
+.daily-motivation {
+  --poster-text: #f5f7f4;
+  --poster-muted: #c2d2b6;
+  --poster-base: #121d16;
+  --poster-glow: #476826;
+  --poster-border: #3b512e;
+  position: relative;
+  isolation: isolate;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  min-height: 292px;
+  margin-top: 22px;
+  padding: 24px;
+  border: 1px solid var(--poster-border);
+  border-radius: 20px;
+  background: radial-gradient(ellipse at 95% 0%, var(--poster-glow) 0, transparent 72%), var(--poster-base);
+  color: var(--poster-text);
+  overflow: hidden;
+}
+.daily-motivation-header { display: flex; justify-content: space-between; align-items: center; gap: 16px; }
+.daily-motivation .daily-motivation-label, .daily-motivation-edition {
+  margin: 0;
+  color: var(--poster-muted);
+  font-size: 9px;
+  line-height: 1.5;
+  font-weight: 800;
+  letter-spacing: .18em;
+  text-transform: uppercase;
+}
+.daily-motivation-edition { white-space: nowrap; letter-spacing: .1em; font-weight: 600; }
+.daily-motivation-body { flex: 1; display: flex; flex-direction: column; justify-content: center; align-items: flex-start; }
+.daily-motivation .daily-motivation-text {
+  max-width: 29ch;
+  margin: 0;
+  padding: 0;
+  border: 0;
+  color: var(--poster-text);
+  font: 400 clamp(26px, 5.8vw, 35px)/1.2 Georgia, 'Times New Roman', serif;
+  letter-spacing: -.03em;
+  text-wrap: pretty;
+  overflow-wrap: anywhere;
+}
+.daily-motivation-text em { color: var(--lime); font-style: italic; }
+.daily-motivation-author { display: inline-flex; align-items: center; min-height: 44px; max-width: 100%; margin-top: 6px; color: var(--poster-muted); font-size: 11px; font-weight: 600; text-decoration: underline; text-decoration-color: #9eada779; text-underline-offset: 4px; }
+.daily-motivation-author:hover { color: var(--poster-text); }
+.daily-motivation-author:focus-visible { outline: 2px solid var(--lime); outline-offset: 3px; border-radius: 3px; }
+.daily-motivation .daily-motivation-note { margin: 0; color: var(--poster-muted); font-size: 10px; line-height: 1.6; }
+/* A shared corner glow echoes the Home workout card, with five color mixes. */
+.daily-motivation[data-style='forest'] { --poster-base: #121d16; --poster-glow: #476826; --poster-border: #3b512e; --poster-muted: #c2d2b6; }
+.daily-motivation[data-style='teal'] { --poster-base: #102323; --poster-glow: #236d65; --poster-border: #315a55; --poster-muted: #bbd9d4; }
+.daily-motivation[data-style='amethyst'] { --poster-base: #21182d; --poster-glow: #70468e; --poster-border: #59406b; --poster-muted: #d7c5e5; }
+.daily-motivation[data-style='indigo'] { --poster-base: #151e31; --poster-glow: #3d5f98; --poster-border: #374c6c; --poster-muted: #c4d2e7; }
+.daily-motivation[data-style='berry'] { --poster-base: #291922; --poster-glow: #8d405f; --poster-border: #68384b; --poster-muted: #e3c2d0; }
+.daily-motivation[data-length='long'] .daily-motivation-text { font-size: clamp(24px, 5.2vw, 31px); }
+@media (min-width: 600px) {
+  .daily-motivation { min-height: 270px; padding: 28px 32px; gap: 20px; }
+  .daily-motivation .daily-motivation-text { font-size: 36px; }
+  .daily-motivation[data-length='long'] .daily-motivation-text { font-size: 30px; }
+  .daily-motivation .daily-motivation-label, .daily-motivation-edition { font-size: 10px; }
+  .daily-motivation .daily-motivation-note { font-size: 11px; }
+}

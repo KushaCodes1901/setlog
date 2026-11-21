@@ -17,7 +17,8 @@ A workout journal for keeping track of your sets and seeing how your training ch
 - A full-screen exercise countdown for timed sets, with a large display and the option to stop early and keep your elapsed time.
 - A rest timer with a full-screen countdown, completion message and sound controls.
 - A History calendar for workouts and rest days, with editing and deletion.
-- A weekly activity summary, personal records, weekly lifting volume and exercise progress charts.
+- A weekly activity summary, personal records and exercise progress charts.
+- Daily motivation on Home: a mix of original encouragement and sourced quotes from athletes and authors. The message stays consistent for the day, works offline, and changes the next day. Tap a quote’s author to read its source.
 - Manual calorie entry from a watch or gym machine.
 - A local profile photo, name and bio, with an experience score, levels, weekly activity and earned badges.
 - Light and dark appearance, height and weight units, and profile measurements.

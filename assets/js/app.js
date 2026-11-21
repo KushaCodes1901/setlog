@@ -727,6 +727,7 @@ function renderRecordsReport(records, sessions) {
   report.querySelectorAll('[data-home-action]').forEach(button => { button.onclick = () => selectView(button.dataset.homeAction); });
   report.insertBefore(homeDashboard.render(sessions, () => { historyCalendar.select(new Date().toLocaleDateString('en-GB')); selectView('history'); }), report.querySelector('.home-quick-actions'));
   report.querySelector('.home-message').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+  report.querySelector('.home-welcome').append(dailyMotivation.render(sessions));
   const log = report.querySelector('.home-log-button');
   log.querySelector('span').textContent = hasDraft ? 'Resume workout' : 'Log Workout';
   log.onclick = () => selectView('log', { restoreScroll: true });
@@ -1133,8 +1134,17 @@ window.addEventListener('storage', event => {
   if (event.key === storageKey && activeView === 'home') showHome();
   if (event.key === storageKey && activeView === 'profile') appProfile.show();
 });
+function refreshHomeMotivation() {
+  if (document.hidden || activeView !== 'home') return;
+  try {
+    if (dailyMotivation.refresh(readStorage().sessions)) {
+      document.querySelector('.home-message').textContent = new Date().toLocaleDateString('en-GB', { day: 'numeric', month: 'long', year: 'numeric' });
+    }
+  } catch {}
+}
+setInterval(refreshHomeMotivation, 60000);
 document.addEventListener('visibilitychange', () => {
-  if (!document.hidden) refreshToday();
+  if (!document.hidden) { refreshToday(); refreshHomeMotivation(); }
 });
 if ('serviceWorker' in navigator && location.protocol !== 'file:') {
   navigator.serviceWorker.register('./sw.js', { updateViaCache: 'none' }).then(registration => {
