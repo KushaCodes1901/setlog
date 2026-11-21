@@ -56,7 +56,28 @@ const learningMuscles = (() => {
     'dead-hang': ['dead-hang', 'Finger flexors on the palm side of the forearm that maintain the grip during a hang.'],
     'back-extension': ['back-extension', 'Erector spinae beside the spine, gluteus maximus at the hips and hamstrings behind the thighs.'],
     'deadlift': ['deadlift', 'Erector spinae, gluteus maximus, hamstrings and quadriceps, shown in rear and front views.'],
-    'dumbbell-pullover': ['pullover', 'Pectoralis major on the chest and latissimus dorsi on the back, shown in front and rear views.']
+    'dumbbell-pullover': ['pullover', 'Pectoralis major on the chest and latissimus dorsi on the back, shown in front and rear views.'],
+    'squat': ['legs-compound', 'Quadriceps on the front thighs and gluteus maximus at the hips, shown in front and back views.'],
+    'front-squat': ['legs-compound', 'Quadriceps on the front thighs and gluteus maximus at the hips, shown in front and back views.'],
+    'goblet-squat': ['legs-compound', 'Quadriceps on the front thighs and gluteus maximus at the hips, shown in front and back views.'],
+    'hack-squat': ['legs-compound', 'Quadriceps on the front thighs and gluteus maximus at the hips, shown in front and back views.'],
+    'smith-machine-squat': ['legs-compound', 'Quadriceps on the front thighs and gluteus maximus at the hips, shown in front and back views.'],
+    'lunge': ['legs-compound', 'Quadriceps on the front thighs and gluteus maximus at the hips, shown in front and back views.'],
+    'reverse-lunge': ['legs-compound', 'Quadriceps on the front thighs and gluteus maximus at the hips, shown in front and back views.'],
+    'bulgarian-split-squat': ['legs-compound', 'Quadriceps on the front thighs and gluteus maximus at the hips, shown in front and back views.'],
+    'step-up': ['legs-compound', 'Quadriceps on the front thighs and gluteus maximus at the hips, shown in front and back views.'],
+    'seated-leg-curl': ['hamstrings', 'Hamstrings on the back of the thighs, with biceps femoris and semitendinosus labeled.'],
+    'standing-leg-curl': ['hamstrings', 'Hamstrings on the back of the thighs, with biceps femoris and semitendinosus labeled.'],
+    'romanian-deadlift': ['back-extension', 'Hamstrings, gluteus maximus and stabilizing erector spinae, shown from the back.'],
+    'sumo-deadlift': ['deadlift', 'Quadriceps, gluteus maximus, hamstrings and stabilizing erector spinae in front and back views.'],
+    'hip-thrust': ['glutes', 'Gluteus maximus across the buttocks, shown from the back.'],
+    'glute-bridge': ['glutes', 'Gluteus maximus across the buttocks, shown from the back.'],
+    'cable-kickback': ['glutes', 'Gluteus maximus across the buttocks, shown from the back.'],
+    'hip-abduction': ['hip-abductors', 'Gluteus medius on the upper outer hip.'],
+    'hip-adduction': ['hip-adductors', 'Hip adductor group along the inner thighs.'],
+    'calf-raise': ['calves', 'Gastrocnemius in the upper calf and soleus along the lower calf, shown from the back.'],
+    'seated-calf-raise': ['calves', 'Gastrocnemius in the upper calf and soleus along the lower calf, shown from the back.'],
+    'standing-calf-machine': ['calves', 'Gastrocnemius in the upper calf and soleus along the lower calf, shown from the back.']
   };
   function render(slug) {
     const illustration = illustrations[slug];
