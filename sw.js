@@ -1,6 +1,23 @@
-const cacheName = 'setlog-offline-v96';
+const cacheName = 'setlog-offline-v97';
 const home = new URL('./', self.location.href).href;
 const assets = [
+  'assets/media/learning/treadmill-character.webp',
+  'assets/media/learning/treadmill-thumbnail.webp',
+  'assets/media/learning/stationary-bike-character.webp',
+  'assets/media/learning/stationary-bike-thumbnail.webp',
+  'assets/media/learning/elliptical-character.webp',
+  'assets/media/learning/elliptical-thumbnail.webp',
+  'assets/media/learning/stair-climber-character.webp',
+  'assets/media/learning/stair-climber-thumbnail.webp',
+  'assets/media/learning/rowing-machine-character.webp',
+  'assets/media/learning/rowing-machine-thumbnail.webp',
+  'assets/media/learning/jump-rope-character.webp',
+  'assets/media/learning/jump-rope-thumbnail.webp',
+  'assets/media/learning/muscles-cardio-legs.webp',
+  'assets/media/learning/muscles-elliptical.webp',
+  'assets/media/learning/muscles-rowing.webp',
+  'assets/media/learning/muscles-jump-rope.webp',
+
   'assets/media/learning/kettlebell-swing-character.webp',
   'assets/media/learning/kettlebell-swing-thumbnail.webp',
   'assets/media/learning/burpee-character.webp',
@@ -181,9 +198,9 @@ const assets = [
   'assets/media/learning/skull-crusher-thumbnail.webp',
   'assets/media/learning/tricep-kickback-character.webp',
   'assets/media/learning/tricep-kickback-thumbnail.webp',
-  'assets/js/learning-muscles.js?v=full-body-guides-1',
+  'assets/js/learning-muscles.js?v=cardio-guides-1',
   'assets/css/learning.css',
-  'assets/js/learning-guides.js?v=full-body-guides-1',
+  'assets/js/learning-guides.js?v=cardio-guides-1',
   'assets/js/learning.js?v=full-body-guides-1',
   'assets/css/profile.css',
   'assets/js/profile.js',

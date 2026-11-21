@@ -98,7 +98,13 @@ const learningMuscles = (() => {
     'farmer-carry': ['carry', 'Forearm flexors for grip, external obliques and upper trapezius for loaded-carry support.'],
     'battle-ropes': ['ropes', 'Deltoids, forearm flexors and rectus abdominis for alternating rope waves.'],
     'sled-push': ['legs-compound', 'Quadriceps on the front thighs and gluteus maximus at the hips.'],
-    'jumping-jack': ['jumping-jack', 'Deltoids, gluteus medius, hip adductors and calves in front and rear views.']
+    'jumping-jack': ['jumping-jack', 'Deltoids, gluteus medius, hip adductors and calves in front and rear views.'],
+    'treadmill': ['cardio-legs', 'Quadriceps, gluteus maximus and calves, shown in front and rear lower-body views.'],
+    'stationary-bike': ['cardio-legs', 'Quadriceps, gluteus maximus and calves, shown in front and rear lower-body views.'],
+    'stair-climber': ['cardio-legs', 'Quadriceps, gluteus maximus and calves, shown in front and rear lower-body views.'],
+    'elliptical': ['elliptical', 'Quadriceps, gluteus maximus, calves and deltoids for forward striding with moving handles.'],
+    'rowing-machine': ['rowing', 'Quadriceps, gluteus maximus, latissimus dorsi and stabilizing erector spinae for the rowing stroke.'],
+    'jump-rope': ['jump-rope', 'Forearm flexors and calves for turning the rope and repeated small hops.']
   };
   function render(slug) {
     const illustration = illustrations[slug];
