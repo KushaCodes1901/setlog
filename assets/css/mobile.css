@@ -115,10 +115,6 @@ body[data-view=settings] .header-settings { visibility: hidden; }
 .home-milestone progress { height: 5px; border-radius: 5px; margin-top: 13px; }
 .records-body h2 { font-size: 22px; }
 .records-help { font-size: 11px; line-height: 1.65; margin-top: 10px; }
-.record-week { padding: 20px; border: 1px solid var(--line); border-radius: 20px; background: var(--card); }
-.record-week > p:not(.record-week-explanation) { font-size: 32px; font-weight: 800; letter-spacing: -.04em; }
-.record-week strong { font-size: 12px; font-weight: 650; }
-.record-week .record-week-explanation { font-size: 11px; line-height: 1.6; }
 .record-lifts li { border-color: var(--line); }
 .record-lifts button { min-height: 72px; font-size: 14px; font-weight: 700; }
 .record-lifts strong { color: var(--accent); font-size: 15px; font-weight: 750; }

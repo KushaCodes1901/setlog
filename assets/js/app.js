@@ -749,24 +749,6 @@ function renderRecordsReport(records, sessions) {
   help.className = 'muted records-help';
   help.textContent = 'Your first lift sets the starting mark. Beat it to earn a PR.';
   body.append(help);
-  if (records.weeklyBest) {
-    const week = document.createElement('div');
-    const label = document.createElement('strong');
-    const value = document.createElement('p');
-    const note = document.createElement('small');
-    week.className = 'record-week';
-    label.textContent = 'Total weight lifted in a week';
-    value.textContent = formatWeight(records.weeklyBest.volumeKg);
-    const [year, month, day] = records.weeklyBest.week.split('-').map(Number);
-    note.textContent = 'Week of ' + new Date(year, month - 1, day, 12).toLocaleDateString('en-GB', { day: 'numeric', month: 'short', year: 'numeric' });
-    week.append(label, value, note);
-    const explanation = document.createElement('p');
-    explanation.className = 'record-week-explanation';
-    const unit = appSettings.weightUnit();
-    explanation.textContent = 'Your highest weekly total, adding up every rep. For example, 10 reps × 20 ' + unit + ' = 200 ' + unit + '. A week runs Monday–Sunday.';
-    week.append(explanation);
-    body.append(week);
-  }
   const list = document.createElement('ul');
   list.className = 'record-lifts';
   if (records.exerciseBests.length) {
@@ -796,7 +778,7 @@ function renderRecordsReport(records, sessions) {
   const note = document.createElement('p');
   note.className = 'muted records-help';
   note.textContent = records.exerciseBests.length
-    ? 'Best lifts are tracked per exercise. Weekly totals exclude timed, unweighted and assisted sets.'
+    ? 'Best lifts are tracked per exercise.'
     : 'Log a weighted workout to set your starting marks. Timed, unweighted and assisted sets don’t count toward lifting records.';
   body.append(note);
   desktopLayout.enhance(report, sessions);

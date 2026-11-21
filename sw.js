@@ -1,4 +1,4 @@
-const cacheName = 'setlog-offline-v98';
+const cacheName = 'setlog-offline-v99';
 const home = new URL('./', self.location.href).href;
 const assets = [
   'assets/media/learning/treadmill-character.webp',
@@ -224,7 +224,7 @@ const assets = [
   'assets/js/personal-records.js',
   'assets/js/exercise-progress.js',
   'assets/js/exercise-timer.js',
-  'assets/js/app.js?v=refresh-tab-1',
+  'assets/js/app.js?v=home-records-2',
   'assets/js/desktop.js',
   'assets/css/desktop.css',
   'assets/css/tablet.css?v=responsive-2',

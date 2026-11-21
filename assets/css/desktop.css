@@ -126,8 +126,7 @@
   .home-milestone { grid-column: 2; grid-row: 6; margin: 0; }
   .records-body { grid-column: 1; grid-row: 5 / span 2; padding: 24px; border: 1px solid var(--line); border-radius: 22px; background: var(--card); }
   .records-body h2 { font-size: 23px; }
-  .records-help, .record-week-explanation, .record-lifts small, .home-stats span { font-size: 12px; }
-  .record-week { margin-top: 20px; background: var(--bg); }
+  .records-help, .record-lifts small, .home-stats span { font-size: 12px; }
   .record-lifts-title { margin-top: 24px; }
 
   /* Give the existing forms and calendars room without changing their behavior. */

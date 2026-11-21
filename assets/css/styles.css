@@ -233,10 +233,6 @@ button:disabled { opacity: .48; cursor: default; }
 .home-milestone p { font-size: 12px; color: var(--muted); }
 .records-body { padding: 0; }
 .records-help { font-size: 12px; margin-top: 14px; }
-.record-week { padding: 18px 0; margin-top: 18px; border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: transparent; }
-.record-week strong { font-size: 13px; font-weight: 500; color: var(--muted); }
-.record-week p { color: var(--text); font-size: 30px; font-weight: 550; margin: 6px 0; font-variant-numeric: tabular-nums; overflow-wrap: anywhere; }
-.record-week .record-week-explanation { margin-top: 10px; color: var(--muted); font-size: 12px; font-weight: 400; }
 .record-lifts { list-style: none; margin: 14px 0 0; padding: 0; }
 .record-lifts-title { margin-top: 20px; font-size: 14px; }
 .record-lifts li { padding: 0; border-bottom: 1px solid var(--line); background: transparent; }
