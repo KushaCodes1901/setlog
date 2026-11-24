@@ -1,0 +1,100 @@
+.balance-home {
+  margin: 20px 0;
+  padding: 22px;
+  border: 1px solid var(--line);
+  border-radius: 22px;
+  background: var(--card);
+  color: var(--text);
+}
+.balance-home-heading, .balance-list-heading { display: flex; align-items: center; justify-content: space-between; gap: 12px; }
+.balance-home-heading h3 { font-size: 18px; font-weight: 800; letter-spacing: -.035em; }
+.balance-home-heading > span { color: var(--muted); font-size: 9px; letter-spacing: .08em; white-space: nowrap; }
+.balance-home-main { display: grid; grid-template-columns: 104px minmax(0, 1fr); gap: 20px; align-items: center; margin: 18px 0; }
+.balance-mini { display: flex; height: 130px; padding: 8px 2px; border-radius: 14px; background: var(--bg); }
+.balance-mini .balance-body { width: 50%; height: 100%; }
+.balance-home-main strong { display: block; font-size: 25px; line-height: 1.15; letter-spacing: -.04em; }
+.balance-home-main p { margin: 6px 0; font-size: 12px; color: var(--text); }
+.balance-home-main small { display: block; color: var(--muted); font-size: 11px; line-height: 1.6; }
+.balance-open, .balance-guide { min-height: 44px; padding: 10px 14px; border: 1px solid var(--line); background: var(--surface-raised); color: var(--text); font: 700 12px var(--font); border-radius: 12px; }
+.balance-open { width: 100%; text-align: left; }
+.balance-open:hover, .balance-guide:hover { border-color: var(--muted); }
+.balance-silhouette { fill: var(--surface-raised); stroke: var(--muted); stroke-width: .8; stroke-opacity: .5; }
+.balance-region { fill: var(--line); stroke: var(--bg); stroke-width: 1.4; stroke-linejoin: round; }
+.balance-region[data-heat='1'], .balance-legend i[data-heat='1'] { fill: #687d36; background: #687d36; }
+.balance-region[data-heat='2'] { fill: #96b53d; }
+.balance-region[data-heat='3'], .balance-legend i[data-heat='3'] { fill: var(--lime); background: var(--lime); }
+.balance-region[role='button'] { cursor: pointer; }
+.balance-region[aria-pressed='true'], .balance-region:focus-visible { stroke: var(--text); stroke-width: 2; outline: none; filter: drop-shadow(0 0 3px #c4f34a44); }
+.balance-region[role='button']:hover { stroke: var(--text); stroke-width: 2; }
+.balance-open-page { overflow: hidden; }
+.balance-dialog {
+  position: fixed; inset: 0; width: 100%; max-width: none; height: 100%; height: 100dvh;
+  max-height: none; margin: 0; padding: 0; border: 0; background: var(--bg); color: var(--text);
+  overflow-y: auto; overscroll-behavior: contain; scrollbar-width: thin; scrollbar-color: var(--line) transparent;
+}
+.balance-dialog::backdrop { background: #0b0f10b8; }
+.balance-shell { width: min(100%, 1000px); margin: auto; padding: max(24px, env(safe-area-inset-top)) 20px max(40px, env(safe-area-inset-bottom)); }
+.balance-header { display: flex; justify-content: space-between; align-items: center; gap: 14px; }
+.balance-dialog .balance-kicker { margin: 0 0 8px; color: var(--muted); font-size: 9px; font-weight: 800; letter-spacing: .12em; }
+.balance-header h2 { font-size: clamp(28px, 4vw, 38px); font-weight: 800; line-height: 1.2; letter-spacing: -.045em; }
+.balance-close { flex: 0 0 44px; width: 44px; height: 44px; padding: 0; border: 1px solid var(--line); border-radius: 50%; background: var(--card); color: var(--text); font-size: 27px; font-weight: 400; }
+.balance-intro { margin: 16px 0 22px; color: var(--muted); font-size: 13px; line-height: 1.65; }
+.balance-range, .balance-views { display: flex; gap: 4px; padding: 4px; background: var(--card); border: 1px solid var(--line); border-radius: 14px; }
+.balance-range { width: min(100%, 340px); }
+.balance-range button, .balance-views button { flex: 1; min-height: 42px; padding: 8px 12px; border: 0; border-radius: 10px; background: transparent; color: var(--muted); font: 700 12px var(--font); }
+.balance-range button[aria-pressed='true'], .balance-views button[aria-pressed='true'] { background: var(--lime); color: #19210e; }
+.balance-period { margin: 14px 0 4px; color: var(--muted); font-size: 11px; }
+.balance-count { margin: 0; font-size: 12px; font-weight: 600; }
+.balance-insight { margin: 20px 0; padding: 15px 17px; border: 1px solid var(--line); border-left: 3px solid var(--lime); border-radius: 12px; background: var(--card); color: var(--text); font-size: 13px; line-height: 1.7; }
+.balance-layout { display: grid; gap: 18px; align-items: start; }
+.balance-visual, .balance-detail { min-width: 0; border: 1px solid var(--line); border-radius: 20px; background: var(--card); padding: 20px; }
+.balance-views { max-width: 230px; margin: auto; background: var(--bg); }
+.balance-map { display: grid; place-items: center; padding: 20px 0 14px; }
+.balance-map .balance-body { display: block; width: min(100%, 210px); height: 370px; overflow: visible; }
+.balance-legend { display: flex; justify-content: center; flex-wrap: wrap; gap: 12px; font-size: 10px; color: var(--muted); }
+.balance-legend span { display: flex; align-items: center; gap: 5px; }
+.balance-legend i { display: inline-block; width: 10px; height: 10px; border: 1px solid var(--muted); border-radius: 3px; background: var(--line); }
+.balance-muted { color: var(--muted); font-size: 12px; line-height: 1.7; }
+.balance-visual > .balance-muted { margin: 12px 0 0; text-align: center; font-size: 11px; }
+.balance-detail h3 { font-size: 24px; letter-spacing: -.04em; line-height: 1.2; }
+.balance-detail-stats { margin: 20px 0; padding-bottom: 18px; border-bottom: 1px solid var(--line); }
+.balance-detail-stats strong { display: block; color: var(--text); font-size: 28px; font-weight: 750; letter-spacing: -.035em; }
+.balance-detail-stats p { margin: 7px 0 0; font-size: 11px; color: var(--muted); line-height: 1.7; }
+.balance-exercises { margin: 0; padding: 0; list-style: none; }
+.balance-exercises li { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 15px 0; border-bottom: 1px solid var(--line); }
+.balance-exercises li > div { min-width: 0; overflow-wrap: anywhere; }
+.balance-exercises strong { font-size: 13px; }
+.balance-exercises small { display: block; margin-top: 5px; color: var(--muted); font-size: 11px; }
+.balance-exercises b { font-size: 17px; }
+.balance-guide { margin-top: 20px; width: 100%; }
+.balance-list-heading { margin: 26px 0 12px; }
+.balance-list-heading h3 { font-size: 18px; letter-spacing: -.03em; }
+.balance-list-heading > span { font-size: 10px; color: var(--muted); }
+.balance-muscles { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 8px; }
+.balance-muscles button { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 10px 8px; min-height: 64px; padding: 12px; border: 1px solid var(--line); border-radius: 12px; background: var(--card); color: var(--text); text-align: left; font: 600 11px/1.4 var(--font); }
+.balance-muscles button[aria-pressed='true'] { border-color: #799d3a; box-shadow: inset 0 0 0 1px #799d3a; }
+.balance-muscles b { font-variant-numeric: tabular-nums; }
+.balance-bar { grid-column: 1 / -1; display: block; height: 4px; border-radius: 3px; background: var(--line); overflow: hidden; }
+.balance-bar i { display: block; height: 100%; border-radius: 3px; background: var(--lime); }
+.balance-method { margin-top: 24px; padding: 18px; border: 1px solid var(--line); border-radius: 14px; background: var(--card); }
+.balance-method summary { cursor: pointer; font-size: 12px; font-weight: 700; }
+.balance-method p { color: var(--muted); font-size: 12px; line-height: 1.75; margin: 14px 0 0; overflow-wrap: anywhere; }
+.balance-method a { color: var(--text); text-underline-offset: 3px; }
+.balance-dialog button:focus-visible, .balance-home button:focus-visible { outline: 2px solid var(--text); outline-offset: 3px; }
+@media (min-width: 680px) {
+  .balance-shell { padding: 36px; }
+  .balance-layout { grid-template-columns: minmax(0, 1fr) minmax(0, 1fr); }
+  .balance-detail { align-self: stretch; }
+  .balance-muscles { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+}
+@media (min-width: 600px) and (max-width: 1099px), (min-width: 600px) and (max-width: 1599px) and (pointer: coarse) {
+  .balance-home { grid-column: 1 / -1; grid-row: 5; margin: 0; }
+  .home-records .home-stats, .home-records .home-milestone { grid-row: 6; }
+  .home-records .records-body { grid-row: 7; }
+}
+@media (min-width: 1100px) and (pointer: fine), (min-width: 1600px) {
+  .balance-home { grid-column: 1; grid-row: 5; margin: 0; }
+  .home-records .home-stats { grid-row: 5; }
+  .home-records .records-body { grid-row: 6; }
+  .home-records .home-milestone { grid-row: 6; }
+}

@@ -19,6 +19,7 @@ A workout journal for keeping track of your sets and seeing how your training ch
 - A History calendar for workouts and rest days, with editing and deletion.
 - A weekly activity summary, personal records and exercise progress charts.
 - Daily motivation on Home: a mix of original encouragement and sourced quotes from athletes and authors. The message stays consistent for the day, works offline, and changes the next day. Tap a quote’s author to read its source.
+- A Muscle Balance Report on Home with front/back maps, 7- and 30-day views, muscle-by-muscle set breakdowns and Learn shortcuts. Main-muscle sets count as 1 credit and assisting sets as ½; this is a coverage estimate, not a recovery or physique assessment. Cardio and unrecognized exercises are listed separately.
 - Manual calorie entry from a watch or gym machine.
 - A local profile photo, name and bio, with an experience score, levels, weekly activity and earned badges.
 - Light and dark appearance, height and weight units, and profile measurements.

@@ -745,6 +745,7 @@ function renderRecordsReport(records, sessions) {
     : 'Log a weighted workout to establish your first marks.';
   const overview = exerciseProgress.overview(sessions, formatWeight, openExerciseProgress);
   report.insertBefore(overview, report.querySelector('.home-stats'));
+  report.insertBefore(muscleBalance.overview(sessions, { readSessions: () => readStorage().sessions, onGuide: name => appLearning.openGuide(name) }), report.querySelector('.home-stats'));
   const body = report.querySelector('.records-body');
   const help = document.createElement('p');
   help.className = 'muted records-help';

@@ -1,4 +1,4 @@
-const cacheName = 'setlog-offline-v103';
+const cacheName = 'setlog-offline-v104';
 const home = new URL('./', self.location.href).href;
 const assets = [
   'assets/media/learning/treadmill-character.webp',
@@ -201,13 +201,15 @@ const assets = [
   'assets/js/learning-muscles.js?v=cardio-guides-1',
   'assets/css/learning.css',
   'assets/js/learning-guides.js?v=cardio-guides-1',
-  'assets/js/learning.js?v=full-body-guides-1',
+  'assets/js/learning.js?v=muscle-balance-1',
   'assets/css/profile.css',
   'assets/js/profile.js',
   'assets/media/illustrations/profile-trophy.svg',
   'assets/css/mobile.css',
   'assets/fonts/manrope-variable.ttf',
   'assets/media/illustrations/training-hero.svg',
+  'assets/js/muscle-balance.js',
+  'assets/css/muscle-balance.css',
   'assets/js/daily-motivation.js?v=gradients-1',
   'assets/css/daily-motivation.css?v=gradients-1',
   'assets/js/home-dashboard.js',
@@ -226,7 +228,7 @@ const assets = [
   'assets/js/personal-records.js',
   'assets/js/exercise-progress.js',
   'assets/js/exercise-timer.js',
-  'assets/js/app.js?v=daily-motivation-1',
+  'assets/js/app.js?v=muscle-balance-1',
   'assets/js/desktop.js',
   'assets/css/desktop.css',
   'assets/css/tablet.css?v=responsive-2',

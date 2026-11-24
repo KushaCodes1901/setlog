@@ -119,6 +119,15 @@ const appLearning = (() => {
     returnButton = event.currentTarget; libraryScroll = 0; library({ focus: false }); selectView('learn'); root.querySelector('h1').focus({ preventScroll: true });
   };
   return {
+    openGuide(name) {
+      const guide = learningGuides.find(item => item.name === name);
+      if (!guide) return;
+      returnButton = null;
+      libraryScroll = 0;
+      detail(guide, true);
+      selectView('learn');
+      root.querySelector('h1').focus({ preventScroll: true });
+    },
     capture() { return { page, slug: activeGuide?.slug, fromLibrary: detailFromLibrary, query, area, libraryScroll }; },
     restore(state) {
       query = state.query; area = state.area; libraryScroll = state.libraryScroll;
